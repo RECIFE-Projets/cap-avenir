@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a3d6b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Plateforme d'orientation et d'insertion professionnelle du Havre">
+<title>Cap Avenir – Le Havre</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0a3d6b;
+  --primary-light:#1a5fa0;
+  --primary-pale:#e8f2fc;
+  --accent:#f4a020;
+  --accent-light:#fdf3e0;
+  --success:#1a8a4a;
+  --success-light:#e6f6ec;
+  --danger:#c0392b;
+  --danger-light:#fdf0ee;
+  --warning:#e67e22;
+  --warning-light:#fef5ea;
+  --bg:#f5f7fa;
+  --surface:#ffffff;
+  --surface2:#f0f4f8;
+  --text:#1a2535;
+  --text2:#4a5568;
+  --text3:#8096aa;
+  --border:#dce6f0;
+  --radius:12px;
+  --shadow:0 2px 16px rgba(10,61,107,0.08);
+  --shadow-lg:0 8px 40px rgba(10,61,107,0.14);
+  --font:'Sora',sans-serif;
+  --font2:'DM Sans',sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --primary:#3a8fd9;
+    --primary-light:#5aa8f0;
+    --primary-pale:#0d2540;
+    --accent:#f4a020;
+    --bg:#0f1923;
+    --surface:#182433;
+    --surface2:#1e2f40;
+    --text:#e8f2fc;
+    --text2:#99b5cc;
+    --text3:#5577aa;
+    --border:#253545;
+    --shadow:0 2px 16px rgba(0,0,0,0.3);
+    --shadow-lg:0 8px 40px rgba(0,0,0,0.4);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font2);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--font);}
+.page{display:none;min-height:100vh;flex-direction:column;}
+.page.active{display:flex;}
+
+/* NAV */
+.topbar{background:var(--primary);color:#fff;padding:0.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+.topbar-brand{display:flex;align-items:center;gap:10px;font-family:var(--font);font-weight:700;font-size:1.05rem;letter-spacing:0.01em;}
+.topbar-brand .logo-badge{background:var(--accent);color:#fff;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0;}
+.topbar-actions{display:flex;gap:8px;align-items:center;}
+.btn-icon{background:rgba(255,255,255,0.15);border:none;color:#fff;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:background 0.2s;}
+.btn-icon:hover{background:rgba(255,255,255,0.25);}
+
+/* SCROLL CONTENT */
+.scroll-content{flex:1;overflow-y:auto;padding:1.25rem;max-width:780px;width:100%;margin:0 auto;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0.75rem 1.5rem;border-radius:var(--radius);font-family:var(--font);font-size:0.9rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none;white-space:nowrap;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-1px);box-shadow:var(--shadow);}
+.btn-accent{background:var(--accent);color:#fff;}
+.btn-accent:hover{background:#e0900e;transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary);}
+.btn-outline:hover{background:var(--primary-pale);}
+.btn-success{background:var(--success);color:#fff;}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-ghost{background:var(--surface2);color:var(--text2);border:1.5px solid var(--border);}
+.btn-ghost:hover{background:var(--border);color:var(--text);}
+.btn-full{width:100%;}
+.btn-lg{padding:1rem 2rem;font-size:1rem;}
+.btn-sm{padding:0.45rem 0.9rem;font-size:0.8rem;border-radius:8px;}
+
+/* CARDS */
+.card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);padding:1.25rem;box-shadow:var(--shadow);}
+.card+.card{margin-top:1rem;}
+.card-title{font-family:var(--font);font-size:1rem;font-weight:600;margin-bottom:0.6rem;color:var(--text);}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+
+/* FORM */
+.form-group{margin-bottom:1.1rem;}
+label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:0.4rem;color:var(--text2);}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font2);font-size:0.9rem;background:var(--surface);color:var(--text);transition:border 0.2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-pale);}
+.input-group{position:relative;}
+.input-group input{padding-right:44px;}
+.input-group .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text3);}
+.error-msg{color:var(--danger);font-size:0.78rem;margin-top:4px;display:none;}
+.success-msg{color:var(--success);font-size:0.78rem;margin-top:4px;}
+
+/* RADIO / CHECKBOX cards */
+.choice-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.choice-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:1rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.choice-card:hover{border-color:var(--primary-light);background:var(--primary-pale);}
+.choice-card.selected{border-color:var(--primary);background:var(--primary-pale);}
+.choice-card .choice-icon{font-size:1.8rem;margin-bottom:6px;}
+.choice-card .choice-label{font-size:0.82rem;font-weight:600;color:var(--text);}
+
+/* ALERT / INFO BOX */
+.alert{padding:0.85rem 1rem;border-radius:10px;font-size:0.85rem;line-height:1.5;display:flex;gap:10px;align-items:flex-start;}
+.alert-info{background:var(--primary-pale);color:var(--primary);border-left:4px solid var(--primary);}
+.alert-warning{background:var(--warning-light);color:var(--warning);border-left:4px solid var(--warning);}
+.alert-success{background:var(--success-light);color:var(--success);border-left:4px solid var(--success);}
+.alert-danger{background:var(--danger-light);color:var(--danger);border-left:4px solid var(--danger);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:0.73rem;font-weight:600;gap:4px;}
+.badge-blue{background:var(--primary-pale);color:var(--primary);}
+.badge-green{background:var(--success-light);color:var(--success);}
+.badge-amber{background:var(--accent-light);color:#b07a10;}
+.badge-red{background:var(--danger-light);color:var(--danger);}
+.badge-gray{background:var(--surface2);color:var(--text2);}
+
+/* PROGRESS */
+.progress-bar{background:var(--border);border-radius:20px;height:8px;overflow:hidden;}
+.progress-fill{background:linear-gradient(90deg,var(--primary),var(--primary-light));height:100%;border-radius:20px;transition:width 0.5s;}
+
+/* SECTION TITLE */
+.section-title{font-family:var(--font);font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.8rem;display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';display:block;width:4px;height:20px;background:var(--accent);border-radius:2px;}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--text3);margin-bottom:1rem;flex-wrap:wrap;}
+.breadcrumb span{cursor:pointer;color:var(--primary);}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;gap:0;margin:1rem 0 1.5rem;}
+.step{display:flex;align-items:center;gap:6px;flex:1;}
+.step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;}
+.step.done .step-circle{background:var(--success);color:#fff;}
+.step.active .step-circle{background:var(--primary);color:#fff;}
+.step.pending .step-circle{background:var(--border);color:var(--text3);}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 4px;}
+.step.done .step-line{background:var(--success);}
+.step-label{font-size:0.68rem;color:var(--text3);margin-top:2px;display:none;}
+@media(min-width:480px){.step-label{display:block;}}
+
+/* BOTTOM NAV */
+.bottom-nav{background:var(--surface);border-top:1.5px solid var(--border);display:none;position:sticky;bottom:0;z-index:90;}
+.bottom-nav.visible{display:flex;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:0.55rem 0.25rem;cursor:pointer;gap:3px;transition:color 0.2s;border:none;background:none;color:var(--text3);}
+.nav-item.active{color:var(--primary);}
+.nav-item .nav-icon{font-size:1.3rem;}
+.nav-item .nav-label{font-size:0.62rem;font-weight:600;}
+
+/* LANDING */
+#page-landing{background:var(--primary);color:#fff;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;}
+.landing-hero{max-width:520px;margin:0 auto;}
+.landing-logo{width:80px;height:80px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:2rem;font-weight:800;margin:0 auto 1.5rem;box-shadow:0 8px 32px rgba(244,160,32,0.4);}
+.landing-title{font-family:var(--font);font-size:2rem;font-weight:800;line-height:1.15;margin-bottom:0.8rem;}
+.landing-title span{color:var(--accent);}
+.landing-sub{font-size:0.95rem;opacity:0.85;line-height:1.6;margin-bottom:2rem;}
+.landing-offline-note{background:rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 1rem;font-size:0.82rem;margin-bottom:2rem;display:flex;align-items:center;gap:8px;text-align:left;}
+.landing-btns{display:flex;gap:12px;flex-direction:column;}
+.landing-btns .btn{font-size:1rem;padding:0.95rem 2rem;}
+.btn-white{background:#fff;color:var(--primary);}
+.btn-white:hover{background:rgba(255,255,255,0.9);transform:translateY(-1px);}
+.btn-outline-white{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.6);}
+.btn-outline-white:hover{background:rgba(255,255,255,0.1);}
+
+/* QUIZ / TEST */
+.quiz-question{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:1rem;line-height:1.5;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.quiz-option{background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:0.85rem 1rem;cursor:pointer;font-size:0.88rem;transition:all 0.2s;display:flex;align-items:center;gap:10px;}
+.quiz-option:hover{border-color:var(--primary-light);background:var(--primary-pale);}
+.quiz-option.selected{border-color:var(--primary);background:var(--primary-pale);}
+.quiz-option.correct{border-color:var(--success);background:var(--success-light);}
+.quiz-option.wrong{border-color:var(--danger);background:var(--danger-light);}
+.quiz-option .opt-letter{width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;flex-shrink:0;}
+
+/* MÉTIER CARD */
+.metier-card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;cursor:pointer;transition:all 0.2s;box-shadow:var(--shadow);}
+.metier-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.metier-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.metier-info{padding:0.9rem;}
+.metier-title{font-family:var(--font);font-size:0.92rem;font-weight:700;margin-bottom:4px;}
+.metier-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.metier-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(min-width:520px){.metier-grid{grid-template-columns:1fr 1fr 1fr;}}
+
+/* PROFILE SELECTOR */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+
+/* DASHBOARD STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1rem;}
+.stat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center;}
+.stat-value{font-family:var(--font);font-size:1.6rem;font-weight:800;color:var(--primary);}
+.stat-label{font-size:0.73rem;color:var(--text3);margin-top:2px;}
+
+/* TOOLTIP */
+.help-fab{position:fixed;bottom:80px;right:16px;z-index:200;background:var(--accent);color:#fff;width:48px;height:48px;border-radius:50%;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(244,160,32,0.5);display:none;align-items:center;justify-content:center;}
+.help-fab.visible{display:flex;}
+
+/* HANDICAP SELECTOR */
+.handicap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.handicap-item{background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:0.75rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;}
+.handicap-item:hover{border-color:var(--primary-light);}
+.handicap-item.selected{border-color:var(--primary);background:var(--primary-pale);}
+.handicap-item .h-icon{font-size:1.3rem;flex-shrink:0;}
+.handicap-item .h-text{font-size:0.8rem;font-weight:600;color:var(--text);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:16px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);}
+.modal-header{padding:1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-body{padding:1.25rem;}
+.modal-footer{padding:1rem 1.25rem;border-top:1.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+
+/* BREADCRUMB TRAIL */
+.trail{display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--text3);margin-bottom:0.75rem;background:var(--surface2);padding:0.5rem 0.75rem;border-radius:8px;overflow-x:auto;white-space:nowrap;}
+.trail-item{cursor:pointer;color:var(--primary);}
+.trail-sep{color:var(--text3);}
+
+/* FORMATION CENTER CARD */
+.formation-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:8px;}
+.formation-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.formation-name{font-weight:700;font-size:0.88rem;color:var(--text);}
+.formation-center{font-size:0.8rem;color:var(--text2);margin-top:2px;}
+.formation-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+
+/* SCORE + GAME */
+.score-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:10px;padding:0.75rem 1rem;border:1.5px solid var(--border);margin-bottom:1rem;}
+.score-num{font-family:var(--font);font-size:1.3rem;font-weight:800;color:var(--primary);}
+.score-label{font-size:0.78rem;color:var(--text3);}
+
+/* BREADCRUMB TRAIL */
+.nav-trail{display:flex;align-items:center;gap:6px;font-size:0.76rem;background:var(--surface2);padding:0.5rem 0.75rem;border-radius:8px;margin-bottom:1rem;overflow-x:auto;}
+.nav-trail-item{color:var(--primary);cursor:pointer;white-space:nowrap;}
+.nav-trail-sep{color:var(--text3);}
+.nav-trail-current{color:var(--text2);white-space:nowrap;}
+
+/* SKELETON */
+.skeleton{background:var(--surface2);border-radius:8px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+
+/* OFFLINE BADGE */
+.offline-indicator{display:none;align-items:center;gap:6px;background:var(--warning-light);color:var(--warning);font-size:0.75rem;font-weight:600;padding:5px 10px;border-radius:8px;}
+.offline-indicator.show{display:flex;}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .landing-title{font-size:1.6rem;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .metier-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ACCESSIBILITY */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* DARK MODE TOGGLE */
+.theme-btn{background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-weight:600;}
+
+/* ATTESTATION */
+.attestation-preview{background:#fff;border:3px double var(--primary);border-radius:12px;padding:2rem;text-align:center;max-width:500px;margin:0 auto;color:#1a2535;}
+.attestation-preview h2{font-family:var(--font);color:var(--primary);font-size:1.3rem;margin-bottom:0.5rem;}
+
+/* VIDEO PLACEHOLDER */
+.video-placeholder{background:var(--surface2);border-radius:12px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;border:2px dashed var(--border);cursor:pointer;}
+.video-placeholder:hover{border-color:var(--primary);background:var(--primary-pale);}
+
+/* DRAG AND DROP */
+.drag-zone{min-height:60px;border:2px dashed var(--border);border-radius:10px;padding:0.75rem;display:flex;flex-wrap:wrap;gap:6px;}
+.drag-zone.over{border-color:var(--primary);background:var(--primary-pale);}
+.drag-chip{background:var(--primary);color:#fff;padding:6px 12px;border-radius:20px;font-size:0.8rem;cursor:grab;user-select:none;}
+.drag-chip:active{cursor:grabbing;}
+
+/* TOGGLE */
+.toggle{position:relative;display:inline-block;width:44px;height:24px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--border);border-radius:24px;transition:0.3s;}
+.toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:0.3s;}
+input:checked+.toggle-slider{background:var(--primary);}
+input:checked+.toggle-slider:before{transform:translateX(20px);}
+
+/* REFERENTE ADMIN SIDEBAR */
+.admin-tabs{display:flex;gap:4px;background:var(--surface2);padding:4px;border-radius:10px;margin-bottom:1rem;overflow-x:auto;}
+.admin-tab{padding:0.55rem 0.9rem;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;border:none;background:none;color:var(--text2);}
+.admin-tab.active{background:var(--surface);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+
+/* EDITABLE LIST */
+.editable-list-item{display:flex;align-items:center;gap:8px;padding:0.75rem;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;margin-bottom:6px;}
+.editable-list-item:hover .item-actions{opacity:1;}
+.item-actions{display:flex;gap:4px;margin-left:auto;opacity:0;transition:opacity 0.2s;}
+@media(max-width:600px){.item-actions{opacity:1;}}
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE LANDING ===== -->
+<div id="page-landing" class="page active">
+  <div class="landing-hero">
+    <div class="landing-logo">⚓</div>
+    <h1 class="landing-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
+    <p class="landing-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — avec ou sans connexion Internet.</p>
+    <div class="landing-offline-note">
+      <span style="font-size:1.2rem">📶</span>
+      <span>Cette application fonctionne avec ou sans connexion Internet. Vos données sont sauvegardées automatiquement.</span>
+    </div>
+    <div class="landing-btns">
+      <button class="btn btn-white btn-lg" onclick="showPage('page-register')">✨ S'inscrire — c'est gratuit</button>
+      <button class="btn btn-outline-white btn-lg" onclick="showPage('page-login')">🔑 Se connecter</button>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.78rem;opacity:0.6;">Plateforme RÉCIFE × GRETA Côtes Normandes · Le Havre</p>
+  </div>
+</div>
+
+<!-- ===== PAGE INSCRIPTION ===== -->
+<div id="page-register" class="page">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="logo-badge">⚓</div>
+      Cap Avenir
+    </div>
+    <button class="btn-icon" onclick="showPage('page-landing')" title="Retour">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-landing')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Inscription</span>
+    </div>
+
+    <div class="section-title">Créer mon compte</div>
+
+    <div class="alert alert-info" style="margin-bottom:1rem;">
+      <span>⚠️</span>
+      <span><strong>Important :</strong> Notez votre adresse mail et votre mot de passe. Aucun mail de confirmation ne sera envoyé.</span>
+    </div>
+
+    <form id="register-form" onsubmit="handleRegister(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group">
+          <label for="reg-nom">Nom *</label>
+          <input type="text" id="reg-nom" placeholder="Votre nom" required autocomplete="family-name">
+          <div class="error-msg" id="err-nom">Ce champ est obligatoire</div>
+        </div>
+        <div class="form-group">
+          <label for="reg-prenom">Prénom *</label>
+          <input type="text" id="reg-prenom" placeholder="Votre prénom" required autocomplete="given-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-email">Adresse mail *</label>
+        <input type="email" id="reg-email" placeholder="exemple@mail.fr" required autocomplete="email">
+        <div class="error-msg" id="err-email">Adresse mail invalide</div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-email2">Confirmer l'adresse mail *</label>
+        <input type="email" id="reg-email2" placeholder="Confirmez votre mail" required>
+        <div class="error-msg" id="err-email2">Les adresses ne correspondent pas</div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-pwd">Mot de passe *</label>
+        <div class="input-group">
+          <input type="password" id="reg-pwd" placeholder="Minimum 8 caractères" required>
+          <button type="button" class="eye-btn" onclick="togglePwd('reg-pwd','eye1')" id="eye1">👁</button>
+        </div>
+        <div style="margin-top:4px;font-size:0.74rem;color:var(--text3);">Au moins 8 caractères</div>
+        <div class="error-msg" id="err-pwd">Mot de passe trop court (8 caractères minimum)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-pwd2">Confirmer le mot de passe *</label>
+        <div class="input-group">
+          <input type="password" id="reg-pwd2" placeholder="Retapez votre mot de passe" required>
+          <button type="button" class="eye-btn" onclick="togglePwd('reg-pwd2','eye2')" id="eye2">👁</button>
+        </div>
+        <div class="error-msg" id="err-pwd2">Les mots de passe ne correspondent pas</div>
+      </div>
+
+      <div class="form-group">
+        <label>Mon profil *</label>
+        <div class="profile-grid">
+          <div class="choice-card" id="profile-stagiaire" onclick="selectProfile('stagiaire')">
+            <div class="choice-icon">🎓</div>
+            <div class="choice-label">Stagiaire / Demandeur d'emploi</div>
+          </div>
+          <div class="choice-card" id="profile-referente" onclick="selectProfile('referente')">
+            <div class="choice-icon">👩‍💼</div>
+            <div class="choice-label">Référente & Conseillère CIP</div>
+          </div>
+        </div>
+        <div class="error-msg" id="err-profile">Veuillez choisir un profil</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Créer mon compte →</button>
+    </form>
+
+    <p style="text-align:center;margin-top:1rem;font-size:0.83rem;color:var(--text3);">
+      Déjà inscrit(e) ? <span style="color:var(--primary);cursor:pointer;font-weight:600;" onclick="showPage('page-login')">Se connecter</span>
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE CONNEXION ===== -->
+<div id="page-login" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Cap Avenir</div>
+    <button class="btn-icon" onclick="showPage('page-landing')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-landing')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Connexion</span>
+    </div>
+    <div class="section-title">Se connecter</div>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="login-email">Adresse mail</label>
+        <input type="email" id="login-email" placeholder="exemple@mail.fr" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="login-pwd">Mot de passe</label>
+        <div class="input-group">
+          <input type="password" id="login-pwd" placeholder="Votre mot de passe" required>
+          <button type="button" class="eye-btn" onclick="togglePwd('login-pwd','eye3')" id="eye3">👁</button>
+        </div>
+      </div>
+      <div class="error-msg" id="err-login" style="display:none;margin-bottom:1rem;"></div>
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Connexion →</button>
+    </form>
+    <p style="text-align:center;margin-top:1rem;font-size:0.83rem;color:var(--text3);">
+      Pas encore de compte ? <span style="color:var(--primary);cursor:pointer;font-weight:600;" onclick="showPage('page-register')">S'inscrire</span>
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAGE TEST ORIENTATION ===== -->
+<div id="page-test" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Test d'orientation</div>
+    <div class="topbar-actions">
+      <span class="offline-indicator" id="offline-badge">📡 Hors ligne</span>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div id="test-progress-bar">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:0.78rem;color:var(--text3);">Étape <span id="step-current">1</span> / 6</span>
+        <span style="font-size:0.78rem;color:var(--text3);" id="step-name">Niveau de français</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="test-progress" style="width:16%"></div></div>
+    </div>
+
+    <!-- SECTION 1 : NIVEAU FRANÇAIS -->
+    <div id="test-section-1" class="test-section">
+      <div style="margin-top:1.25rem" class="card">
+        <div class="card-title">🇫🇷 Quel est votre niveau en français ?</div>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:1rem;">Choisissez le niveau qui correspond le mieux à vos compétences actuelles.</p>
+        <div class="quiz-options" id="niv-french">
+          <div class="quiz-option" onclick="selectNiveau('A1')"><span class="opt-letter">A1</span>Je comprends des mots simples</div>
+          <div class="quiz-option" onclick="selectNiveau('A2')"><span class="opt-letter">A2</span>Je comprends des phrases courtes</div>
+          <div class="quiz-option" onclick="selectNiveau('B1')"><span class="opt-letter">B1</span>Je comprends et parle des sujets courants</div>
+          <div class="quiz-option" onclick="selectNiveau('B2')"><span class="opt-letter">B2</span>Je m'exprime avec aisance</div>
+          <div class="quiz-option" onclick="selectNiveau('C1')"><span class="opt-letter">C1</span>Je m'exprime couramment</div>
+          <div class="quiz-option" onclick="selectNiveau('C2')"><span class="opt-letter">C2</span>Niveau langue maternelle</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="nextTestSection(2)">Suivant →</button>
+    </div>
+
+    <!-- SECTION 2 : HANDICAP -->
+    <div id="test-section-2" class="test-section" style="display:none">
+      <div style="margin-top:1.25rem" class="card">
+        <div class="card-title">♿ Situation de handicap</div>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Ces informations permettent de vous orienter vers des métiers adaptés. Elles sont confidentielles et uniquement visibles par votre conseillère.</p>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Avez-vous une situation de handicap ?</label>
+          <div class="choice-group">
+            <div class="choice-card" id="handi-oui" onclick="toggleHandicap(true)"><div class="choice-icon">✅</div><div class="choice-label">Oui</div></div>
+            <div class="choice-card" id="handi-non" onclick="toggleHandicap(false)"><div class="choice-icon">❌</div><div class="choice-label">Non / Je préfère ne pas répondre</div></div>
+          </div>
+        </div>
+        <div id="handicap-details" style="display:none">
+          <p style="font-size:0.82rem;font-weight:600;margin-bottom:0.6rem;color:var(--text2);">Quel(s) type(s) de handicap ? (sélection multiple)</p>
+          <div class="handicap-grid">
+            <div class="handicap-item" onclick="toggleHItem(this,'moteur')"><span class="h-icon">🦽</span><span class="h-text">Moteur / Mobilité</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'visuel')"><span class="h-icon">👁</span><span class="h-text">Visuel</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'auditif')"><span class="h-icon">👂</span><span class="h-text">Auditif</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'psychique')"><span class="h-icon">🧠</span><span class="h-text">Psychique / Mental</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'cognitif')"><span class="h-icon">📚</span><span class="h-text">Cognitif (dyslexie, TDAH…)</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'chronique')"><span class="h-icon">💊</span><span class="h-text">Maladie chronique</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'langage')"><span class="h-icon">🗣</span><span class="h-text">Trouble du langage</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'autre')"><span class="h-icon">❓</span><span class="h-text">Autre</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem;">
+        <button class="btn btn-ghost" onclick="nextTestSection(1)">← Retour</button>
+        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(3)">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : PRÉFÉRENCES TRAVAIL -->
+    <div id="test-section-3" class="test-section" style="display:none">
+      <div style="margin-top:1.25rem" class="card">
+        <div class="card-title">🛠 Comment aimez-vous travailler ?</div>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Sélectionnez tout ce qui vous correspond</p>
+        <div class="handicap-grid" id="prefs-grid">
+          <div class="handicap-item" onclick="toggleHItem(this,'manuel')"><span class="h-icon">🔧</span><span class="h-text">Travail manuel</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'bureau')"><span class="h-icon">💻</span><span class="h-text">Travail en bureau</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'exterieur')"><span class="h-icon">🌳</span><span class="h-text">En extérieur</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'equipe')"><span class="h-icon">👥</span><span class="h-text">En équipe</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'seul')"><span class="h-icon">🧍</span><span class="h-text">Seul(e)</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'contact')"><span class="h-icon">🤝</span><span class="h-text">Contact client</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'technique')"><span class="h-icon">⚙️</span><span class="h-text">Technique / Précision</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'creatif')"><span class="h-icon">🎨</span><span class="h-text">Créatif</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem;">
+        <button class="btn btn-ghost" onclick="nextTestSection(2)">← Retour</button>
+        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(4)">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4 : INTÉRÊTS -->
+    <div id="test-section-4" class="test-section" style="display:none">
+      <div style="margin-top:1.25rem" class="card">
+        <div class="card-title">💡 Quels secteurs vous intéressent ?</div>
+        <div class="handicap-grid" id="interests-grid">
+          <div class="handicap-item" onclick="toggleHItem(this,'maritime')"><span class="h-icon">⚓</span><span class="h-text">Maritime & Port</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'industrie')"><span class="h-icon">🏭</span><span class="h-text">Industrie</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'logistique')"><span class="h-icon">📦</span><span class="h-text">Logistique</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'batiment')"><span class="h-icon">🏗</span><span class="h-text">Bâtiment / BTP</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'sante')"><span class="h-icon">🏥</span><span class="h-text">Santé & Social</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'numerique')"><span class="h-icon">💻</span><span class="h-text">Numérique</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'commerce')"><span class="h-icon">🛒</span><span class="h-text">Commerce & Vente</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'restauration')"><span class="h-icon">🍳</span><span class="h-text">Hôtellerie & Restauration</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'transport')"><span class="h-icon">🚛</span><span class="h-text">Transport</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'environnement')"><span class="h-icon">🌿</span><span class="h-text">Environnement</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem;">
+        <button class="btn btn-ghost" onclick="nextTestSection(3)">← Retour</button>
+        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(5)">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5 : COMPÉTENCES -->
+    <div id="test-section-5" class="test-section" style="display:none">
+      <div style="margin-top:1.25rem" class="card">
+        <div class="card-title">⭐ Vos compétences actuelles</div>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Qu'est-ce que vous savez déjà faire ?</p>
+        <div class="handicap-grid">
+          <div class="handicap-item" onclick="toggleHItem(this,'conduire')"><span class="h-icon">🚗</span><span class="h-text">Conduire (permis B)</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'chariot')"><span class="h-icon">🏗</span><span class="h-text">Chariot élévateur</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'ordi')"><span class="h-icon">💻</span><span class="h-text">Ordinateur / Bureautique</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'accueil')"><span class="h-icon">😊</span><span class="h-text">Accueil / Service</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'cuisine')"><span class="h-icon">🍴</span><span class="h-text">Cuisine</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'bricolage')"><span class="h-icon">🔨</span><span class="h-text">Bricolage / Mécanique</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'soin')"><span class="h-icon">💝</span><span class="h-text">Soin aux personnes</span></div>
+          <div class="handicap-item" onclick="toggleHItem(this,'langues')"><span class="h-icon">🌍</span><span class="h-text">Langues étrangères</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem;">
+        <button class="btn btn-ghost" onclick="nextTestSection(4)">← Retour</button>
+        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(6)">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 6 : RÉSULTATS -->
+    <div id="test-section-6" class="test-section" style="display:none">
+      <div style="margin-top:1.25rem;text-align:center;" class="card">
+        <div style="font-size:3rem;margin-bottom:0.75rem">🎯</div>
+        <div class="card-title" style="font-size:1.15rem;text-align:center;">Votre profil est prêt !</div>
+        <p style="font-size:0.85rem;color:var(--text3);margin-bottom:1.5rem;">Voici les métiers qui correspondent à votre profil :</p>
+        <div id="recommended-metiers" style="text-align:left;display:flex;flex-direction:column;gap:8px;"></div>
+        <div id="strengths-section" style="margin-top:1rem;text-align:left;"></div>
+      </div>
+      <button class="btn btn-accent btn-full btn-lg" style="margin-top:1rem" onclick="goToMetiers()">🚀 Découvrir mes métiers recommandés</button>
+      <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="showPage('page-dashboard-stagiaire')">Mon tableau de bord</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE STAGIAIRE DASHBOARD ===== -->
+<div id="page-dashboard-stagiaire" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Mon espace</div>
+    <div class="topbar-actions">
+      <span class="offline-indicator" id="offline-badge2">📡 Hors ligne</span>
+      <button class="btn-icon" onclick="showModal('modal-help')" title="Aide">❓</button>
+    </div>
+  </div>
+  <div class="scroll-content" id="dashboard-scroll">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+      <div>
+        <p style="font-size:0.78rem;color:var(--text3);">Bonjour,</p>
+        <h2 style="font-family:var(--font);font-size:1.2rem;" id="dash-welcome">Prénom</h2>
+      </div>
+      <span class="badge badge-blue" id="dash-niveau">Niveau B1</span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-metiers">0</div>
+        <div class="stat-label">Métiers explorés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-score">0</div>
+        <div class="stat-label">Points gagnés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-badges">0</div>
+        <div class="stat-label">Badges obtenus</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-games">0</div>
+        <div class="stat-label">Jeux terminés</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">📈 Progression globale</div>
+      <div class="progress-bar"><div class="progress-fill" id="global-progress" style="width:0%"></div></div>
+      <p style="font-size:0.75rem;color:var(--text3);margin-top:6px;"><span id="global-pct">0</span>% complété</p>
+    </div>
+
+    <div class="section-title">Modules</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-metiers')">
+        <div style="font-size:2rem;margin-bottom:6px;">🗺️</div>
+        <div style="font-family:var(--font);font-size:0.85rem;font-weight:700;">Découvrir les métiers</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-action')">
+        <div style="font-size:2rem;margin-bottom:6px;">🚀</div>
+        <div style="font-family:var(--font);font-size:0.85rem;font-weight:700;">Passer à l'action</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-test')">
+        <div style="font-size:2rem;margin-bottom:6px;">🎯</div>
+        <div style="font-family:var(--font);font-size:0.85rem;font-weight:700;">Refaire le test</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-attestations')">
+        <div style="font-size:2rem;margin-bottom:6px;">🏆</div>
+        <div style="font-family:var(--font);font-size:0.85rem;font-weight:700;">Mes attestations</div>
+      </div>
+    </div>
+
+    <div id="rec-metiers-dash" style="margin-bottom:1rem;"></div>
+
+    <button class="btn btn-ghost btn-full" onclick="logout()">Se déconnecter</button>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item active" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
+<!-- ===== PAGE MÉTIERS ===== -->
+<div id="page-metiers" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Les métiers</div>
+    <button class="btn-icon" onclick="showPage('page-dashboard-stagiaire')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Métiers</span>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="position:relative;margin-bottom:1rem;">
+      <input type="text" id="metier-search" placeholder="🔍 Rechercher un métier…" oninput="filterMetiers()" style="padding-left:1rem;">
+    </div>
+
+    <!-- CATEGORY FILTER -->
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;">
+      <button class="btn btn-sm btn-primary" onclick="filterCat('all',this)">Tous</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterCat('porteur-lh',this)">📍 Porteurs Le Havre</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterCat('porteur-agglo',this)">🌐 Agglo havraise</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterCat('nonporteur',this)">ℹ️ Non porteurs</button>
+    </div>
+
+    <div class="metier-grid" id="metiers-grid">
+      <!-- dynamically filled -->
+    </div>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item active"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
+<!-- ===== PAGE DÉTAIL MÉTIER ===== -->
+<div id="page-metier-detail" class="page">
+  <div class="topbar">
+    <div class="topbar-brand" id="metier-detail-title"><div class="logo-badge">⚓</div>Métier</div>
+    <button class="btn-icon" onclick="showPage('page-metiers')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail" id="metier-trail"></div>
+
+    <!-- VIDEO -->
+    <div class="video-placeholder" onclick="openVideoModal()" style="margin-bottom:1rem;" id="video-placeholder">
+      <span style="font-size:2.5rem">▶️</span>
+      <span style="font-size:0.85rem;color:var(--text2);font-weight:600;">Voir la vidéo du métier</span>
+      <span style="font-size:0.75rem;color:var(--text3);">Sous-titres disponibles</span>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="card" id="metier-desc-card" style="margin-bottom:1rem;">
+      <div class="card-title" id="metier-full-title">Nom du métier</div>
+      <p id="metier-description" style="font-size:0.88rem;line-height:1.7;color:var(--text2);"></p>
+      <div style="margin-top:0.75rem;display:flex;gap:6px;flex-wrap:wrap;" id="metier-badge-row"></div>
+    </div>
+
+    <!-- CONDITIONS -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">📋 Conditions de travail</div>
+      <div id="metier-conditions" style="font-size:0.85rem;line-height:1.8;color:var(--text2);"></div>
+    </div>
+
+    <!-- FORMATIONS -->
+    <div class="card" style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+        <div class="card-title" style="margin:0;">🎓 Formations disponibles</div>
+        <span style="font-size:0.73rem;color:var(--text3);" id="formations-update-date"></span>
+      </div>
+      <div id="formations-list"></div>
+    </div>
+
+    <!-- GAMES -->
+    <div class="section-title" style="margin-top:1rem;">🎮 Jeux & Quiz</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;" id="games-grid"></div>
+
+    <button class="btn btn-accent btn-full" onclick="startGame('qcm')">🎮 Commencer les jeux</button>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item active" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
+<!-- ===== PAGE GAME QCM ===== -->
+<div id="page-game-qcm" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="game-title">Quiz</span></div>
+    <button class="btn-icon" onclick="showPage('page-metier-detail')">✕</button>
+  </div>
+  <div class="scroll-content">
+    <div class="score-bar">
+      <div><div class="score-num" id="qcm-score">0</div><div class="score-label">points</div></div>
+      <div style="flex:1;margin:0 12px;">
+        <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px;">Question <span id="q-current">1</span>/<span id="q-total">5</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="qcm-progress" style="width:20%"></div></div>
+      </div>
+      <div style="font-size:1.5rem" id="qcm-timer-display">⏱</div>
+    </div>
+
+    <div class="card" id="qcm-card">
+      <div class="quiz-question" id="qcm-question">Question ici…</div>
+      <div class="quiz-options" id="qcm-options"></div>
+    </div>
+
+    <div id="qcm-feedback" style="display:none;margin-top:0.75rem;"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="qcm-next-btn" onclick="nextQcmQuestion()">Question suivante →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE ACTION ===== -->
+<div id="page-action" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Passer à l'action</div>
+    <button class="btn-icon" onclick="showPage('page-dashboard-stagiaire')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Passer à l'action</span>
+    </div>
+    <div class="section-title">Mes outils</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-cv')">
+        <div style="font-size:2rem;margin-bottom:6px;">📄</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Créer mon CV</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-lettre')">
+        <div style="font-size:2rem;margin-bottom:6px;">✉️</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Ma lettre de motivation</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-entretien')">
+        <div style="font-size:2rem;margin-bottom:6px;">🎤</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Simuler un entretien</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-entreprises')">
+        <div style="font-size:2rem;margin-bottom:6px;">🏢</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Entreprises locales</div>
+      </div>
+    </div>
+
+    <div class="section-title">Liens utiles</div>
+    <div class="card" style="display:flex;flex-direction:column;gap:8px;">
+      <a href="https://www.francetravail.fr" target="_blank" class="btn btn-outline btn-full">🔗 France Travail</a>
+      <a href="https://greta.ac-normandie.fr/greta/greta-cotes-normandes/" target="_blank" class="btn btn-outline btn-full">🎓 GRETA Côtes Normandes</a>
+      <a href="https://www.cap-emploi-76.fr" target="_blank" class="btn btn-ghost btn-full">♿ Cap Emploi 76 (handicap)</a>
+    </div>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item active"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
+<!-- ===== PAGE ATTESTATIONS ===== -->
+<div id="page-attestations" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Mes réussites</div>
+    <button class="btn-icon" onclick="showPage('page-dashboard-stagiaire')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Mes réussites</span>
+    </div>
+    <div class="section-title">🏅 Badges obtenus</div>
+    <div id="badges-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;"></div>
+
+    <div class="section-title">📜 Attestations</div>
+    <div id="attestations-list" style="margin-bottom:1rem;"></div>
+    <div class="alert alert-info">
+      <span>ℹ️</span>
+      <span>Les attestations sont générées automatiquement lorsque vous atteignez le score minimum dans un métier.</span>
+    </div>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item active"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
+<!-- ===== PAGE ENTREPRISES ===== -->
+<div id="page-entreprises" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Entreprises locales</div>
+    <button class="btn-icon" onclick="showPage('page-action')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-item" onclick="showPage('page-action')">Action</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Entreprises</span>
+    </div>
+    <div id="entreprises-list"></div>
+  </div>
+</div>
+
+<!-- ===== PAGE RÉFÉRENTE DASHBOARD ===== -->
+<div id="page-dashboard-referente" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Espace référente</div>
+    <div class="topbar-actions">
+      <span class="offline-indicator" id="offline-badge3">📡</span>
+      <button class="btn-icon" onclick="showModal('modal-help')">❓</button>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div class="admin-tabs" role="tablist">
+      <button class="admin-tab active" onclick="showAdminTab('tab-stagiaires',this)">👥 Stagiaires</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-groupes',this)">📂 Groupes</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-metiers-admin',this)">🗂 Métiers</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-formations-admin',this)">🎓 Formations</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-rapports',this)">📊 Rapports</button>
+    </div>
+
+    <!-- TAB STAGIAIRES -->
+    <div id="tab-stagiaires" class="admin-tab-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <div class="section-title" style="margin:0;">Stagiaires</div>
+        <input type="text" id="search-stagiaires" placeholder="Rechercher…" style="width:160px;font-size:0.8rem;padding:0.5rem 0.75rem;" oninput="filterStagiaires()">
+      </div>
+      <div id="stagiaires-list"></div>
+    </div>
+
+    <!-- TAB GROUPES -->
+    <div id="tab-groupes" class="admin-tab-content" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <div class="section-title" style="margin:0;">Groupes</div>
+        <button class="btn btn-primary btn-sm" onclick="showModal('modal-add-groupe')">+ Créer</button>
+      </div>
+      <div id="groupes-list"></div>
+    </div>
+
+    <!-- TAB MÉTIERS ADMIN -->
+    <div id="tab-metiers-admin" class="admin-tab-content" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <div class="section-title" style="margin:0;">Gestion des métiers</div>
+        <button class="btn btn-primary btn-sm" onclick="showModal('modal-add-metier')">+ Ajouter</button>
+      </div>
+      <div id="admin-metiers-list"></div>
+    </div>
+
+    <!-- TAB FORMATIONS ADMIN -->
+    <div id="tab-formations-admin" class="admin-tab-content" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <div class="section-title" style="margin:0;">Gestion des formations</div>
+        <button class="btn btn-primary btn-sm" onclick="showModal('modal-add-formation')">+ Ajouter</button>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:1rem;">
+        <span>ℹ️</span>
+        <span>Mettez à jour les centres de formation en cas de changement d'offre ou de fermeture.</span>
+      </div>
+      <div id="admin-formations-list"></div>
+    </div>
+
+    <!-- TAB RAPPORTS -->
+    <div id="tab-rapports" class="admin-tab-content" style="display:none">
+      <div class="section-title">Rapports & Statistiques</div>
+      <div class="stats-grid" style="margin-bottom:1rem;">
+        <div class="stat-card"><div class="stat-value" id="r-total-stagiaires">0</div><div class="stat-label">Stagiaires total</div></div>
+        <div class="stat-card"><div class="stat-value" id="r-actifs">0</div><div class="stat-label">Actifs (7j)</div></div>
+        <div class="stat-card"><div class="stat-value" id="r-metiers-explores">0</div><div class="stat-label">Explorations</div></div>
+        <div class="stat-card"><div class="stat-value" id="r-attestations">0</div><div class="stat-label">Attestations</div></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="showModal('modal-rapport')">📄 Générer rapport PDF</button>
+    </div>
+
+    <button class="btn btn-ghost btn-full" style="margin-top:1rem;" onclick="logout()">Se déconnecter</button>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Modal Help -->
+<div class="modal-overlay" id="modal-help">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header"><h3 style="font-family:var(--font);">❓ Aide</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-help')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.88rem;line-height:1.7;color:var(--text2);">Cette application vous guide dans la découverte des métiers disponibles au Havre et dans l'agglomération.<br><br>
+      Vous pouvez l'utiliser <strong>sans connexion Internet</strong> après la première connexion. Vos données sont sauvegardées automatiquement.<br><br>
+      Pour toute question, contactez votre référente.</p>
+    </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="closeModal('modal-help')">Compris !</button></div>
+  </div>
+</div>
+
+<!-- Modal CV -->
+<div class="modal-overlay" id="modal-cv">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">📄 Créer mon CV</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-cv')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Voici les étapes pour créer votre CV :</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="alert alert-info"><span>1️⃣</span><span>Rassemblez vos informations personnelles (nom, prénom, adresse, téléphone)</span></div>
+        <div class="alert alert-info"><span>2️⃣</span><span>Listez vos expériences professionnelles et bénévoles</span></div>
+        <div class="alert alert-info"><span>3️⃣</span><span>Notez vos compétences et langues parlées</span></div>
+        <div class="alert alert-info"><span>4️⃣</span><span>Votre référente peut vous aider à le mettre en forme</span></div>
+      </div>
+      <a href="https://www.francetravail.fr/candidat/vos-services-en-ligne/application-mobile-pole-emploi.html" target="_blank" class="btn btn-primary btn-full" style="margin-top:1rem;">🔗 Aide France Travail</a>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-cv')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- Modal Lettre -->
+<div class="modal-overlay" id="modal-lettre">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">✉️ Lettre de motivation</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-lettre')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Une lettre de motivation explique pourquoi vous voulez ce travail. Elle doit :</p>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
+        <div class="alert alert-success"><span>✅</span><span>Être courte (1 page maximum)</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Dire pourquoi ce métier vous plaît</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Expliquer vos compétences utiles</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Demander un entretien</span></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-lettre')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- Modal Entretien -->
+<div class="modal-overlay" id="modal-entretien">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">🎤 Simuler un entretien</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-entretien')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Questions fréquentes en entretien :</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Parlez-moi de vous.&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Présentez votre parcours en 2-3 minutes</p></div>
+        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Pourquoi ce poste ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Expliquez votre motivation sincère</p></div>
+        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Quelles sont vos qualités ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Citez 3 qualités avec des exemples concrets</p></div>
+        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Avez-vous des questions ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Toujours préparer 2-3 questions sur le poste</p></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-entretien')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- Modal Rapport -->
+<div class="modal-overlay" id="modal-rapport">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">📄 Rapport financeur</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-rapport')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Période</label>
+        <select><option>Ce mois</option><option>Ce trimestre</option><option>Cette année</option><option>Personnalisé</option></select>
+      </div>
+      <div class="form-group">
+        <label>Groupe(s)</label>
+        <select><option>Tous les groupes</option></select>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="generateRapportPDF()">📥 Télécharger le rapport PDF</button>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- Modal Add Groupe -->
+<div class="modal-overlay" id="modal-add-groupe">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">➕ Créer un groupe</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-add-groupe')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Nom du groupe *</label><input type="text" id="new-groupe-nom" placeholder="Ex: Groupe A – Avril 2025"></div>
+      <div class="form-group"><label>Dispositif</label><input type="text" id="new-groupe-dispositif" placeholder="Ex: RÉCIFE, RSA, etc."></div>
+      <div class="form-group"><label>Date de création</label><input type="text" id="new-groupe-date" value="" placeholder="JJ/MM/AAAA"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-groupe')">Annuler</button>
+      <button class="btn btn-primary" onclick="addGroupe()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Add Metier (Référente) -->
+<div class="modal-overlay" id="modal-add-metier">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">➕ Ajouter un métier</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-add-metier')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Nom du métier *</label><input type="text" id="new-metier-nom" placeholder="Ex: Technicien de maintenance"></div>
+      <div class="form-group"><label>Emoji / Icône</label><input type="text" id="new-metier-emoji" placeholder="Ex: 🔧" maxlength="4"></div>
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select id="new-metier-cat">
+          <option value="porteur-lh">Porteur Le Havre</option>
+          <option value="porteur-agglo">Porteur Agglomération</option>
+          <option value="nonporteur">Non porteur</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Description (FLE)</label><textarea id="new-metier-desc" rows="3" placeholder="Description simple…"></textarea></div>
+      <div class="form-group"><label>Lien vidéo (YouTube, etc.)</label><input type="url" id="new-metier-video" placeholder="https://youtube.com/…"></div>
+      <div class="form-group">
+        <label>Accessibilité handicap</label>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="new-metier-handi-checks"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-metier')">Annuler</button>
+      <button class="btn btn-primary" onclick="addMetierAdmin()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Add Formation (Référente) -->
+<div class="modal-overlay" id="modal-add-formation">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">🎓 Ajouter / Modifier une formation</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-add-formation')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Nom de la formation *</label><input type="text" id="new-form-nom" placeholder="Ex: CAP Chaudronnier industriel"></div>
+      <div class="form-group"><label>Centre de formation *</label><input type="text" id="new-form-centre" placeholder="Ex: GRETA Côtes Normandes"></div>
+      <div class="form-group"><label>Adresse / Ville</label><input type="text" id="new-form-ville" placeholder="Ex: Le Havre (76)"></div>
+      <div class="form-group"><label>Métier concerné</label><select id="new-form-metier"></select></div>
+      <div class="form-group"><label>Durée</label><input type="text" id="new-form-duree" placeholder="Ex: 6 mois"></div>
+      <div class="form-group"><label>Financement possible</label><input type="text" id="new-form-financement" placeholder="Ex: CPF, Région, France Travail"></div>
+      <div class="form-group"><label>Lien web</label><input type="url" id="new-form-lien" placeholder="https://…"></div>
+      <div class="form-group"><label>Date de mise à jour</label><input type="date" id="new-form-date"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-formation')">Annuler</button>
+      <button class="btn btn-primary" onclick="addFormationAdmin()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirm Delete -->
+<div class="modal-overlay" id="modal-confirm-delete">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header"><h3 style="font-family:var(--font);color:var(--danger);">⚠️ Suppression définitive</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-confirm-delete')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:0.88rem;color:var(--text2);">Cette action est <strong>irréversible</strong>. Toutes les données de ce stagiaire seront supprimées définitivement.</p>
+      <div class="alert alert-danger" style="margin-top:0.75rem;"><span>⛔</span><span>Êtes-vous certain(e) de vouloir supprimer ?</span></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm-delete')">Annuler</button>
+      <button class="btn btn-danger" id="confirm-delete-btn">Supprimer définitivement</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAB Help -->
+<button class="help-fab" id="help-fab" onclick="showModal('modal-help')" title="Aide">❓</button>
+
+<script>
+// ==================== DATA ====================
+const METIERS = [
+  // PORTEURS LE HAVRE
+  {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
+   desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
+   conditions:'• Travail en extérieur et en intérieur\n• Horaires décalés (nuit, week-end)\n• Port de charges\n• Équipements de sécurité obligatoires',
+   video:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+   videoLabel:'Visite du port du Havre – métiers portuaires',
+   tags:['Extérieur','Équipe','Physique'],
+   niveauFr:'A2',
+   handicap:['moteur'],
+   incompatible:['moteur','visuel'],
+   competences:['manuel','equipe','exterieur'],
+   secteur:'maritime',
+   formations:[
+     {nom:'Titre Pro Agent de Terminal Portuaire',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-01'},
+     {nom:'CAP Opérateur Logistique',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'https://porte-oceane.ac-normandie.fr',updated:'2025-01'}
+   ],
+   entreprises:['Haropa Port Le Havre','CMA CGM','MSC France','Sogestran'],
+   questions:[
+     {q:'Quel est le rang du port du Havre en France ?',opts:['1er','2ème','3ème','4ème'],rep:1,expl:'Le Havre est le 2ème port de France et le 1er port français pour les conteneurs.'},
+     {q:'Que signifie "HAROPA" ?',opts:['Havres et Rouen Port Autonome','Havre Rouen Paris','Harbour Of Rouen And Paris','Aucun de ces choix'],rep:1,expl:'HAROPA PORT est l\'axe Seine, regroupant les ports du Havre, Rouen et Paris.'},
+     {q:'Quel équipement est obligatoire sur le port ?',opts:['Casque et gilet jaune','Juste un t-shirt','Des lunettes de soleil','Rien de spécial'],rep:0,expl:'Les EPI (Équipements de Protection Individuelle) sont obligatoires sur le port pour la sécurité de tous.'}
+   ]
+  },
+  {id:'cariste',nom:'Cariste',emoji:'🏗',cat:'porteur-lh',couleur:'#e67e22',
+   desc:'Le cariste conduit des chariots élévateurs pour déplacer des marchandises dans des entrepôts ou sur des quais. Au Havre, de nombreuses entreprises logistiques recrutent des caristes.',
+   conditions:'• En entrepôt ou sur quai\n• Debout et assis alternativement\n• CACES obligatoire\n• Manutention de charges',
+   video:'https://youtu.be/cariste-metier',
+   videoLabel:'Le métier de cariste – logistique',
+   tags:['Entrepôt','CACES','Recrutement élevé'],
+   niveauFr:'A1',
+   incompatible:['visuel','moteur'],
+   competences:['manuel','technique','chariot'],
+   secteur:'logistique',
+   formations:[
+     {nom:'CACES R489 (Chariots)',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 jours',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF',lien:'https://www.afpa.fr',updated:'2025-01'}
+   ],
+   entreprises:['XPO Logistics','ID Logistics','Kuehne+Nagel Le Havre','DHL Supply Chain'],
+   questions:[
+     {q:'Qu\'est-ce qu\'un CACES ?',opts:['Un diplôme d\'université','Une certification pour conduire des engins','Un vêtement de travail','Un logiciel'],rep:1,expl:'Le CACES (Certificat d\'Aptitude à la Conduite En Sécurité) est obligatoire pour conduire des chariots.'},
+     {q:'Où travaille principalement un cariste au Havre ?',opts:['À l\'hôpital','Dans un entrepôt ou sur le port','Dans une école','En forêt'],rep:1,expl:'Le cariste travaille surtout dans des entrepôts logistiques et sur les quais portuaires.'},
+     {q:'Quelle est la règle principale lors du déplacement d\'une charge ?',opts:['Aller le plus vite possible','Vérifier la stabilité avant tout mouvement','Fermer les yeux','Demander à un collègue de faire à sa place'],rep:1,expl:'La sécurité est primordiale. Toujours vérifier la stabilité de la charge avant de démarrer.'}
+   ]
+  },
+  {id:'soudeur',nom:'Soudeur / Soudeuse',emoji:'🔥',cat:'porteur-lh',couleur:'#c0392b',
+   desc:'Le soudeur assemble des pièces métalliques par soudage. À Gonfreville-l\'Orcher et dans la zone industrielle havraise, de nombreuses entreprises de chaudronnerie recrutent des soudeurs qualifiés.',
+   conditions:'• En atelier ou sur chantier\n• Travail debout, positions contraignantes\n• Chaleur et fumées (protection obligatoire)\n• Travail à la lumière artificielle',
+   video:'https://youtu.be/soudeur-metier',
+   videoLabel:'Démonstration de soudure à l\'arc – industrie havraise',
+   tags:['Industrie','Manuel','Qualifié'],
+   niveauFr:'A2',
+   incompatible:['visuel','moteur'],
+   competences:['manuel','technique','bricolage'],
+   secteur:'industrie',
+   formations:[
+     {nom:'CAP Réalisation Industrielle en Chaudronnerie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage, Région',lien:'https://lycee-edgar-pisani.ac-normandie.fr',updated:'2025-01'},
+     {nom:'Titre Pro Soudeur',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, France Travail, OPCO',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Bac Pro Technicien en Chaudronnerie Industrielle',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['Chaufour Invest (Gonfreville)','MLCHEM','Total Énergies (PLPC)','Saffaf Industrie'],
+   questions:[
+     {q:'À quoi sert le soudage ?',opts:['À peindre des métaux','À assembler des pièces métalliques','À couper des fils électriques','À nettoyer des surfaces'],rep:1,expl:'Le soudage permet d\'assembler deux pièces métalliques de manière durable par fusion.'},
+     {q:'Quel équipement protège les yeux du soudeur ?',opts:['Lunettes de soleil','Masque de soudage','Chapeau','Bonnet'],rep:1,expl:'Le masque de soudage protège les yeux et le visage des rayonnements UV très intenses.'},
+     {q:'Dans quelle zone industrielle havraise soudeurs et chaudronniers sont très demandés ?',opts:['Soquence','Zone industrielle de Harfleur','Port 2000','Toutes ces zones'],rep:3,expl:'Toutes ces zones industrielles recrutent régulièrement des soudeurs et des chaudronniers.'}
+   ]
+  },
+  {id:'technicien-maintenance',nom:'Technicien de maintenance',emoji:'⚙️',cat:'porteur-lh',couleur:'#1a5fa0',
+   desc:'Le technicien de maintenance répare et entretient les machines et équipements industriels. Dans les usines et raffineries de la zone havraise, ce métier est très recherché.',
+   conditions:'• En atelier, usine ou sur site industriel\n• Horaires en 3×8 possibles\n• Lecture de plans techniques\n• Travail en hauteur possible',
+   video:'https://youtu.be/maintenance-industrie',
+   videoLabel:'Technicien de maintenance industrielle – zone havraise',
+   tags:['Industrie','Qualifié','CDI facile'],
+   niveauFr:'B1',
+   incompatible:['moteur','visuel'],
+   competences:['technique','manuel','bricolage','ordi'],
+   secteur:'industrie',
+   formations:[
+     {nom:'BTS Maintenance des Systèmes',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Maintenance des Équipements Industriels',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+   ],
+   entreprises:['TotalEnergies Le Havre','Exxon Mobil (Port-Jérôme)','Renault Trucks','Air Liquide'],
+   questions:[
+     {q:'Quelle est la mission principale d\'un technicien de maintenance ?',opts:['Vendre des produits','Réparer et prévenir les pannes de machines','Conduire des camions','Répondre au téléphone'],rep:1,expl:'Le technicien de maintenance s\'assure que les équipements fonctionnent correctement et intervient en cas de panne.'},
+     {q:'Qu\'est-ce que la maintenance préventive ?',opts:['Réparer après une panne','Entretenir avant qu\'une panne se produise','Acheter de nouvelles machines','Former les collègues'],rep:1,expl:'La maintenance préventive permet d\'éviter les pannes en vérifiant régulièrement les équipements.'},
+     {q:'Quel document est essentiel pour réparer une machine ?',opts:['Un livre de cuisine','La notice ou le plan technique','Un contrat de travail','Une liste de courses'],rep:1,expl:'Le plan technique ou la notice de la machine indique comment elle fonctionne et comment la réparer.'}
+   ]
+  },
+  {id:'aide-soignant',nom:'Aide-soignant(e)',emoji:'💝',cat:'porteur-lh',couleur:'#e91e8c',
+   desc:'L\'aide-soignant(e) aide les infirmiers et prend soin des malades et des personnes âgées dans les hôpitaux, cliniques et maisons de retraite du Havre. C\'est un métier du cœur, en forte demande.',
+   conditions:'• En hôpital, clinique, EHPAD ou à domicile\n• Horaires décalés (nuit, week-end, jours fériés)\n• Travail en équipe soignante\n• Manutention des patients (formation gestes/postures)',
+   video:'https://youtu.be/aide-soignant',
+   videoLabel:'Une journée d\'une aide-soignante au CHU du Havre',
+   tags:['Santé','Relationnel','CDI'],
+   niveauFr:'B1',
+   incompatible:['moteur'],
+   competences:['soin','equipe','contact'],
+   secteur:'sante',
+   formations:[
+     {nom:'DEAS – Diplôme d\'État d\'Aide-Soignant',centre:'IFAS CHU du Havre',ville:'Le Havre',duree:'12 mois',financement:'Région Normandie, CPF',lien:'https://www.chu-lehavre.fr/formation',updated:'2025-03'},
+     {nom:'DEAS en alternance',centre:'Croix-Rouge compétence Le Havre',ville:'Le Havre',duree:'11 mois',financement:'France Travail, OPCO Santé',lien:'https://formation.croix-rouge.fr',updated:'2025-02'}
+   ],
+   entreprises:['CHU du Havre','Clinique des Ormeaux','EHPAD Les Tamaris','SSIAD du Havre'],
+   questions:[
+     {q:'Quelle est la durée de formation pour devenir aide-soignant ?',opts:['1 semaine','1 mois','10 à 12 mois','5 ans'],rep:2,expl:'Le Diplôme d\'État d\'Aide-Soignant (DEAS) se prépare en 10 à 12 mois.'},
+     {q:'Où travaille principalement un aide-soignant au Havre ?',opts:['Dans les parcs','Au port','À l\'hôpital, en clinique ou en EHPAD','Dans les écoles'],rep:2,expl:'Les aides-soignants travaillent principalement dans les structures de santé : hôpitaux, cliniques, EHPAD.'},
+     {q:'Quel geste est important pour la sécurité du patient ?',opts:['Courir dans les couloirs','Respecter les gestes et postures de manutention','Ignorer les appels','Parler très fort'],rep:1,expl:'Les gestes et postures adaptés évitent les accidents pour le patient et pour le soignant.'}
+   ]
+  },
+  {id:'conducteur-spl',nom:'Conducteur SPL',emoji:'🚛',cat:'porteur-lh',couleur:'#2c3e50',
+   desc:'Le conducteur SPL conduit des camions semi-remorques pour livrer des marchandises. Au Havre, le port génère énormément de trafic routier et les conducteurs SPL sont très demandés.',
+   conditions:'• Travail en cabine, debout pour charger/décharger\n• Longues distances ou trajets régionaux\n• Permis C+E obligatoire (anciennement EC)\n• Travail de nuit possible',
+   video:'https://youtu.be/spl-conducteur',
+   videoLabel:'Conducteur SPL au port du Havre',
+   tags:['Transport','Autonomie','Permis requis'],
+   niveauFr:'A2',
+   incompatible:['visuel','moteur','auditif'],
+   competences:['conduire','seul','technique'],
+   secteur:'transport',
+   formations:[
+     {nom:'Permis C+E + FIMO Marchandises',centre:'Auto-école CFA Transport Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr/transport',updated:'2025-01'},
+     {nom:'Titre Pro Conducteur du Transport Routier Marchandises',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+   ],
+   entreprises:['Normatrans','Transports Robbe','Geodis Le Havre','DB Schenker'],
+   questions:[
+     {q:'Quel permis faut-il pour conduire un semi-remorque ?',opts:['Permis B','Permis A (moto)','Permis C+E','Permis nautique'],rep:2,expl:'Le permis C+E (anciennement EC) est nécessaire pour conduire des ensembles articulés comme les semi-remorques.'},
+     {q:'Qu\'est-ce que la FIMO ?',opts:['Un réseau social','Formation Initiale Minimale Obligatoire','Un type de camion','Une ville de Normandie'],rep:1,expl:'La FIMO est une formation obligatoire pour tous les nouveaux conducteurs de transport de marchandises.'},
+     {q:'Combien d\'heures de conduite maximum sans pause ?',opts:['10 heures','6 heures','4 heures 30','2 heures'],rep:2,expl:'La réglementation impose une pause après 4h30 de conduite continue pour la sécurité de tous.'}
+   ]
+  },
+  {id:'electricien',nom:'Électricien(ne)',emoji:'⚡',cat:'porteur-lh',couleur:'#f39c12',
+   desc:'L\'électricien installe, répare et entretient les installations électriques dans les maisons, les bâtiments et les usines. Dans l\'agglomération havraise en pleine croissance, ce métier est en forte demande.',
+   conditions:'• Sur chantier, en logement ou en industrie\n• Travail en hauteur possible\n• Habilitations électriques obligatoires\n• Travail en équipe sur les grands chantiers',
+   video:'https://youtu.be/electricien-batiment',
+   videoLabel:'Électricien sur chantier au Havre',
+   tags:['BTP','Qualifié','Chantier'],
+   niveauFr:'A2',
+   incompatible:['auditif','moteur'],
+   competences:['manuel','technique','bricolage'],
+   secteur:'batiment',
+   formations:[
+     {nom:'CAP Électricien',centre:'Lycée des Métiers Fernand Léger',ville:'Ste-Marie-des-Champs (près Le Havre)',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Électricien d\'Équipement',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Bac Pro MELEC',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['Bouygues Énergies & Services','Enedis Normandie','Serelec Le Havre','Spie Batignolles'],
+   questions:[
+     {q:'Qu\'est-ce qu\'une habilitation électrique ?',opts:['Un diplôme de cuisine','Une autorisation à travailler sur des installations électriques','Un permis de conduire','Un certificat de natation'],rep:1,expl:'L\'habilitation électrique est obligatoire pour intervenir sur les installations électriques en toute sécurité.'},
+     {q:'Où peut travailler un électricien au Havre ?',opts:['Uniquement dans les maisons','Seulement en usine','Sur des chantiers, dans des bâtiments et dans l\'industrie','Uniquement en extérieur'],rep:2,expl:'L\'électricien peut travailler dans tous types d\'environnements : résidentiel, tertiaire et industriel.'},
+     {q:'Quelle couleur représente le fil de terre en électricité ?',opts:['Rouge','Noir','Vert et jaune','Bleu'],rep:2,expl:'Le fil de terre (protection) est identifiable par ses couleurs vert et jaune, norme internationale.'}
+   ]
+  },
+  {id:'agent-logistique',nom:'Agent logistique',emoji:'📦',cat:'porteur-lh',couleur:'#8e44ad',
+   desc:'L\'agent logistique gère les stocks, prépare les commandes et organise les expéditions dans un entrepôt. La zone logistique havraise est l\'une des plus importantes de France.',
+   conditions:'• En entrepôt (chaud en été, froid en hiver)\n• Travail debout, marche fréquente\n• Utilisation de scanners et d\'outils numériques\n• Horaires en 2x8 ou 3x8',
+   video:'https://youtu.be/agent-logistique',
+   videoLabel:'Agent logistique en entrepôt havrais',
+   tags:['Logistique','Entrepôt','Polyvalent'],
+   niveauFr:'A2',
+   incompatible:['moteur','visuel'],
+   competences:['manuel','ordi','chariot'],
+   secteur:'logistique',
+   formations:[
+     {nom:'CAP Opérateur Logistique',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr',updated:'2025-01'},
+     {nom:'Titre Pro Préparateur de Commandes',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'2 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+   ],
+   entreprises:['XPO Logistics','ID Logistics Le Havre','Norbert Dentressangle','Kuehne+Nagel'],
+   questions:[
+     {q:'Qu\'est-ce que la gestion des stocks ?',opts:['Organiser les fêtes de bureau','Savoir combien de produits il y a et où ils se trouvent','Conduire des camions','Réparer des machines'],rep:1,expl:'La gestion des stocks permet de savoir exactement ce qu\'il y a dans l\'entrepôt pour éviter les ruptures.'},
+     {q:'Quel outil utilise souvent l\'agent logistique pour scanner les colis ?',opts:['Un téléphone personnel','Une douchette / pistolet scanner','Un marteau','Un ordinateur fixe'],rep:1,expl:'La douchette (scanner code-barres) est l\'outil principal de l\'agent logistique pour enregistrer les mouvements de stock.'},
+     {q:'Que signifie "FIFO" en logistique ?',opts:['First In, First Out (premier entré, premier sorti)','Fast International Freight Operations','Find Inventory For Orders','Rien de spécial'],rep:0,expl:'Le FIFO (Premier entré, Premier sorti) est la règle qui dit qu\'on doit écouler les produits les plus anciens en premier.'}
+   ]
+  },
+  // PORTEURS AGGLO
+  {id:'infirmier',nom:'Infirmier(ère)',emoji:'🏥',cat:'porteur-agglo',couleur:'#e91e8c',
+   desc:'L\'infirmier(ère) soigne les malades, administre des médicaments et surveille l\'état de santé des patients. Très forte demande dans l\'ensemble de l\'agglomération havraise.',
+   conditions:'• Hôpital, clinique, domicile, EHPAD\n• Travail debout, rythme intense\n• 12h de travail par poste possibles\n• Nuits, week-ends et jours fériés',
+   video:'https://youtu.be/infirmier-metier',
+   videoLabel:'Une journée d\'une infirmière au CHU du Havre',
+   tags:['Santé','Diplôme d\'État','Forte demande'],
+   niveauFr:'B2',
+   incompatible:['moteur'],
+   competences:['soin','equipe','contact','ordi'],
+   secteur:'sante',
+   formations:[
+     {nom:'Diplôme d\'État Infirmier (DEI)',centre:'IFSI CHU du Havre',ville:'Le Havre',duree:'3 ans',financement:'Parcoursup, Région, APL',lien:'https://www.chu-lehavre.fr/ifsi',updated:'2025-03'},
+     {nom:'Passerelle aide-soignant → infirmier',centre:'IFSI CHU du Havre',ville:'Le Havre',duree:'Selon parcours',financement:'Région, CPF',lien:'https://www.chu-lehavre.fr',updated:'2025-02'}
+   ],
+   entreprises:['CHU du Havre','Clinique du Mail (Sainte-Adresse)','Polyclinique du Parc','SSIAD'],
+   questions:[
+     {q:'Combien d\'années dure la formation infirmière ?',opts:['1 an','2 ans','3 ans','5 ans'],rep:2,expl:'Le Diplôme d\'État Infirmier (DEI) se prépare en 3 ans après le bac, incluant des stages.'},
+     {q:'Quelle structure forme les infirmiers au Havre ?',opts:['La mairie','L\'IFSI du CHU du Havre','L\'école primaire','Le port'],rep:1,expl:'L\'Institut de Formation en Soins Infirmiers (IFSI) du CHU du Havre forme les futurs infirmiers.'},
+     {q:'Qu\'est-ce qu\'un IDE ?',opts:['Ingénieur De l\'Espace','Infirmier Diplômé d\'État','Institut Du Emploi','Aucune de ces réponses'],rep:1,expl:'IDE signifie Infirmier Diplômé d\'État, le titre officiel d\'un infirmier en France.'}
+   ]
+  },
+  {id:'dev-web',nom:'Développeur web',emoji:'💻',cat:'porteur-agglo',couleur:'#2ecc71',
+   desc:'Le développeur web crée des sites internet et des applications en ligne. Le numérique est un secteur en pleine croissance, avec l\'école 42 implantée au Havre.',
+   conditions:'• En bureau ou en télétravail\n• Travail assis devant ordinateur\n• Créativité et logique nécessaires\n• Missions en freelance possibles',
+   video:'https://youtu.be/dev-web-metier',
+   videoLabel:'École 42 Le Havre – parcours développeur',
+   tags:['Numérique','Télétravail','Avenir'],
+   niveauFr:'B1',
+   incompatible:[],
+   competences:['ordi','bureau','technique','creatif'],
+   secteur:'numerique',
+   formations:[
+     {nom:'École 42 Le Havre (formation gratuite)',centre:'42 Le Havre',ville:'Le Havre',duree:'3 à 5 ans',financement:'Gratuit (sélection sur test)',lien:'https://42lehavre.fr',updated:'2025-03'},
+     {nom:'Titre Pro Développeur Web et Web Mobile',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'12 mois',financement:'CPF, France Travail, OPCO',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'BTS SIO option SLAM',centre:'Lycée Jules Siegfried',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['Capgemini Normandie','42 Le Havre','Openfield','Normandie Webschool'],
+   questions:[
+     {q:'Quel langage est utilisé pour structurer une page web ?',opts:['Excel','HTML','Word','PowerPoint'],rep:1,expl:'HTML (HyperText Markup Language) est le langage de base pour créer la structure d\'une page web.'},
+     {q:'Où se trouve l\'école 42 au Havre ?',opts:['Sur le port','Dans le centre-ville du Havre','À Montivilliers','À Harfleur'],rep:1,expl:'L\'école 42 Le Havre est implantée au Havre et propose une formation gratuite et innovante.'},
+     {q:'Que signifie "CSS" ?',opts:['Colored Style System','Cascading Style Sheets','Computer Software Service','Central Storage System'],rep:1,expl:'CSS (Cascading Style Sheets) est le langage utilisé pour mettre en forme les pages web (couleurs, polices, etc.).'}
+   ]
+  },
+  {id:'maçon',nom:'Maçon(ne)',emoji:'🏗',cat:'porteur-agglo',couleur:'#7f8c8d',
+   desc:'Le maçon construit et rénove des bâtiments. Dans l\'agglomération havraise et notamment à Montivilliers, Harfleur et Gonfreville, de nombreux chantiers recrutent des maçons qualifiés.',
+   conditions:'• En extérieur et en intérieur selon les chantiers\n• Travail physique et en équipe\n• Horaires de journée en général\n• Conduite de minibus de chantier',
+   video:'https://youtu.be/maçon-btp',
+   videoLabel:'Maçon sur chantier en Normandie',
+   tags:['BTP','Extérieur','Chantier'],
+   niveauFr:'A2',
+   incompatible:['moteur','visuel'],
+   competences:['manuel','exterieur','equipe','bricolage'],
+   secteur:'batiment',
+   formations:[
+     {nom:'CAP Maçon',centre:'Lycée des Métiers du BTP Rouen',ville:'Rouen (cours à distance possible)',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Maçon',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+   ],
+   entreprises:['Eiffage Construction Normandie','Vinci Construction','SHAM BTP','Normabat Harfleur'],
+   questions:[
+     {q:'Quel matériau le maçon utilise le plus ?',opts:['Du bois','Du ciment et de la brique','De l\'acier','Du verre'],rep:1,expl:'Le maçon travaille principalement avec du ciment, du mortier et des matériaux de construction comme la brique.'},
+     {q:'Que construit un maçon ?',opts:['Des voitures','Des murs, des fondations, des bâtiments','Des bateaux','Des routes uniquement'],rep:1,expl:'Le maçon construit les structures en maçonnerie : murs, fondations, dalles, etc.'},
+     {q:'Qu\'est-ce qu\'un niveau à bulle ?',opts:['Un outil pour mesurer la chaleur','Un instrument pour vérifier l\'horizontalité ou la verticalité','Une boisson de chantier','Un document officiel'],rep:1,expl:'Le niveau à bulle permet de vérifier qu\'une surface est bien horizontale ou verticale.'}
+   ]
+  },
+  // NON PORTEURS
+  {id:'secretaire',nom:'Secrétaire / Assistant(e)',emoji:'📋',cat:'nonporteur',couleur:'#95a5a6',
+   desc:'Le ou la secrétaire gère l\'accueil, le courrier, les appels téléphoniques et organise les rendez-vous dans une entreprise. Ce métier existe mais évolue avec le numérique.',
+   conditions:'• En bureau, travail assis\n• Contact régulier avec le public\n• Maîtrise des outils informatiques\n• Horaires de journée',
+   video:'https://youtu.be/secretaire-admin',
+   videoLabel:'Le métier de secrétaire administrative',
+   tags:['Bureau','Bureautique','Évolution'],
+   niveauFr:'B1',
+   incompatible:['visuel','cognitif'],
+   competences:['bureau','ordi','contact','accueil'],
+   secteur:'commerce',
+   formations:[
+     {nom:'Titre Pro Secrétaire Assistant',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'BTS Gestion de la PME',centre:'Lycée Jules Siegfried',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['Entreprises diverses au Havre','Cabinets médicaux','Collectivités'],
+   questions:[
+     {q:'Quel logiciel est essentiel pour un secrétaire ?',opts:['Minecraft','Suite Office (Word, Excel)','Un jeu vidéo','Un logiciel de dessin'],rep:1,expl:'La maîtrise de Word, Excel et Outlook est indispensable pour un secrétaire administratif.'},
+     {q:'Quelle qualité est fondamentale pour un secrétaire ?',opts:['La force physique','L\'organisation et la discrétion','La vitesse de course','La connaissance en mécanique'],rep:1,expl:'L\'organisation, la rigueur et la discrétion (confidentialité) sont des qualités essentielles.'},
+     {q:'Comment évolue ce métier avec le numérique ?',opts:['Il disparaît totalement','Il se transforme avec de nouvelles compétences numériques','Il reste identique','Il devient un métier manuel'],rep:1,expl:'Le métier évolue : de nouvelles compétences numériques sont nécessaires, mais la gestion administrative reste utile.'}
+   ]
+  }
+];
+
+// FORMATIONS BASE (modifiable par référente)
+let FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom') || '[]');
+
+// ENTREPRISES
+const ENTREPRISES = [
+  {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaports.com'},
+  {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.fr'},
+  {nom:'TotalEnergies (Raffinerie)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://totalenergies.com'},
+  {nom:'XPO Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.xpo.com'},
+  {nom:'ID Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.id-logistics.com'},
+  {nom:'CHU du Havre',secteur:'Santé',ville:'Le Havre',lien:'https://www.chu-lehavre.fr'},
+  {nom:'Eiffage Construction',secteur:'BTP',ville:'Le Havre',lien:'https://www.eiffage.com'},
+  {nom:'École 42 Le Havre',secteur:'Numérique',ville:'Le Havre',lien:'https://42lehavre.fr'},
+  {nom:'Normatrans',secteur:'Transport',ville:'Le Havre',lien:''},
+  {nom:'Air Liquide (Zone Industrielle)',secteur:'Industrie',ville:'Harfleur',lien:'https://www.airliquide.com'},
+  {nom:'DB Schenker',secteur:'Logistique',ville:'Le Havre',lien:'https://www.dbschenker.com'},
+  {nom:'Bouygues Énergies & Services',secteur:'BTP/Énergie',ville:'Le Havre',lien:'https://bouygues-es.com'},
+  {nom:'Clinique des Ormeaux',secteur:'Santé',ville:'Le Havre',lien:''},
+  {nom:'Enedis Normandie',secteur:'Énergie',ville:'Le Havre',lien:'https://www.enedis.fr'},
+  {nom:'Saffaf Industrie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:''},
+];
+
+// ==================== STATE ====================
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+let users = JSON.parse(localStorage.getItem('users') || '[]');
+let groups = JSON.parse(localStorage.getItem('groups') || '[]');
+let testResults = JSON.parse(localStorage.getItem('testResults_' + (currentUser?.email||'')) || 'null');
+let selectedProfile = '';
+let currentMetier = null;
+let qcmQuestions = [];
+let qcmIndex = 0;
+let qcmScore = 0;
+let selectedHandicap = [];
+let selectedPrefs = [];
+let selectedInterests = [];
+let selectedSkills = [];
+let selectedNiveauFr = '';
+let customMetiers = JSON.parse(localStorage.getItem('custom_metiers') || '[]');
+
+// ==================== UTILS ====================
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) || def; }catch(e){ return def; } }
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
+  const pg = document.getElementById(id);
+  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; }
+  updateFab(id);
+  trackNavigation(id);
+}
+function updateFab(pageId){
+  const fab = document.getElementById('help-fab');
+  const noFab = ['page-landing','page-login','page-register'];
+  if(noFab.includes(pageId)) fab.classList.remove('visible');
+  else fab.classList.add('visible');
+}
+function trackNavigation(pageId){
+  if(!currentUser) return;
+  if(!currentUser.navHistory) currentUser.navHistory = [];
+  currentUser.navHistory.push({page:pageId, time:new Date().toISOString()});
+  if(currentUser.navHistory.length > 100) currentUser.navHistory = currentUser.navHistory.slice(-100);
+  saveCurrentUser();
+}
+function saveCurrentUser(){
+  if(!currentUser) return;
+  save('currentUser', currentUser);
+  let idx = users.findIndex(u => u.email === currentUser.email);
+  if(idx >= 0) users[idx] = currentUser;
+  save('users', users);
+}
+function showModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function togglePwd(inputId, btnId){
+  const inp = document.getElementById(inputId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ==================== OFFLINE DETECTION ====================
+function updateOfflineStatus(){
+  const online = navigator.onLine;
+  document.querySelectorAll('.offline-indicator').forEach(el => {
+    el.classList.toggle('show', !online);
+  });
+}
+window.addEventListener('online', updateOfflineStatus);
+window.addEventListener('offline', updateOfflineStatus);
+updateOfflineStatus();
+
+// ==================== AUTH ====================
+function selectProfile(p){
+  selectedProfile = p;
+  document.getElementById('profile-stagiaire').classList.toggle('selected', p === 'stagiaire');
+  document.getElementById('profile-referente').classList.toggle('selected', p === 'referente');
+}
+function handleRegister(e){
+  e.preventDefault();
+  let valid = true;
+  const nom = document.getElementById('reg-nom').value.trim();
+  const prenom = document.getElementById('reg-prenom').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const email2 = document.getElementById('reg-email2').value.trim().toLowerCase();
+  const pwd = document.getElementById('reg-pwd').value;
+  const pwd2 = document.getElementById('reg-pwd2').value;
+
+  document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+
+  if(!nom){ showErr('err-nom'); valid = false; }
+  if(email !== email2){ showErr('err-email2'); valid = false; }
+  if(!/\S+@\S+\.\S+/.test(email)){ showErr('err-email'); valid = false; }
+  if(pwd.length < 8){ showErr('err-pwd'); valid = false; }
+  if(pwd !== pwd2){ showErr('err-pwd2'); valid = false; }
+  if(!selectedProfile){ showErr('err-profile'); valid = false; }
+  if(!valid) return;
+
+  if(users.find(u => u.email === email)){
+    showErr('err-email'); document.getElementById('err-email').textContent = 'Cette adresse mail est déjà utilisée.'; return;
+  }
+
+  const user = { nom, prenom, email, pwd, profile: selectedProfile, createdAt: new Date().toISOString(), navHistory:[], stats:{metiersExplored:[],scores:{},badges:[],games:0} };
+  users.push(user);
+  save('users', users);
+  currentUser = user;
+  save('currentUser', user);
+  postLogin();
+}
+function showErr(id){ const el = document.getElementById(id); if(el){ el.style.display = 'block'; } }
+function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pwd = document.getElementById('login-pwd').value;
+  const user = users.find(u => u.email === email && u.pwd === pwd);
+  const errEl = document.getElementById('err-login');
+  if(!user){ errEl.textContent = 'Email ou mot de passe incorrect.'; errEl.style.display = 'block'; return; }
+  currentUser = user;
+  save('currentUser', user);
+  postLogin();
+}
+function postLogin(){
+  if(!currentUser.stats) currentUser.stats = {metiersExplored:[],scores:{},badges:[],games:0};
+  saveCurrentUser();
+  if(currentUser.profile === 'referente') goToReferente();
+  else {
+    testResults = load('testResults_'+currentUser.email, null);
+    if(!testResults) showPage('page-test');
+    else goToDashboard();
+  }
+}
+function logout(){
+  currentUser = null;
+  save('currentUser', null);
+  showPage('page-landing');
+}
+
+// ==================== TEST ORIENTATION ====================
+function selectNiveau(n){
+  selectedNiveauFr = n;
+  document.querySelectorAll('#niv-french .quiz-option').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+function toggleHandicap(has){
+  document.getElementById('handi-oui').classList.toggle('selected', has);
+  document.getElementById('handi-non').classList.toggle('selected', !has);
+  document.getElementById('handicap-details').style.display = has ? 'block' : 'none';
+}
+function toggleHItem(el, key){
+  el.classList.toggle('selected');
+  // collect in relevant array based on parent
+  const pid = el.closest('.test-section')?.id;
+  if(pid === 'test-section-2') updateArr(selectedHandicap, key, el.classList.contains('selected'));
+  else if(pid === 'test-section-3') updateArr(selectedPrefs, key, el.classList.contains('selected'));
+  else if(pid === 'test-section-4') updateArr(selectedInterests, key, el.classList.contains('selected'));
+  else if(pid === 'test-section-5') updateArr(selectedSkills, key, el.classList.contains('selected'));
+}
+function updateArr(arr, key, add){
+  const idx = arr.indexOf(key);
+  if(add && idx < 0) arr.push(key);
+  if(!add && idx >= 0) arr.splice(idx, 1);
+}
+function nextTestSection(n){
+  document.querySelectorAll('.test-section').forEach(s => s.style.display = 'none');
+  document.getElementById('test-section-'+n).style.display = 'block';
+  const pct = Math.round((n/6)*100);
+  document.getElementById('test-progress').style.width = pct+'%';
+  document.getElementById('step-current').textContent = n;
+  const names = ['','Niveau français','Handicap','Préférences','Intérêts','Compétences','Résultats'];
+  document.getElementById('step-name').textContent = names[n]||'';
+  if(n === 6) generateResults();
+}
+function generateResults(){
+  // Score each metier
+  const all = [...METIERS, ...customMetiers];
+  const scored = all.map(m => {
+    let score = 0;
+    // check incompatibilities
+    const hasIncompat = selectedHandicap.some(h => m.incompatible && m.incompatible.includes(h));
+    if(hasIncompat) return {m, score: -100};
+    // interests match
+    if(selectedInterests.includes(m.secteur)) score += 30;
+    // prefs match
+    if(m.competences) m.competences.forEach(c => { if(selectedPrefs.includes(c)||selectedSkills.includes(c)) score += 10; });
+    // niveau
+    const niveaux = {A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
+    const userN = niveaux[selectedNiveauFr||'A1']||1;
+    const metierN = niveaux[m.niveauFr||'A2']||2;
+    if(userN >= metierN) score += 20;
+    else score += Math.max(0, 20 - (metierN-userN)*8);
+    return {m, score};
+  });
+  scored.sort((a,b) => b.score - a.score);
+  const top3 = scored.filter(s => s.score > 0).slice(0,3);
+  testResults = { niveau: selectedNiveauFr, handicap: selectedHandicap, prefs: selectedPrefs, interests: selectedInterests, skills: selectedSkills, recommended: top3.map(s => s.m.id), date: new Date().toISOString() };
+  save('testResults_'+currentUser.email, testResults);
+  
+  // Display results
+  const recDiv = document.getElementById('recommended-metiers');
+  recDiv.innerHTML = '';
+  top3.forEach((s,i) => {
+    const colors = ['#f4a020','#7f8c8d','#cd7f32'];
+    recDiv.innerHTML += `<div class="card" style="padding:0.85rem;cursor:pointer;display:flex;align-items:center;gap:10px;border-left:4px solid ${colors[i]}" onclick="openMetier('${s.m.id}')">
+      <span style="font-size:1.8rem">${s.m.emoji}</span>
+      <div><div style="font-weight:700;font-family:var(--font);font-size:0.9rem;">${['🥇','🥈','🥉'][i]} ${s.m.nom}</div>
+      <div style="font-size:0.75rem;color:var(--text3);">${s.m.cat==='porteur-lh'?'📍 Le Havre':s.m.cat==='porteur-agglo'?'🌐 Agglo havraise':'ℹ️'}</div></div>
+    </div>`;
+  });
+  
+  document.getElementById('strengths-section').innerHTML = `<div class="alert alert-success" style="margin-top:0.5rem;">
+    <span>⭐</span><div><strong>Points forts détectés :</strong><br>${selectedSkills.map(s=>({conduire:'Permis de conduire',chariot:'Chariot élévateur',ordi:'Bureautique',accueil:'Accueil client',cuisine:'Cuisine',bricolage:'Bricolage/Mécanique',soin:'Soin aux personnes',langues:'Langues étrangères'}[s]||s)).join(', ')||'À découvrir lors des jeux !'}</div>
+  </div>`;
+}
+function goToMetiers(){ showPage('page-metiers'); renderMetiers(); }
+
+// ==================== MÉTIERS ====================
+function renderMetiers(cat='all', search=''){
+  const all = [...METIERS, ...customMetiers];
+  const grid = document.getElementById('metiers-grid');
+  const filtered = all.filter(m => {
+    const matchCat = cat === 'all' || m.cat === cat;
+    const matchSearch = !search || m.nom.toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchSearch;
+  });
+  grid.innerHTML = filtered.map(m => `
+    <div class="metier-card" onclick="openMetier('${m.id}')">
+      <div class="metier-banner" style="background:${m.couleur+'22'}">${m.emoji}</div>
+      <div class="metier-info">
+        <div class="metier-title">${m.nom}</div>
+        <div class="metier-tags">
+          ${m.cat==='porteur-lh'?'<span class="badge badge-blue">📍 LH</span>':m.cat==='porteur-agglo'?'<span class="badge badge-green">🌐 Agglo</span>':'<span class="badge badge-gray">ℹ️ Info</span>'}
+          ${currentUser?.stats?.badges?.includes(m.id)?'<span class="badge badge-amber">🏅</span>':''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function filterCat(cat, btn){
+  document.querySelectorAll('[onclick^="filterCat"]').forEach(b => { b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost'; });
+  renderMetiers(cat, document.getElementById('metier-search').value);
+}
+function filterMetiers(){ renderMetiers('all', document.getElementById('metier-search').value); }
+
+function openMetier(id){
+  const m = [...METIERS, ...customMetiers].find(x => x.id === id);
+  if(!m) return;
+  currentMetier = m;
+  
+  // Track exploration
+  if(currentUser && !currentUser.stats.metiersExplored.includes(id)){
+    currentUser.stats.metiersExplored.push(id);
+    saveCurrentUser();
+  }
+
+  document.getElementById('metier-detail-title').innerHTML = `<div class="logo-badge">⚓</div>${m.nom}`;
+  document.getElementById('metier-full-title').textContent = m.emoji + ' ' + m.nom;
+  document.getElementById('metier-description').textContent = m.desc;
+  document.getElementById('metier-trail').innerHTML = `<span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span><span class="nav-trail-sep">›</span><span class="nav-trail-item" onclick="showPage('page-metiers')">Métiers</span><span class="nav-trail-sep">›</span><span class="nav-trail-current">${m.nom}</span>`;
+  
+  document.getElementById('metier-badge-row').innerHTML = (m.tags||[]).map(t => `<span class="badge badge-blue">${t}</span>`).join('') + `<span class="badge badge-amber">Niveau ${m.niveauFr||'A2'}+</span>`;
+  
+  document.getElementById('metier-conditions').innerHTML = (m.conditions||'').split('\n').map(l=>`<div style="display:flex;gap:6px;align-items:flex-start;">${l.startsWith('•')?'<span style="color:var(--primary)">'+l.slice(0,1)+'</span><span>'+l.slice(1)+'</span>':l}</div>`).join('');
+
+  // Formations
+  const formDiv = document.getElementById('formations-list');
+  const allForms = [...(m.formations||[]), ...FORMATIONS_CUSTOM.filter(f => f.metier === m.id)];
+  if(allForms.length === 0){
+    formDiv.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucune formation renseignée pour ce métier. Demandez à votre référente.</p>';
+  } else {
+    formDiv.innerHTML = allForms.map(f => `
+      <div class="formation-card">
+        <div class="formation-card-header">
+          <div><div class="formation-name">${f.nom}</div><div class="formation-centre">${f.centre} — ${f.ville}</div></div>
+          ${f.lien?`<a href="${f.lien}" target="_blank" class="btn btn-sm btn-outline">🔗</a>`:''}
+        </div>
+        <div class="formation-meta">
+          ${f.duree?`<span class="badge badge-gray">⏱ ${f.duree}</span>`:''}
+          ${f.financement?`<span class="badge badge-green">💰 ${f.financement}</span>`:''}
+          ${f.updated?`<span class="badge badge-blue">Màj ${f.updated}</span>`:''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Games grid
+  const games = [
+    {id:'qcm',icon:'🧠',name:'Quiz QCM',pts:'20 pts'},
+    {id:'vraifaux',icon:'✅',name:'Vrai ou Faux',pts:'15 pts'},
+    {id:'glisser',icon:'🎯',name:'Glisser-Déposer',pts:'25 pts'},
+    {id:'situation',icon:'💡',name:'Situation pro',pts:'30 pts'},
+  ];
+  document.getElementById('games-grid').innerHTML = games.map(g => `
+    <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;" onclick="startGame('${g.id}')">
+      <div style="font-size:1.8rem;margin-bottom:4px">${g.icon}</div>
+      <div style="font-size:0.8rem;font-weight:700;font-family:var(--font);">${g.name}</div>
+      <span class="badge badge-amber" style="margin-top:6px;">${g.pts}</span>
+    </div>
+  `).join('');
+
+  showPage('page-metier-detail');
+}
+
+// ==================== GAMES ====================
+function startGame(type){
+  if(!currentMetier) return;
+  if(type === 'qcm') startQCM();
+  else { alert('Ce jeu est en cours de développement. Essayez le Quiz QCM !'); }
+}
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function startQCM(){
+  const qs = shuffle(currentMetier.questions || []);
+  qcmQuestions = qs;
+  qcmIndex = 0;
+  qcmScore = 0;
+  document.getElementById('game-title').textContent = '🧠 Quiz – ' + currentMetier.nom;
+  document.getElementById('q-total').textContent = qs.length;
+  document.getElementById('qcm-score').textContent = 0;
+  document.getElementById('qcm-next-btn').style.display = 'none';
+  document.getElementById('qcm-feedback').style.display = 'none';
+  renderQCMQuestion();
+  showPage('page-game-qcm');
+}
+function renderQCMQuestion(){
+  if(qcmIndex >= qcmQuestions.length){ endQCM(); return; }
+  const q = qcmQuestions[qcmIndex];
+  document.getElementById('q-current').textContent = qcmIndex + 1;
+  document.getElementById('qcm-progress').style.width = ((qcmIndex+1)/qcmQuestions.length*100)+'%';
+  document.getElementById('qcm-question').textContent = q.q;
+  const opts = q.opts.map((o,i) => ({text:o, origIdx:i}));
+  const shuffled = shuffle(opts);
+  document.getElementById('qcm-options').innerHTML = shuffled.map((o,i) => 
+    `<div class="quiz-option" onclick="selectQCMAnswer(this,${o.origIdx},${q.rep})" data-idx="${o.origIdx}">
+      <span class="opt-letter">${['A','B','C','D'][i]}</span>${o.text}
+    </div>`
+  ).join('');
+  document.getElementById('qcm-feedback').style.display = 'none';
+  document.getElementById('qcm-next-btn').style.display = 'none';
+}
+function selectQCMAnswer(el, chosen, correct){
+  document.querySelectorAll('#qcm-options .quiz-option').forEach(o => o.style.pointerEvents = 'none');
+  const isCorrect = chosen === correct;
+  if(isCorrect){ el.classList.add('correct'); qcmScore += 20; document.getElementById('qcm-score').textContent = qcmScore; }
+  else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#qcm-options .quiz-option').forEach(o => { if(parseInt(o.dataset.idx) === correct) o.classList.add('correct'); });
+  }
+  const feedDiv = document.getElementById('qcm-feedback');
+  feedDiv.style.display = 'block';
+  feedDiv.innerHTML = `<div class="alert ${isCorrect?'alert-success':'alert-warning'}"><span>${isCorrect?'✅':'❌'}</span><span>${qcmQuestions[qcmIndex].expl}</span></div>`;
+  document.getElementById('qcm-next-btn').style.display = 'block';
+  qcmIndex++;
+}
+function nextQcmQuestion(){ renderQCMQuestion(); }
+function endQCM(){
+  const pct = Math.round(qcmScore / (qcmQuestions.length * 20) * 100);
+  const gotBadge = pct >= 60;
+  document.getElementById('qcm-options').innerHTML = '';
+  document.getElementById('qcm-question').innerHTML = `<div style="text-align:center;padding:1rem 0;">
+    <div style="font-size:3rem;margin-bottom:0.75rem">${gotBadge?'🏅':'💪'}</div>
+    <div style="font-size:1.2rem;font-weight:700;font-family:var(--font);">Score final : ${qcmScore} pts (${pct}%)</div>
+    <p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">${gotBadge?'Félicitations ! Vous obtenez le badge '+currentMetier.nom+' !':'Continuez à pratiquer pour obtenir le badge !'}</p>
+  </div>`;
+  if(gotBadge && currentUser){
+    if(!currentUser.stats.badges.includes(currentMetier.id)){
+      currentUser.stats.badges.push(currentMetier.id);
+    }
+  }
+  if(currentUser){
+    currentUser.stats.scores[currentMetier.id] = Math.max(currentUser.stats.scores[currentMetier.id]||0, qcmScore);
+    currentUser.stats.games = (currentUser.stats.games||0) + 1;
+    if(gotBadge) generateAttestation(currentMetier.nom);
+    saveCurrentUser();
+  }
+  document.getElementById('qcm-feedback').style.display = 'none';
+  document.getElementById('qcm-next-btn').innerHTML = '← Retour au métier';
+  document.getElementById('qcm-next-btn').onclick = () => showPage('page-metier-detail');
+  document.getElementById('qcm-next-btn').style.display = 'block';
+}
+
+// ==================== ATTESTATIONS ====================
+function generateAttestation(metierNom){
+  if(!currentUser) return;
+  if(!currentUser.attestations) currentUser.attestations = [];
+  const exists = currentUser.attestations.find(a => a.metier === metierNom);
+  if(!exists){
+    currentUser.attestations.push({metier:metierNom, date:new Date().toLocaleDateString('fr-FR'), id: Date.now()});
+    saveCurrentUser();
+  }
+}
+function renderAttestations(){
+  const atts = currentUser?.attestations || [];
+  const list = document.getElementById('attestations-list');
+  if(atts.length === 0){
+    list.innerHTML = '<p style="font-size:0.85rem;color:var(--text3);">Aucune attestation encore. Complétez les quiz avec un score ≥ 60% !</p>';
+    return;
+  }
+  list.innerHTML = atts.map(a => `
+    <div class="formation-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div class="formation-name">🏅 ${a.metier}</div>
+          <div class="formation-centre">Délivré le ${a.date}</div>
+          <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">Cette attestation n'est pas un document officiel.</div>
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="downloadAttestation('${a.metier}','${a.date}')">📥 PDF</button>
+      </div>
+    </div>
+  `).join('');
+  
+  const badges = currentUser?.stats?.badges || [];
+  const badgesDiv = document.getElementById('badges-list');
+  if(badges.length === 0){
+    badgesDiv.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun badge encore. Jouez aux quiz pour en obtenir !</p>';
+  } else {
+    const all = [...METIERS, ...customMetiers];
+    badgesDiv.innerHTML = badges.map(bid => {
+      const m = all.find(x => x.id === bid);
+      return m ? `<div style="background:var(--accent-light);border:2px solid var(--accent);border-radius:12px;padding:0.75rem 1rem;text-align:center;min-width:100px;"><div style="font-size:1.8rem">${m.emoji}</div><div style="font-size:0.75rem;font-weight:700;color:#b07a10;margin-top:4px;">${m.nom}</div></div>` : '';
+    }).join('');
+  }
+}
+function downloadAttestation(metier, date){
+  const nom = currentUser?.nom || '';
+  const prenom = currentUser?.prenom || '';
+  const win = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>Attestation</title><style>
+    body{font-family:Arial,sans-serif;margin:40px;max-width:600px;margin:40px auto;}
+    .box{border:3px double #0a3d6b;padding:40px;border-radius:12px;text-align:center;}
+    h1{color:#0a3d6b;font-size:1.4rem;margin-bottom:0.5rem;}
+    .disclaimer{font-size:0.78rem;color:#888;margin-top:20px;font-style:italic;}
+    .logo{font-size:2rem;margin-bottom:1rem;}
+  </style></head><body>
+    <div class="box">
+      <div class="logo">⚓</div>
+      <h1>ATTESTATION DE PARTICIPATION</h1>
+      <p>La plateforme <strong>Cap Avenir – Le Havre</strong></p>
+      <p>certifie que</p>
+      <h2>${prenom} ${nom}</h2>
+      <p>a suivi et complété avec succès le module</p>
+      <h3 style="color:#f4a020;">${metier}</h3>
+      <p>Délivré le ${date}</p>
+      <p class="disclaimer">Cette attestation n'est pas un document officiel.</p>
+    </div>
+    <script>window.print();<\/script>
+  </body></html>`);
+}
+
+// ==================== DASHBOARD STAGIAIRE ====================
+function renderDashboard(){
+  if(!currentUser) return;
+  document.getElementById('dash-welcome').textContent = currentUser.prenom + ' ' + currentUser.nom;
+  const niveau = testResults?.niveau || '—';
+  document.getElementById('dash-niveau').textContent = 'Niveau ' + niveau;
+  const stats = currentUser.stats || {};
+  document.getElementById('stat-metiers').textContent = (stats.metiersExplored||[]).length;
+  document.getElementById('stat-score').textContent = Object.values(stats.scores||{}).reduce((a,b)=>a+b,0);
+  document.getElementById('stat-badges').textContent = (stats.badges||[]).length;
+  document.getElementById('stat-games').textContent = stats.games || 0;
+  const pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
+  document.getElementById('global-progress').style.width = pct+'%';
+  document.getElementById('global-pct').textContent = pct;
+  
+  // Recommended metiers widget
+  const recDiv = document.getElementById('rec-metiers-dash');
+  if(testResults?.recommended?.length){
+    const all = [...METIERS, ...customMetiers];
+    recDiv.innerHTML = `<div class="section-title">🎯 Mes métiers recommandés</div>` +
+      testResults.recommended.slice(0,3).map(id => {
+        const m = all.find(x => x.id === id);
+        return m ? `<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:6px;cursor:pointer;" onclick="openMetier('${m.id}')">
+          <span style="font-size:1.6rem">${m.emoji}</span>
+          <div style="flex:1"><div style="font-weight:700;font-size:0.88rem;">${m.nom}</div><div style="font-size:0.75rem;color:var(--text3);">${m.cat==='porteur-lh'?'📍 Le Havre':m.cat==='porteur-agglo'?'🌐 Agglo havraise':'ℹ️'}</div></div>
+          <span style="color:var(--primary);font-size:1.1rem;">›</span>
+        </div>` : '';
+      }).join('');
+  }
+}
+
+// ==================== ENTREPRISES ====================
+function renderEntreprises(){
+  const div = document.getElementById('entreprises-list');
+  div.innerHTML = `<div class="section-title">🏢 Entreprises qui recrutent</div>` +
+  ENTREPRISES.map(e => `
+    <div class="formation-card">
+      <div class="formation-card-header">
+        <div><div class="formation-name">${e.nom}</div><div class="formation-centre">${e.secteur} — ${e.ville}</div></div>
+        ${e.lien?`<a href="${e.lien}" target="_blank" class="btn btn-sm btn-outline">🔗</a>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================== RÉFÉRENTE ====================
+function goToReferente(){ showPage('page-dashboard-referente'); renderReferenteDashboard(); }
+function renderReferenteDashboard(){
+  renderStagiairesList();
+  renderGroupesList();
+  renderAdminMetiers();
+  renderAdminFormations();
+  updateRapportStats();
+  populateMetierSelect();
+}
+function showAdminTab(tabId, btn){
+  document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).style.display = 'block';
+  btn.classList.add('active');
+}
+function renderStagiairesList(filter=''){
+  const div = document.getElementById('stagiaires-list');
+  const stagiaires = users.filter(u => u.profile === 'stagiaire' && (!filter || (u.nom+u.prenom+u.email).toLowerCase().includes(filter.toLowerCase())));
+  if(!stagiaires.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun stagiaire inscrit.</p>'; return; }
+  div.innerHTML = stagiaires.map(s => `
+    <div class="editable-list-item">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:var(--primary);flex-shrink:0;">${(s.prenom[0]||'?').toUpperCase()}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:600;font-size:0.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.prenom} ${s.nom}</div>
+        <div style="font-size:0.74rem;color:var(--text3);">${(s.stats?.metiersExplored||[]).length} métiers · ${(s.stats?.badges||[]).length} badges</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-sm btn-ghost" onclick="showStagiaireDetail('${s.email}')">👁</button>
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${s.email}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+function filterStagiaires(){ renderStagiairesList(document.getElementById('search-stagiaires').value); }
+function showStagiaireDetail(email){
+  const s = users.find(u => u.email === email);
+  if(!s) return;
+  showModal('modal-stagiaire-detail');
+  const modal = document.getElementById('modal-stagiaire-detail');
+  if(!modal){
+    // Create modal dynamically
+    const m = document.createElement('div');
+    m.className = 'modal-overlay open';
+    m.id = 'modal-stagiaire-detail';
+    m.innerHTML = `<div class="modal"><div class="modal-header"><h3 style="font-family:var(--font);">📋 ${s.prenom} ${s.nom}</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-stagiaire-detail')">✕</button></div>
+    <div class="modal-body">
+      <div class="card" style="margin-bottom:0.75rem;padding:0.85rem;">
+        <div style="font-size:0.82rem;line-height:1.8;">
+          <div><strong>Email :</strong> ${s.email}</div>
+          <div><strong>Inscrit le :</strong> ${new Date(s.createdAt).toLocaleDateString('fr-FR')}</div>
+          <div><strong>Métiers explorés :</strong> ${(s.stats?.metiersExplored||[]).length}</div>
+          <div><strong>Badges obtenus :</strong> ${(s.stats?.badges||[]).length}</div>
+          <div><strong>Jeux terminés :</strong> ${s.stats?.games||0}</div>
+          <div><strong>Attestations :</strong> ${(s.attestations||[]).length}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-stagiaire-detail')">Fermer</button></div></div>`;
+    document.body.appendChild(m);
+  } else { modal.classList.add('open'); }
+}
+function confirmDelete(email){
+  document.getElementById('confirm-delete-btn').onclick = () => {
+    users = users.filter(u => u.email !== email);
+    save('users', users);
+    closeModal('modal-confirm-delete');
+    renderStagiairesList();
+  };
+  showModal('modal-confirm-delete');
+}
+function renderGroupesList(){
+  const div = document.getElementById('groupes-list');
+  if(!groups.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun groupe créé. Cliquez sur "+ Créer".</p>'; return; }
+  div.innerHTML = groups.map((g,i) => `
+    <div class="editable-list-item">
+      <span style="font-size:1.4rem">📂</span>
+      <div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">${g.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${g.dispositif||'—'} · Créé le ${g.date||'—'}</div></div>
+      <div class="item-actions">
+        <button class="btn btn-sm btn-ghost" onclick="renameGroupe(${i})">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteGroupe(${i})">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+function addGroupe(){
+  const nom = document.getElementById('new-groupe-nom').value.trim();
+  if(!nom) return;
+  groups.push({nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value});
+  save('groups', groups);
+  closeModal('modal-add-groupe');
+  renderGroupesList();
+}
+function renameGroupe(i){
+  const newNom = prompt('Nouveau nom du groupe :', groups[i].nom);
+  if(newNom && confirm('Voulez-vous renommer ce groupe ?')){ groups[i].nom = newNom; save('groups',groups); renderGroupesList(); }
+}
+function deleteGroupe(i){
+  if(confirm('Supprimer ce groupe ? Les stagiaires ne seront pas supprimés.')){ groups.splice(i,1); save('groups',groups); renderGroupesList(); }
+}
+function renderAdminMetiers(){
+  const div = document.getElementById('admin-metiers-list');
+  const all = [...METIERS, ...customMetiers];
+  div.innerHTML = all.map(m => `
+    <div class="editable-list-item">
+      <span style="font-size:1.4rem">${m.emoji}</span>
+      <div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">${m.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${m.cat==='porteur-lh'?'📍 Le Havre':m.cat==='porteur-agglo'?'🌐 Agglo':m.cat==='nonporteur'?'ℹ️ Non porteur':'—'} · ${(m.formations||[]).length} formations</div></div>
+      ${customMetiers.includes(m)?`<div class="item-actions"><button class="btn btn-sm btn-danger" onclick="deleteCustomMetier('${m.id}')">🗑</button></div>`:'<span class="badge badge-gray">Natif</span>'}
+    </div>
+  `).join('');
+}
+function addMetierAdmin(){
+  const nom = document.getElementById('new-metier-nom').value.trim();
+  if(!nom) return;
+  const id = 'custom-' + Date.now();
+  customMetiers.push({
+    id, nom,
+    emoji: document.getElementById('new-metier-emoji').value || '💼',
+    cat: document.getElementById('new-metier-cat').value,
+    desc: document.getElementById('new-metier-desc').value,
+    couleur: '#8e44ad',
+    video: document.getElementById('new-metier-video').value,
+    formations: [],
+    questions: [],
+    tags: [],
+    niveauFr: 'A2',
+    incompatible: [],
+    competences: [],
+    secteur: 'autre',
+    conditions: ''
+  });
+  save('custom_metiers', customMetiers);
+  closeModal('modal-add-metier');
+  renderAdminMetiers();
+  renderMetiers();
+}
+function deleteCustomMetier(id){
+  if(confirm('Supprimer ce métier ?')){ customMetiers = customMetiers.filter(m => m.id !== id); save('custom_metiers',customMetiers); renderAdminMetiers(); }
+}
+function renderAdminFormations(){
+  const div = document.getElementById('admin-formations-list');
+  const allForms = FORMATIONS_CUSTOM;
+  if(!allForms.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);margin-bottom:0.75rem;">Aucune formation ajoutée manuellement. Cliquez sur "+ Ajouter".</p>'; }
+  else {
+    div.innerHTML = allForms.map((f,i) => `
+      <div class="editable-list-item">
+        <span style="font-size:1.3rem">🎓</span>
+        <div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;">${f.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${f.centre} · ${f.ville} · Màj ${f.updated||'—'}</div></div>
+        <div class="item-actions">
+          <button class="btn btn-sm btn-danger" onclick="deleteFormation(${i})">🗑</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  // Also show all native formations with edit hint
+  div.innerHTML += `<div class="alert alert-info" style="margin-top:0.75rem;"><span>✏️</span><span>Les formations natives peuvent être complétées en ajoutant de nouvelles entrées ci-dessus.</span></div>`;
+}
+function addFormationAdmin(){
+  const nom = document.getElementById('new-form-nom').value.trim();
+  const centre = document.getElementById('new-form-centre').value.trim();
+  if(!nom || !centre) return;
+  FORMATIONS_CUSTOM.push({
+    nom, centre,
+    ville: document.getElementById('new-form-ville').value,
+    metier: document.getElementById('new-form-metier').value,
+    duree: document.getElementById('new-form-duree').value,
+    financement: document.getElementById('new-form-financement').value,
+    lien: document.getElementById('new-form-lien').value,
+    updated: document.getElementById('new-form-date').value || new Date().toISOString().slice(0,7)
+  });
+  save('formations_custom', FORMATIONS_CUSTOM);
+  closeModal('modal-add-formation');
+  renderAdminFormations();
+}
+function deleteFormation(i){
+  if(confirm('Supprimer cette formation ?')){ FORMATIONS_CUSTOM.splice(i,1); save('formations_custom',FORMATIONS_CUSTOM); renderAdminFormations(); }
+}
+function populateMetierSelect(){
+  const sel = document.getElementById('new-form-metier');
+  if(!sel) return;
+  const all = [...METIERS, ...customMetiers];
+  sel.innerHTML = all.map(m => `<option value="${m.id}">${m.nom}</option>`).join('');
+}
+function updateRapportStats(){
+  const stagiaires = users.filter(u => u.profile === 'stagiaire');
+  document.getElementById('r-total-stagiaires').textContent = stagiaires.length;
+  const week = new Date(); week.setDate(week.getDate()-7);
+  document.getElementById('r-actifs').textContent = stagiaires.filter(s => s.navHistory?.some(h => new Date(h.time) > week)).length;
+  document.getElementById('r-metiers-explores').textContent = stagiaires.reduce((a,s)=>a+(s.stats?.metiersExplored||[]).length,0);
+  document.getElementById('r-attestations').textContent = stagiaires.reduce((a,s)=>a+(s.attestations||[]).length,0);
+}
+function generateRapportPDF(){
+  alert('Fonctionnalité d\'export PDF en cours de finalisation. Contactez votre équipe technique pour l\'activer.');
+  closeModal('modal-rapport');
+}
+
+// ==================== INIT ====================
+function goToDashboard(){
+  showPage('page-dashboard-stagiaire');
+  renderDashboard();
+  renderMetiers();
+}
+function initHandicapChecks(){
+  const types = [
+    {val:'moteur',label:'Moteur/Mobilité'},
+    {val:'visuel',label:'Visuel'},
+    {val:'auditif',label:'Auditif'},
+    {val:'psychique',label:'Psychique/Mental'},
+    {val:'cognitif',label:'Cognitif'},
+    {val:'chronique',label:'Maladie chronique'},
+    {val:'langage',label:'Trouble du langage'},
+  ];
+  const div = document.getElementById('new-metier-handi-checks');
+  if(div) div.innerHTML = types.map(t => `<label style="display:flex;align-items:center;gap:8px;font-size:0.83rem;"><input type="checkbox" value="${t.val}"> ${t.label}</label>`).join('');
+}
+initHandicapChecks();
+
+// Set today date default
+document.getElementById('new-form-date').valueAsDate = new Date();
+document.getElementById('new-groupe-date').value = new Date().toLocaleDateString('fr-FR');
+
+// Auto-login if session exists
+if(currentUser){ postLogin(); }
+
+// PWA Service Worker
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
