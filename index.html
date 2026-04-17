@@ -715,6 +715,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
             <span>💡</span><span><strong>Plusieurs réponses possibles.</strong> Plus vous êtes précis(e), mieux nous pouvons vous orienter.</span>
           </div>
           <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);">Quel(s) type(s) de handicap ?</p>
+          <div class="alert alert-info" style="margin-bottom:0.5rem;padding:0.5rem 0.75rem;"><span>👆</span><span style="font-size:0.78rem;"><strong>Plusieurs réponses possibles</strong></span></div>
           <div class="handicap-grid">
             <div class="handicap-item" onclick="toggleHItem(this,'moteur')">
               <span class="h-icon">🦽</span>
@@ -778,7 +779,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
           </div>
 
           <div style="margin-top:1rem;">
-            <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);">Des contraintes particulières au travail ?</p>
+            <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.4rem;color:var(--text);">Des contraintes particulières au travail ?</p>
+            <div class="alert alert-info" style="margin-bottom:0.5rem;padding:0.5rem 0.75rem;"><span>👆</span><span style="font-size:0.78rem;"><strong>Plusieurs réponses possibles</strong> — Cochez tout ce qui vous concerne</span></div>
             <div style="display:flex;flex-direction:column;gap:6px;">
               <div class="handicap-item" onclick="toggleHItem(this,'pas-debout')">
                 <span class="h-icon">🪑</span>
@@ -1254,6 +1256,11 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Carte interactive</div>
         <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Formations & Entreprises</div>
       </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;grid-column:1/-1;border:2px solid var(--accent);" onclick="showPage('page-glossaire')">
+        <div style="font-size:2rem;margin-bottom:6px;">📖</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Glossaire multilingue</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Définitions + traduction dans toutes les langues — IA</div>
+      </div>
     </div>
 
     <div class="section-title">Liens utiles</div>
@@ -1343,6 +1350,83 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span>Pour postuler, visitez le site de l'entreprise ou rendez-vous sur <strong>France Travail</strong> pour voir leurs offres d'emploi.</span>
     </div>
   </div>
+</div>
+
+<!-- ===== PAGE GLOSSAIRE MULTILINGUE ===== -->
+<div id="page-glossaire" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>📖 Glossaire</div>
+    <button class="btn-icon" onclick="showPage('page-action')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-action')">Action</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Glossaire multilingue</span>
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom:1rem;">
+      <span>🌍</span>
+      <span>Cherchez un mot en français et obtenez sa définition simple + sa traduction dans n'importe quelle langue du monde.</span>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div style="display:flex;gap:8px;margin-bottom:1rem;">
+      <input type="text" id="glossaire-search" placeholder="🔍 Entrez un mot (ex: CACES, contrat, salaire...)"
+        style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:0.75rem 1rem;font-size:0.9rem;background:var(--surface);color:var(--text);outline:none;"
+        onkeydown="if(event.key==='Enter') searchGlossaire()" oninput="filterGlossaireLocal(this.value)">
+      <button class="btn btn-primary" onclick="searchGlossaire()">Chercher</button>
+    </div>
+
+    <!-- Sélecteur de langue -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap;">
+      <span style="font-size:0.82rem;color:var(--text3);flex-shrink:0;">🌐 Traduire en :</span>
+      <select id="glossaire-lang" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:0.82rem;background:var(--surface);color:var(--text);cursor:pointer;">
+        <option value="arabe">🇸🇦 Arabe</option>
+        <option value="anglais">🇬🇧 Anglais</option>
+        <option value="espagnol">🇪🇸 Espagnol</option>
+        <option value="portugais">🇵🇹 Portugais</option>
+        <option value="roumain">🇷🇴 Roumain</option>
+        <option value="russe">🇷🇺 Russe</option>
+        <option value="turc">🇹🇷 Turc</option>
+        <option value="polonais">🇵🇱 Polonais</option>
+        <option value="allemand">🇩🇪 Allemand</option>
+        <option value="italien">🇮🇹 Italien</option>
+        <option value="chinois">🇨🇳 Chinois</option>
+        <option value="japonais">🇯🇵 Japonais</option>
+        <option value="vietnamien">🇻🇳 Vietnamien</option>
+        <option value="kurde">🏳 Kurde (Kurmanji)</option>
+        <option value="dari">🇦🇫 Dari / Persan</option>
+        <option value="tigrigna">🇪🇷 Tigrigna</option>
+        <option value="somali">🇸🇴 Somali</option>
+        <option value="bambara">🇲🇱 Bambara</option>
+        <option value="wolof">🇸🇳 Wolof</option>
+        <option value="haoussa">🇳🇬 Haoussa</option>
+        <option value="hindi">🇮🇳 Hindi</option>
+        <option value="bengali">🇧🇩 Bengali</option>
+        <option value="filipino">🇵🇭 Filipino / Tagalog</option>
+        <option value="ukrainien">🇺🇦 Ukrainien</option>
+        <option value="georgien">🇬🇪 Géorgien</option>
+      </select>
+    </div>
+
+    <!-- Résultat IA -->
+    <div id="glossaire-result" style="display:none;margin-bottom:1rem;"></div>
+
+    <!-- Mots fréquents -->
+    <div class="section-title" style="margin-bottom:0.5rem;">📚 Mots fréquents</div>
+    <div id="glossaire-local-list" style="display:flex;flex-direction:column;gap:6px;">
+    </div>
+
+    <!-- Mots suggérés rapides -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;" id="glossaire-chips"></div>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
 </div>
 
 <!-- ===== PAGE CARTE ===== -->
@@ -2179,24 +2263,24 @@ let FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom') || 
 // ENTREPRISES enrichies
 const ENTREPRISES = [
   // Maritime & Port
-  {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaports.com',desc:'Premier port à conteneurs de France, recrutements réguliers'},
-  {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.fr',desc:'3e armateur mondial, siège mondial au Havre'},
-  {nom:'MSC France',secteur:'Maritime',ville:'Le Havre',lien:'https://www.msc.com',desc:'Compagnie maritime internationale'},
-  {nom:'DP World (Terminal de Normandie)',secteur:'Maritime',ville:'Le Havre',lien:'https://www.dpworld.com',desc:'Terminal portuaire, manutention conteneurs'},
-  {nom:'Sogestran',secteur:'Maritime',ville:'Le Havre',lien:'https://www.sogestran.fr',desc:'Transport fluvial et maritime'},
+  {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaport.com/fr',desc:'Premier port à conteneurs de France, recrutements réguliers'},
+  {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.com/fr',desc:'3e armateur mondial, siège mondial au Havre'},
+  {nom:'MSC France',secteur:'Maritime',ville:'Le Havre',lien:'https://www.msc.com/fr-fr',desc:'Compagnie maritime internationale'},
+  {nom:'DP World (Terminal de Normandie)',secteur:'Maritime',ville:'Le Havre',lien:'https://www.dpworld.com/fr',desc:'Terminal portuaire, manutention conteneurs'},
+  {nom:'Sogestran',secteur:'Maritime',ville:'Le Havre',lien:'https://www.francetravail.fr',desc:'Transport fluvial et maritime'},
   // Industrie
   {nom:'TotalEnergies (Raffinerie)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://totalenergies.com',desc:'Raffinerie et pétrochimie, nombreux recrutements'},
-  {nom:'ExxonMobil Normandie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://corporate.exxonmobil.com',desc:'Raffinerie pétrochimique'},
+  {nom:'ExxonMobil Normandie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://www.exxonmobil.fr',desc:'Raffinerie pétrochimique'},
   {nom:'Air Liquide',secteur:'Industrie',ville:'Harfleur',lien:'https://www.airliquide.com',desc:'Gaz industriels, production et maintenance'},
-  {nom:'INEOS (ex Solvay)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://www.ineos.com',desc:'Pétrochimie et matières plastiques'},
+  {nom:'INEOS (ex Solvay)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://www.ineos.com/fr',desc:'Pétrochimie et matières plastiques'},
   {nom:'Renault Trucks Normandie',secteur:'Industrie',ville:'Le Havre',lien:'https://www.renault-trucks.fr',desc:'Camions et poids lourds'},
   {nom:'Saffaf Industrie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'',desc:'Chaudronnerie industrielle'},
   // Logistique
   {nom:'XPO Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.xpo.com',desc:'Transport et logistique internationale'},
   {nom:'ID Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.id-logistics.com',desc:'Entrepôts logistiques, nombreux CDI'},
-  {nom:'Kuehne+Nagel',secteur:'Logistique',ville:'Le Havre',lien:'https://www.kuehne-nagel.com',desc:'Logistique internationale'},
-  {nom:'DB Schenker',secteur:'Logistique',ville:'Le Havre',lien:'https://www.dbschenker.com',desc:'Transport et logistique'},
-  {nom:'Geodis',secteur:'Logistique',ville:'Le Havre',lien:'https://www.geodis.com',desc:'Groupage et messagerie'},
+  {nom:'Kuehne+Nagel',secteur:'Logistique',ville:'Le Havre',lien:'https://home.kuehne-nagel.com',desc:'Logistique internationale'},
+  {nom:'DB Schenker',secteur:'Logistique',ville:'Le Havre',lien:'https://www.dbschenker.com/fr-fr',desc:'Transport et logistique'},
+  {nom:'Geodis',secteur:'Logistique',ville:'Le Havre',lien:'https://www.geodis.com/fr',desc:'Groupage et messagerie'},
   {nom:'Norbert Dentressangle (XPO)',secteur:'Logistique',ville:'Le Havre',lien:'',desc:'Transport routier'},
   {nom:'Normatrans',secteur:'Transport',ville:'Le Havre',lien:'',desc:'Transport routier normand'},
   // Santé
@@ -2205,7 +2289,7 @@ const ENTREPRISES = [
   {nom:'Polyclinique du Parc',secteur:'Santé',ville:'Le Havre',lien:'',desc:'Polyclinique, recrutements infirmiers'},
   {nom:'SSIAD du Havre',secteur:'Santé',ville:'Le Havre',lien:'',desc:'Soins infirmiers à domicile'},
   {nom:'ADMR 76',secteur:'Santé',ville:'Octeville-sur-Mer',lien:'https://www.admr.org',desc:'Aide à domicile, tout le territoire'},
-  {nom:'Petits-fils',secteur:'Santé',ville:'Sainte-Adresse',lien:'https://www.petits-fils.fr',desc:'Aide aux personnes âgées à domicile'},
+  {nom:'Petits-fils',secteur:'Santé',ville:'Sainte-Adresse',lien:'https://www.petits-fils.fr/agences/sainte-adresse',desc:'Aide aux personnes âgées à domicile'},
   // BTP
   {nom:'Eiffage Construction Normandie',secteur:'BTP',ville:'Le Havre',lien:'https://www.eiffage.com',desc:'Construction de bâtiments et infrastructures'},
   {nom:'Vinci Construction',secteur:'BTP',ville:'Le Havre',lien:'https://www.vinci-construction.fr',desc:'Travaux publics et bâtiment'},
@@ -2284,34 +2368,6 @@ function showModal(id){
   document.getElementById(id).classList.add('open');
   if(id === 'modal-entretien'){
     renderQuestionsEntretien('tous');
-  }
-}
-function openVideoModal(){
-  if(!currentMetier) return;
-  const url = currentMetier.video;
-  let embedUrl = '';
-  if(url && url.includes('youtube.com/watch?v=')){
-    const vid = url.split('v=')[1].split('&')[0];
-    embedUrl = 'https://www.youtube.com/embed/' + vid + '?cc_load_policy=1&cc_lang_pref=fr';
-  } else if(url && url.includes('youtu.be/')){
-    const vid = url.split('youtu.be/')[1];
-    embedUrl = 'https://www.youtube.com/embed/' + vid + '?cc_load_policy=1';
-  }
-  if(embedUrl){
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay open';
-    modal.id = 'modal-video-temp';
-    const label = (currentMetier.videoLabel||currentMetier.nom).replace(/'/g,'&#39;');
-    modal.innerHTML = '<div class="modal">'
-      + '<div class="modal-header"><h3 style="font-family:var(--font);">&#127902; ' + label + '</h3>'
-      + '<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-video-temp\').remove()">&#10005;</button></div>'
-      + '<div class="modal-body" style="padding:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">'
-      + '<iframe src="' + embedUrl + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>'
-      + '</div></div>'
-      + '<div class="modal-footer"><div style="font-size:0.78rem;color:var(--text3);">Sous-titres disponibles via le bouton CC sur la vid&#233;o</div></div></div>';
-    document.body.appendChild(modal);
-  } else {
-    alert('Vid\u00e9o non disponible. Votre r\u00e9f\u00e9rente peut en ajouter une.');
   }
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
@@ -3370,73 +3426,75 @@ const MAP_CENTRES = [
 ];
 
 var leafletMap = null;
+var mapLayerFormations = null;
+var mapLayerEntreprises = null;
 
 function renderMapPage(){
   renderMapList('all');
-  // Init Leaflet map after a small delay to ensure DOM is ready
-  setTimeout(function(){
-    initLeafletMap();
-  }, 100);
+  setTimeout(initLeafletMap, 150);
 }
 
 function initLeafletMap(){
-  if(typeof L === 'undefined') return;
+  if(typeof L === 'undefined'){ setTimeout(initLeafletMap, 300); return; }
   var mapDiv = document.getElementById('leaflet-map');
   if(!mapDiv) return;
-  if(leafletMap){ leafletMap.remove(); leafletMap = null; }
+  if(leafletMap){ leafletMap.remove(); leafletMap = null; mapLayerFormations = null; mapLayerEntreprises = null; }
+
   leafletMap = L.map('leaflet-map').setView([49.500, 0.145], 11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 18
   }).addTo(leafletMap);
 
-  // Custom icons
-  var iconFormation = L.divIcon({
-    className: '',
-    html: '<div style="background:#0a3d6b;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#127891;</div>',
-    iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]
-  });
-  var iconEntreprise = L.divIcon({
-    className: '',
-    html: '<div style="background:#f4a020;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#127970;</div>',
-    iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]
-  });
+  var iconF = L.divIcon({className:'',
+    html:'<div style="background:#0a3d6b;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&#127891;</div>',
+    iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-16]});
+  var iconE = L.divIcon({className:'',
+    html:'<div style="background:#f4a020;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&#127970;</div>',
+    iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-16]});
 
-  // Add formation markers
+  mapLayerFormations = L.layerGroup();
+  mapLayerEntreprises = L.layerGroup();
+
   MAP_CENTRES.forEach(function(c){
-    var popupHtml = '<div style="min-width:180px;font-family:sans-serif;">'
-      +'<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;">&#127891; '+c.nom+'</div>'
-      +'<div style="font-size:0.78rem;color:#555;margin-bottom:4px;">&#128205; '+c.adresse+'</div>'
-      +(c.tel ? '<div style="font-size:0.78rem;color:#555;margin-bottom:6px;">&#128222; '+c.tel+'</div>' : '')
-      +'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px;">'
-      +(c.secteurs||[]).slice(0,4).map(function(s){ return '<span style="background:#e8f2fc;color:#0a3d6b;padding:2px 6px;border-radius:10px;font-size:0.68rem;">'+s+'</span>'; }).join('')
-      +'</div>'
-      +(c.lien ? '<a href="'+c.lien+'" target="_blank" rel="noopener noreferrer" style="background:#0a3d6b;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;display:inline-block;">Voir le site &#8599;</a>' : '')
+    var badges = (c.secteurs||[]).slice(0,4).map(function(s){
+      return '<span style="background:#e8f2fc;color:#0a3d6b;padding:2px 6px;border-radius:8px;font-size:0.68rem;margin:1px;display:inline-block;">'+s+'</span>';
+    }).join('');
+    var ph = '<div style="min-width:190px;font-family:sans-serif;line-height:1.5;">'
+      +'<b style="color:#0a3d6b;">&#127891; '+c.nom+'</b><br>'
+      +'<span style="font-size:0.76rem;color:#555;">&#128205; '+c.adresse+'</span><br>'
+      +(c.tel?'<span style="font-size:0.76rem;color:#555;">&#128222; '+c.tel+'</span><br>':'')
+      +'<div style="margin:5px 0;">'+badges+'</div>'
+      +(c.lien?'<a href="'+c.lien+'" target="_blank" rel="noopener noreferrer" style="background:#0a3d6b;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;">Site &#8599;</a>':'<i style="font-size:0.72rem;color:#aaa;">Site non disponible</i>')
       +'</div>';
-    L.marker([c.lat, c.lng], {icon: iconFormation}).addTo(leafletMap).bindPopup(popupHtml);
+    L.marker([c.lat,c.lng],{icon:iconF}).addTo(mapLayerFormations).bindPopup(ph);
   });
 
-  // Add enterprise markers (main ones with coordinates)
-  var entrepriseCoords = [
-    {nom:'Haropa Port Le Havre', lat:49.481, lng:0.138, secteur:'Maritime', lien:'https://www.haropaports.com'},
-    {nom:'CHU du Havre', lat:49.551, lng:0.200, secteur:'Santé', lien:'https://www.chu-lehavre.fr'},
-    {nom:'TotalEnergies Gonfreville', lat:49.503, lng:0.228, secteur:'Industrie', lien:'https://totalenergies.com'},
-    {nom:'XPO Logistics', lat:49.487, lng:0.162, secteur:'Logistique', lien:'https://www.xpo.com'},
-    {nom:'CMA CGM', lat:49.492, lng:0.105, secteur:'Maritime', lien:'https://www.cma-cgm.fr'},
-    {nom:'Eiffage Construction', lat:49.494, lng:0.108, secteur:'BTP', lien:'https://www.eiffage.com'},
-    {nom:'École 42 Le Havre', lat:49.490, lng:0.110, secteur:'Numérique', lien:'https://42lehavre.fr'},
-    {nom:'AFPA Le Havre', lat:49.509, lng:0.195, secteur:'Formation', lien:'https://www.afpa.fr'},
-    {nom:'Air Liquide Harfleur', lat:49.507, lng:0.193, secteur:'Industrie', lien:'https://www.airliquide.com'},
-    {nom:'Kiabi / Auchan Montivilliers', lat:49.546, lng:0.196, secteur:'Commerce', lien:''},
+  var EC = [
+    {nom:'Haropa Port Le Havre',lat:49.481,lng:0.138,s:'Maritime',l:'https://www.haropaport.com/fr'},
+    {nom:'CHU du Havre',lat:49.551,lng:0.200,s:'Santé',l:'https://www.chu-lehavre.fr'},
+    {nom:'TotalEnergies Gonfreville',lat:49.503,lng:0.228,s:'Industrie',l:'https://totalenergies.com'},
+    {nom:'XPO Logistics',lat:49.487,lng:0.162,s:'Logistique',l:'https://www.xpo.com'},
+    {nom:'CMA CGM',lat:49.492,lng:0.105,s:'Maritime',l:'https://www.cma-cgm.com/fr'},
+    {nom:'Eiffage Construction',lat:49.494,lng:0.108,s:'BTP',l:'https://www.eiffage.com'},
+    {nom:'Ecole 42 Le Havre',lat:49.490,lng:0.110,s:'Numerique',l:'https://42lehavre.fr'},
+    {nom:'Air Liquide Harfleur',lat:49.507,lng:0.193,s:'Industrie',l:'https://www.airliquide.com'},
+    {nom:'Kiabi / Auchan Montivilliers',lat:49.546,lng:0.196,s:'Commerce',l:'https://www.kiabi.com'},
+    {nom:'Securitas Le Havre',lat:49.485,lng:0.120,s:'Securite',l:'https://www.securitas.fr'},
+    {nom:'ADMR 76',lat:49.541,lng:0.183,s:'Sante',l:'https://www.admr.org'},
+    {nom:'ID Logistics Le Havre',lat:49.488,lng:0.155,s:'Logistique',l:'https://www.id-logistics.com'},
   ];
-  entrepriseCoords.forEach(function(e){
-    var popupHtml = '<div style="min-width:160px;font-family:sans-serif;">'
-      +'<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;">&#127970; '+e.nom+'</div>'
-      +'<div style="font-size:0.78rem;color:#555;margin-bottom:6px;"><span style="background:#fdf3e0;color:#b07a10;padding:2px 6px;border-radius:10px;font-size:0.68rem;">'+e.secteur+'</span></div>'
-      +(e.lien ? '<a href="'+e.lien+'" target="_blank" rel="noopener noreferrer" style="background:#f4a020;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;display:inline-block;">Site web &#8599;</a>' : '')
+  EC.forEach(function(e){
+    var ph = '<div style="min-width:170px;font-family:sans-serif;line-height:1.5;">'
+      +'<b style="color:#a06010;">&#127970; '+e.nom+'</b><br>'
+      +'<span style="background:#fdf3e0;color:#b07a10;padding:2px 8px;border-radius:8px;font-size:0.7rem;">'+e.s+'</span><br><br>'
+      +(e.l?'<a href="'+e.l+'" target="_blank" rel="noopener noreferrer" style="background:#f4a020;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;">Site &#8599;</a>':'<i style="font-size:0.72rem;color:#aaa;">Site non disponible</i>')
       +'</div>';
-    L.marker([e.lat, e.lng], {icon: iconEntreprise}).addTo(leafletMap).bindPopup(popupHtml);
+    L.marker([e.lat,e.lng],{icon:iconE}).addTo(mapLayerEntreprises).bindPopup(ph);
   });
+
+  mapLayerFormations.addTo(leafletMap);
+  mapLayerEntreprises.addTo(leafletMap);
 }
 
 function filterMap(type, btn){
@@ -3445,6 +3503,17 @@ function filterMap(type, btn){
     b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost';
   });
   renderMapList(type);
+  if(!leafletMap || !mapLayerFormations || !mapLayerEntreprises) return;
+  if(type === 'all'){
+    if(!leafletMap.hasLayer(mapLayerFormations)) mapLayerFormations.addTo(leafletMap);
+    if(!leafletMap.hasLayer(mapLayerEntreprises)) mapLayerEntreprises.addTo(leafletMap);
+  } else if(type === 'formation'){
+    if(!leafletMap.hasLayer(mapLayerFormations)) mapLayerFormations.addTo(leafletMap);
+    if(leafletMap.hasLayer(mapLayerEntreprises)) leafletMap.removeLayer(mapLayerEntreprises);
+  } else if(type === 'entreprise'){
+    if(leafletMap.hasLayer(mapLayerFormations)) leafletMap.removeLayer(mapLayerFormations);
+    if(!leafletMap.hasLayer(mapLayerEntreprises)) mapLayerEntreprises.addTo(leafletMap);
+  }
 }
 
 function renderMapList(type){
@@ -3727,7 +3796,212 @@ function generateRapportPDF(){
   closeModal('modal-rapport');
 }
 
-// ==================== INIT ====================
+// ==================== GLOSSAIRE MULTILINGUE ====================
+const GLOSSAIRE_LOCAL = [
+  {mot:'CACES',def:'Certificat d\'Aptitude à la Conduite En Sécurité. Certification obligatoire pour conduire des engins (chariots, pelleteuses, nacelles…).'},
+  {mot:'CDI',def:'Contrat à Durée Indéterminée. Contrat de travail sans date de fin fixée. C\'est le contrat le plus stable.'},
+  {mot:'CDD',def:'Contrat à Durée Déterminée. Contrat de travail avec une date de fin prévue. Peut être renouvelé.'},
+  {mot:'SMIC',def:'Salaire Minimum Interprofessionnel de Croissance. C\'est le salaire minimum légal en France.'},
+  {mot:'CPF',def:'Compte Personnel de Formation. Chaque travailleur accumule des droits à la formation. On peut utiliser ces droits pour payer une formation.'},
+  {mot:'RQTH',def:'Reconnaissance de la Qualité de Travailleur Handicapé. Statut officiel qui permet d\'accéder à des aides pour trouver un emploi et aménager son poste.'},
+  {mot:'DEAS',def:'Diplôme d\'État d\'Aide-Soignant. Diplôme officiel pour devenir aide-soignant(e). Dure 10 à 12 mois.'},
+  {mot:'PMSMP',def:'Période de Mise en Situation en Milieu Professionnel. C\'est une immersion (stage d\'observation) de 1 jour à 1 mois dans une entreprise.'},
+  {mot:'BTP',def:'Bâtiment et Travaux Publics. Secteur qui regroupe la construction de maisons, bâtiments, routes, ponts…'},
+  {mot:'OPCO',def:'Opérateur de Compétences. Organisme qui finance les formations professionnelles pour les entreprises et les salariés.'},
+  {mot:'Titre Pro',def:'Titre Professionnel. Diplôme d\'État délivré par le ministère du Travail. Reconnu dans toute la France.'},
+  {mot:'CAP',def:'Certificat d\'Aptitude Professionnelle. Premier diplôme professionnel. Se prépare en 2 ans après la 3ème.'},
+  {mot:'Apprentissage',def:'Formation en alternance : on partage son temps entre l\'école et l\'entreprise, avec un salaire.'},
+  {mot:'Bac Pro',def:'Baccalauréat Professionnel. Diplôme de fin de lycée professionnel. Se prépare en 3 ans.'},
+  {mot:'BTS',def:'Brevet de Technicien Supérieur. Diplôme Bac+2. Se prépare après le baccalauréat en 2 ans.'},
+  {mot:'EPI',def:'Équipement de Protection Individuelle. Matériel de sécurité obligatoire : casque, gants, lunettes, chaussures de sécurité…'},
+  {mot:'Fiche de paie',def:'Document remis par l\'employeur chaque mois qui explique le détail du salaire versé.'},
+  {mot:'Bulletin de salaire',def:'Autre nom pour la fiche de paie. Document mensuel qui détaille votre salaire et vos charges.'},
+  {mot:'Mutuelle',def:'Assurance santé complémentaire qui rembourse une partie des frais médicaux non couverts par la Sécurité Sociale.'},
+  {mot:'Congés payés',def:'Jours de vacances légaux payés par l\'employeur. En France, on a droit à 5 semaines (25 jours) par an.'},
+  {mot:'Période d\'essai',def:'Début du contrat de travail pendant lequel l\'employeur et le salarié peuvent mettre fin au contrat facilement.'},
+  {mot:'Licenciement',def:'Fin du contrat de travail décidée par l\'employeur. L\'employeur doit avoir une raison valable.'},
+  {mot:'Démission',def:'Fin du contrat de travail décidée par le salarié. Le salarié doit prévenir l\'employeur (préavis).'},
+  {mot:'France Travail',def:'Anciennement Pôle Emploi. Service public qui aide les demandeurs d\'emploi à trouver un travail et qui verse les allocations chômage.'},
+  {mot:'Allocation chômage',def:'Aide financière versée par France Travail aux personnes qui ont perdu leur emploi.'},
+  {mot:'Mission Locale',def:'Structure publique qui accompagne les jeunes de 16 à 25 ans dans leur insertion professionnelle.'},
+  {mot:'GRETA',def:'Groupement d\'Établissements. Réseau de centres de formation pour adultes rattachés à l\'Éducation Nationale.'},
+  {mot:'AFPA',def:'Agence Nationale pour la Formation Professionnelle des Adultes. Centre de formation qui propose des titres professionnels.'},
+  {mot:'SPL',def:'Semi-remorque à Plateau Long. Type de camion. Un conducteur SPL conduit des ensembles articulés de grande taille.'},
+  {mot:'FIMO',def:'Formation Initiale Minimale Obligatoire. Formation que doit suivre tout nouveau conducteur routier professionnel.'},
+  {mot:'Port autonome',def:'Zone industrielle et commerciale autour d\'un port maritime. Au Havre, c\'est l\'une des plus grandes d\'Europe.'},
+  {mot:'Intérim',def:'Travail temporaire. Une agence d\'intérim vous place dans des entreprises pour des missions courtes.'},
+  {mot:'Habilitation électrique',def:'Autorisation officielle qui permet à un électricien d\'intervenir sur des installations électriques en toute sécurité.'},
+  {mot:'Salaire brut',def:'Salaire avant déduction des charges sociales (cotisations). C\'est le montant indiqué dans votre contrat.'},
+  {mot:'Salaire net',def:'Salaire que vous recevez réellement sur votre compte bancaire, après déduction des charges sociales.'},
+  {mot:'Bulletin de candidature',def:'Document dans lequel vous présentez votre candidature à un poste : nom, compétences, motivations.'},
+  {mot:'CV',def:'Curriculum Vitae. Document qui résume votre parcours professionnel, vos diplômes et vos compétences.'},
+  {mot:'Lettre de motivation',def:'Lettre qui explique pourquoi vous voulez ce travail et ce que vous pouvez apporter à l\'entreprise.'},
+  {mot:'Entretien d\'embauche',def:'Rendez-vous avec l\'employeur pour se rencontrer et discuter du poste. C\'est l\'étape avant l\'embauche.'},
+  {mot:'Reconversion professionnelle',def:'Changer de métier. Se former à un nouveau métier différent de celui que l\'on faisait avant.'},
+];
+
+let glossaireSearchTimeout = null;
+
+function showPage_glossaire(){
+  const chips = document.getElementById('glossaire-chips');
+  if(chips && chips.innerHTML === ''){
+    const suggestions = ['CACES','CDI','SMIC','CPF','RQTH','BTP','CV','Intérim','Apprentissage','Fiche de paie'];
+    chips.innerHTML = suggestions.map(w =>
+      '<span onclick="quickGlossaire(\''+w+'\')" style="background:var(--primary-pale);color:var(--primary);padding:5px 12px;border-radius:20px;font-size:0.8rem;cursor:pointer;border:1px solid var(--primary-pale);font-weight:600;">'+w+'</span>'
+    ).join('');
+  }
+  filterGlossaireLocal('');
+}
+
+function quickGlossaire(word){
+  document.getElementById('glossaire-search').value = word;
+  searchGlossaire();
+}
+
+function filterGlossaireLocal(query){
+  const list = document.getElementById('glossaire-local-list');
+  if(!list) return;
+  const q = query.trim().toLowerCase();
+  const filtered = q ? GLOSSAIRE_LOCAL.filter(e => e.mot.toLowerCase().includes(q) || e.def.toLowerCase().includes(q)) : GLOSSAIRE_LOCAL.slice(0,10);
+  list.innerHTML = filtered.map(e =>
+    '<div class="card" style="padding:0.85rem;margin-bottom:4px;cursor:pointer;" onclick="quickGlossaire(\''+e.mot+'\')">'
+    +'<div style="font-weight:700;font-size:0.88rem;color:var(--primary);">'+e.mot+'</div>'
+    +'<div style="font-size:0.8rem;color:var(--text2);margin-top:3px;line-height:1.5;">'+e.def+'</div>'
+    +'<div style="font-size:0.72rem;color:var(--accent);margin-top:4px;">👆 Cliquez pour traduire</div>'
+    +'</div>'
+  ).join('') || '<p style="font-size:0.83rem;color:var(--text3);">Aucun mot trouvé. Utilisez le bouton "Chercher" pour une traduction IA.</p>';
+}
+
+async function searchGlossaire(){
+  const word = document.getElementById('glossaire-search').value.trim();
+  if(!word) return;
+  const lang = document.getElementById('glossaire-lang').value;
+  const result = document.getElementById('glossaire-result');
+  result.style.display = 'block';
+  result.innerHTML = '<div class="card" style="padding:1rem;text-align:center;">'
+    +'<div style="font-size:1.5rem;margin-bottom:0.5rem;">⏳</div>'
+    +'<div style="font-size:0.85rem;color:var(--text3);">Traduction en cours en ' + lang + '...</div>'
+    +'</div>';
+
+  // Check local dictionary first
+  const local = GLOSSAIRE_LOCAL.find(e => e.mot.toLowerCase() === word.toLowerCase());
+  const localDef = local ? local.def : null;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: 'Tu es un assistant pédagogique pour des apprenants allophones (non-francophones). '
+            + 'Pour le mot ou l\'expression : "' + word + '"\n\n'
+            + (localDef ? '(Définition connue : ' + localDef + ')\n\n' : '')
+            + 'Réponds UNIQUEMENT en JSON (sans backticks, sans markdown) avec cette structure exacte :\n'
+            + '{"mot":"' + word + '","definition_simple":"définition très simple en français (2-3 phrases max, vocabulaire A2/B1)","exemple":"exemple concret d\'utilisation dans le monde du travail","traduction_' + lang.replace(/[^a-z]/gi,'_') + '":"traduction du mot + courte définition en ' + lang + '","phonetique":"transcription phonétique simple si utile"}'
+        }]
+      })
+    });
+    const data = await response.json();
+    const text = (data.content[0].text || '').trim();
+    let parsed;
+    try { parsed = JSON.parse(text); }
+    catch(e) {
+      // Try to extract JSON
+      const match = text.match(/\{[\s\S]*\}/);
+      parsed = match ? JSON.parse(match[0]) : null;
+    }
+    if(parsed){
+      const langKey = Object.keys(parsed).find(k => k.startsWith('traduction_'));
+      const trad = langKey ? parsed[langKey] : '';
+      result.innerHTML = '<div class="card" style="padding:0;overflow:hidden;">'
+        +'<div style="background:var(--primary);color:#fff;padding:0.85rem 1rem;">'
+        +'<div style="font-size:1.1rem;font-weight:700;">📖 ' + parsed.mot + '</div>'
+        +(parsed.phonetique ? '<div style="font-size:0.75rem;opacity:0.8;margin-top:2px;">[' + parsed.phonetique + ']</div>' : '')
+        +'</div>'
+        +'<div style="padding:0.85rem;">'
+        +'<div style="font-size:0.75rem;font-weight:700;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;">Définition (français simple)</div>'
+        +'<div style="font-size:0.88rem;line-height:1.6;margin-bottom:0.75rem;">' + (parsed.definition_simple||'') + '</div>'
+        +(parsed.exemple ? '<div style="background:var(--primary-pale);border-radius:8px;padding:0.6rem 0.75rem;margin-bottom:0.75rem;font-size:0.82rem;color:var(--text2);"><strong>Exemple :</strong> ' + parsed.exemple + '</div>' : '')
+        +(trad ? '<div style="background:var(--accent-light);border-radius:8px;padding:0.75rem;border-left:3px solid var(--accent);">'
+          +'<div style="font-size:0.75rem;font-weight:700;color:var(--accent);margin-bottom:4px;text-transform:uppercase;">🌍 En ' + lang + '</div>'
+          +'<div style="font-size:0.92rem;font-weight:600;line-height:1.5;">' + trad + '</div>'
+          +'</div>' : '')
+        +'</div></div>';
+    } else {
+      result.innerHTML = '<div class="alert alert-warning"><span>⚠️</span><span>Résultat non disponible. Essayez un autre mot.</span></div>';
+    }
+  } catch(err) {
+    result.innerHTML = '<div class="alert alert-warning"><span>📵</span><span>Connexion nécessaire pour la traduction IA. Voici la définition locale :</span></div>'
+      + (localDef ? '<div class="card" style="padding:0.85rem;margin-top:8px;"><b>' + word + '</b><br><span style="font-size:0.83rem;">' + localDef + '</span></div>' : '');
+  }
+}
+
+// Hook into showPage for glossaire
+const _origShowPage = showPage;
+function showPage(id){
+  _origShowPage(id);
+  if(id === 'page-glossaire') showPage_glossaire();
+}
+
+// ==================== VIDEO SOUS-TITRES ====================
+function openVideoModal(){
+  if(!currentMetier) return;
+  const url = currentMetier.video;
+  let vid = '';
+  if(url && url.includes('youtube.com/watch?v=')){
+    vid = url.split('v=')[1].split('&')[0];
+  } else if(url && url.includes('youtu.be/')){
+    vid = url.split('youtu.be/')[1];
+  }
+  if(!vid){ alert('Vid\u00e9o non disponible. Votre r\u00e9f\u00e9rente peut en ajouter une.'); return; }
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay open';
+  modal.id = 'modal-video-temp';
+  const label = (currentMetier.videoLabel||currentMetier.nom).replace(/'/g,'&#39;');
+
+  // Language selector for subtitles
+  const langOptions = [
+    {val:'fr',txt:'🇫🇷 Français'},
+    {val:'en',txt:'🇬🇧 English'},
+    {val:'ar',txt:'🇸🇦 Arabe'},
+    {val:'es',txt:'🇪🇸 Español'},
+    {val:'pt',txt:'🇵🇹 Português'},
+    {val:'ro',txt:'🇷🇴 Română'},
+    {val:'ru',txt:'🇷🇺 Русский'},
+    {val:'tr',txt:'🇹🇷 Türkçe'},
+    {val:'pl',txt:'🇵🇱 Polski'},
+    {val:'de',txt:'🇩🇪 Deutsch'},
+    {val:'zh-Hans',txt:'🇨🇳 中文'},
+    {val:'uk',txt:'🇺🇦 Українська'},
+    {val:'hi',txt:'🇮🇳 हिन्दी'},
+    {val:'vi',txt:'🇻🇳 Tiếng Việt'},
+  ].map(l => '<option value="'+l.val+'">'+l.txt+'</option>').join('');
+
+  function buildEmbed(lang){
+    return 'https://www.youtube.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref='+lang+'&hl='+lang+'&autoplay=1';
+  }
+
+  modal.innerHTML = '<div class="modal" style="max-width:520px;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);font-size:0.95rem;">&#127902; '+label+'</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-video-temp\').remove()">&#10005;</button></div>'
+    +'<div class="modal-body" style="padding:0;">'
+    +'<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">'
+    +'<iframe id="video-iframe" src="'+buildEmbed('fr')+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen allow="autoplay"></iframe>'
+    +'</div></div>'
+    +'<div class="modal-footer" style="flex-direction:column;gap:8px;align-items:stretch;">'
+    +'<div style="display:flex;align-items:center;gap:8px;">'
+    +'<span style="font-size:0.78rem;color:var(--text3);flex-shrink:0;">&#127462; Sous-titres :</span>'
+    +'<select id="video-lang-sel" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:0.8rem;background:var(--surface);color:var(--text);" '
+    +'onchange="document.getElementById(\'video-iframe\').src=\'https://www.youtube.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=\'+this.value+\'&hl=\'+this.value">'
+    +langOptions+'</select></div>'
+    +'<div style="font-size:0.72rem;color:var(--text3);text-align:center;">&#128204; Les sous-titres auto sont disponibles dans de nombreuses langues via YouTube</div>'
+    +'</div></div>';
+  document.body.appendChild(modal);
+}
 function goToDashboard(){
   showPage('page-dashboard-stagiaire');
 }
