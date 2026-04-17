@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="description" content="Plateforme d'orientation et d'insertion professionnelle du Havre">
 <title>Cap Avenir – Le Havre</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -701,7 +702,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="test-section-2" class="test-section" style="display:none">
       <div style="margin-top:1.25rem" class="card">
         <div class="card-title">♿ Situation de handicap</div>
-        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Ces informations permettent de vous orienter vers des métiers adaptés. Elles sont confidentielles et uniquement visibles par votre conseillère.</p>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Ces informations permettent de vous orienter vers des métiers adaptés. Elles sont <strong>confidentielles</strong> et uniquement visibles par votre conseillère. Vous pouvez choisir de ne pas répondre.</p>
         <div class="form-group" style="margin-bottom:0.75rem;">
           <label>Avez-vous une situation de handicap ?</label>
           <div class="choice-group">
@@ -710,16 +711,96 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
           </div>
         </div>
         <div id="handicap-details" style="display:none">
-          <p style="font-size:0.82rem;font-weight:600;margin-bottom:0.6rem;color:var(--text2);">Quel(s) type(s) de handicap ? (sélection multiple)</p>
+          <div class="alert alert-info" style="margin-bottom:0.75rem;">
+            <span>💡</span><span><strong>Plusieurs réponses possibles.</strong> Plus vous êtes précis(e), mieux nous pouvons vous orienter.</span>
+          </div>
+          <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);">Quel(s) type(s) de handicap ?</p>
           <div class="handicap-grid">
-            <div class="handicap-item" onclick="toggleHItem(this,'moteur')"><span class="h-icon">🦽</span><span class="h-text">Moteur / Mobilité</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'visuel')"><span class="h-icon">👁</span><span class="h-text">Visuel</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'auditif')"><span class="h-icon">👂</span><span class="h-text">Auditif</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'psychique')"><span class="h-icon">🧠</span><span class="h-text">Psychique / Mental</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'cognitif')"><span class="h-icon">📚</span><span class="h-text">Cognitif (dyslexie, TDAH…)</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'chronique')"><span class="h-icon">💊</span><span class="h-text">Maladie chronique</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'langage')"><span class="h-icon">🗣</span><span class="h-text">Trouble du langage</span></div>
-            <div class="handicap-item" onclick="toggleHItem(this,'autre')"><span class="h-icon">❓</span><span class="h-text">Autre</span></div>
+            <div class="handicap-item" onclick="toggleHItem(this,'moteur')">
+              <span class="h-icon">🦽</span>
+              <div><span class="h-text">Moteur / Mobilité</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Fauteuil, béquilles, difficultés à se déplacer ou à rester debout longtemps</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'visuel')">
+              <span class="h-icon">👁</span>
+              <div><span class="h-text">Visuel</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Malvoyance, cécité partielle ou totale</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'auditif')">
+              <span class="h-icon">👂</span>
+              <div><span class="h-text">Auditif</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Surdité partielle ou totale, appareillage auditif</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'psychique')">
+              <span class="h-icon">🧠</span>
+              <div><span class="h-text">Psychique / Mental</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Dépression, anxiété, schizophrénie, bipolarité, troubles de la personnalité</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'cognitif')">
+              <span class="h-icon">📚</span>
+              <div><span class="h-text">Cognitif (dys-, TDAH)</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Dyslexie, dysorthographie, TDAH, troubles de la mémoire ou de la concentration</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'chronique')">
+              <span class="h-icon">💊</span>
+              <div><span class="h-text">Maladie chronique</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Diabète, épilepsie, maladies cardiaques, cancer, VIH, sclérose en plaques…</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'langage')">
+              <span class="h-icon">🗣</span>
+              <div><span class="h-text">Trouble du langage</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Bégaiement, aphasie, difficultés d'expression orale ou écrite</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'douleur')">
+              <span class="h-icon">💢</span>
+              <div><span class="h-text">Douleurs chroniques</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Fibromyalgie, lombalgie, pathologies musculo-squelettiques (TMS)</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'autisme')">
+              <span class="h-icon">🌈</span>
+              <div><span class="h-text">Autisme / TSA</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Troubles du spectre autistique, Asperger</div></div>
+            </div>
+            <div class="handicap-item" onclick="toggleHItem(this,'autre')">
+              <span class="h-icon">❓</span>
+              <div><span class="h-text">Autre</span>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">Handicap non listé ci-dessus</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem;">
+            <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);">Avez-vous une RQTH (Reconnaissance de la Qualité de Travailleur Handicapé) ?</p>
+            <div class="choice-group">
+              <div class="choice-card" id="rqth-oui" onclick="selectRQTH('oui')"><div class="choice-icon">✅</div><div class="choice-label">Oui</div></div>
+              <div class="choice-card" id="rqth-non" onclick="selectRQTH('non')"><div class="choice-icon">❌</div><div class="choice-label">Non / Je ne sais pas</div></div>
+            </div>
+            <p style="font-size:0.73rem;color:var(--text3);margin-top:0.5rem;">La RQTH permet d'accéder à des aides spécifiques pour l'emploi et la formation. Votre conseillère peut vous aider à l'obtenir.</p>
+          </div>
+
+          <div style="margin-top:1rem;">
+            <p style="font-size:0.82rem;font-weight:700;margin-bottom:0.6rem;color:var(--text);">Des contraintes particulières au travail ?</p>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="handicap-item" onclick="toggleHItem(this,'pas-debout')">
+                <span class="h-icon">🪑</span>
+                <div><span class="h-text">Ne peut pas rester debout longtemps</span></div>
+              </div>
+              <div class="handicap-item" onclick="toggleHItem(this,'pas-port-charges')">
+                <span class="h-icon">⚖️</span>
+                <div><span class="h-text">Ne peut pas porter de charges lourdes</span></div>
+              </div>
+              <div class="handicap-item" onclick="toggleHItem(this,'pas-hauteur')">
+                <span class="h-icon">🪜</span>
+                <div><span class="h-text">Ne peut pas travailler en hauteur</span></div>
+              </div>
+              <div class="handicap-item" onclick="toggleHItem(this,'pas-bruit')">
+                <span class="h-icon">🔇</span>
+                <div><span class="h-text">Sensibilité aux environnements bruyants</span></div>
+              </div>
+              <div class="handicap-item" onclick="toggleHItem(this,'amenagement')">
+                <span class="h-icon">🛠️</span>
+                <div><span class="h-text">Besoin d'aménagement du poste de travail</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -733,7 +814,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="test-section-3" class="test-section" style="display:none">
       <div style="margin-top:1.25rem" class="card">
         <div class="card-title">🛠 Comment aimez-vous travailler ?</div>
-        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Sélectionnez tout ce qui vous correspond</p>
+        <div class="alert alert-info" style="margin-bottom:0.75rem;"><span>👆</span><span><strong>Plusieurs réponses possibles</strong> — Sélectionnez tout ce qui vous correspond</span></div>
         <div class="handicap-grid" id="prefs-grid">
           <div class="handicap-item" onclick="toggleHItem(this,'manuel')"><span class="h-icon">🔧</span><span class="h-text">Travail manuel</span></div>
           <div class="handicap-item" onclick="toggleHItem(this,'bureau')"><span class="h-icon">💻</span><span class="h-text">Travail en bureau</span></div>
@@ -755,6 +836,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="test-section-4" class="test-section" style="display:none">
       <div style="margin-top:1.25rem" class="card">
         <div class="card-title">💡 Quels secteurs vous intéressent ?</div>
+        <div class="alert alert-info" style="margin-bottom:0.75rem;"><span>👆</span><span><strong>Plusieurs réponses possibles</strong> — Choisissez un ou plusieurs secteurs</span></div>
         <div class="handicap-grid" id="interests-grid">
           <div class="handicap-item" onclick="toggleHItem(this,'maritime')"><span class="h-icon">⚓</span><span class="h-text">Maritime & Port</span></div>
           <div class="handicap-item" onclick="toggleHItem(this,'industrie')"><span class="h-icon">🏭</span><span class="h-text">Industrie</span></div>
@@ -778,7 +860,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="test-section-5" class="test-section" style="display:none">
       <div style="margin-top:1.25rem" class="card">
         <div class="card-title">⭐ Vos compétences actuelles</div>
-        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Qu'est-ce que vous savez déjà faire ?</p>
+        <div class="alert alert-info" style="margin-bottom:0.75rem;"><span>👆</span><span><strong>Plusieurs réponses possibles</strong> — Cochez tout ce que vous savez déjà faire</span></div>
         <div class="handicap-grid">
           <div class="handicap-item" onclick="toggleHItem(this,'conduire')"><span class="h-icon">🚗</span><span class="h-text">Conduire (permis B)</span></div>
           <div class="handicap-item" onclick="toggleHItem(this,'chariot')"><span class="h-icon">🏗</span><span class="h-text">Chariot élévateur</span></div>
@@ -1283,16 +1365,10 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <button class="btn btn-sm btn-ghost" id="map-btn-entreprise" onclick="filterMap('entreprise',this)">🏢 Entreprises</button>
     </div>
 
-    <!-- Carte OpenStreetMap (fonctionne sans clé API) -->
-    <div style="border-radius:12px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:1rem;">
-      <iframe id="map-frame"
-        src="https://www.openstreetmap.org/export/embed.html?bbox=0.05%2C49.46%2C0.25%2C49.57&amp;layer=mapnik&amp;marker=49.493%2C0.107"
-        width="100%" height="340" style="border:0;display:block;" loading="lazy"
-        title="Carte Le Havre et agglomération">
-      </iframe>
-    </div>
+    <!-- Carte interactive Leaflet (OpenStreetMap, sans clé API) -->
+    <div id="leaflet-map" style="height:340px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:0.5rem;"></div>
     <p style="font-size:0.75rem;color:var(--text3);margin-bottom:0.75rem;text-align:center;">
-      <a href="https://www.openstreetmap.org/#map=12/49.493/0.150" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Agrandir la carte ↗</a>
+      &#127760; Cliquez sur un marqueur pour voir les détails · <a href="https://www.openstreetmap.org/#map=12/49.493/0.150" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Agrandir ↗</a>
     </p>
 
     <!-- Liste des lieux -->
@@ -1584,11 +1660,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
 
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <a href="https://www.francetravail.fr/candidat/accompagnement/le-pmsmp.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
+        <a href="https://immersion-facile.beta.gouv.fr" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-full" style="justify-content:flex-start;gap:10px;">
+          &#127759; Immersion Facilitée — Trouver une entreprise
+        </a>
+        <a href="https://www.francetravail.fr/candidat/votre-projet-professionnel/definir-votre-projet-professionn/realiser-une-immersion-professio.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
           &#128269; France Travail — PMSMP
         </a>
         <a href="https://www.missions-locales-normandie.fr" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">
           &#127775; Mission Locale Normandie
+        </a>
+        <a href="https://www.cap-emploi-76.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">
+          &#9855; Cap Emploi 76 — Handicap &amp; Immersion
         </a>
       </div>
     </div>
@@ -1706,7 +1788,7 @@ const METIERS = [
   {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
    desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
    conditions:'• Travail en extérieur et en intérieur\n• Horaires décalés (nuit, week-end)\n• Port de charges\n• Équipements de sécurité obligatoires',
-   video:'https://www.youtube.com/watch?v=F2hc2FLOdhI',
+   video:'https://www.youtube.com/watch?v=OEBFHHBOd1s',
    videoLabel:'Agent portuaire – métiers du port du Havre',
    tags:['Extérieur','Équipe','Physique'],
    niveauFr:'A2',
@@ -1730,7 +1812,7 @@ const METIERS = [
   {id:'cariste',nom:'Cariste',emoji:'🏗',cat:'porteur-lh',couleur:'#e67e22',
    desc:'Le cariste conduit des chariots élévateurs pour déplacer des marchandises dans des entrepôts ou sur des quais. Au Havre, de nombreuses entreprises logistiques recrutent des caristes.',
    conditions:'• En entrepôt ou sur quai\n• Debout et assis alternativement\n• CACES obligatoire\n• Manutention de charges',
-   video:'https://www.youtube.com/watch?v=8mCDGMfGMtY',
+   video:'https://www.youtube.com/watch?v=YxHQ1kBMUXk',
    videoLabel:'Le métier de cariste – entrepôt logistique',
    tags:['Entrepôt','CACES','Recrutement élevé'],
    niveauFr:'A1',
@@ -1753,7 +1835,7 @@ const METIERS = [
   {id:'soudeur',nom:'Soudeur / Soudeuse',emoji:'🔥',cat:'porteur-lh',couleur:'#c0392b',
    desc:'Le soudeur assemble des pièces métalliques par soudage. À Gonfreville-l\'Orcher et dans la zone industrielle havraise, de nombreuses entreprises de chaudronnerie recrutent des soudeurs qualifiés.',
    conditions:'• En atelier ou sur chantier\n• Travail debout, positions contraignantes\n• Chaleur et fumées (protection obligatoire)\n• Travail à la lumière artificielle',
-   video:'https://www.youtube.com/watch?v=njFXCcThigk',
+   video:'https://www.youtube.com/watch?v=aMMfGFpSBVE',
    videoLabel:'Démonstration soudure à l\'arc MIG MAG – industrie',
    tags:['Industrie','Manuel','Qualifié'],
    niveauFr:'A2',
@@ -1775,7 +1857,7 @@ const METIERS = [
   {id:'technicien-maintenance',nom:'Technicien de maintenance',emoji:'⚙️',cat:'porteur-lh',couleur:'#1a5fa0',
    desc:'Le technicien de maintenance répare et entretient les machines et équipements industriels. Dans les usines et raffineries de la zone havraise, ce métier est très recherché.',
    conditions:'• En atelier, usine ou sur site industriel\n• Horaires en 3×8 possibles\n• Lecture de plans techniques\n• Travail en hauteur possible',
-   video:'https://www.youtube.com/watch?v=7_Tol3EoxdA',
+   video:'https://www.youtube.com/watch?v=eRxPQFbIV7g',
    videoLabel:'Technicien de maintenance industrielle – présentation du métier',
    tags:['Industrie','Qualifié','CDI facile'],
    niveauFr:'B1',
@@ -1797,7 +1879,7 @@ const METIERS = [
   {id:'aide-soignant',nom:'Aide-soignant(e)',emoji:'💝',cat:'porteur-lh',couleur:'#e91e8c',
    desc:'L\'aide-soignant(e) aide les infirmiers et prend soin des malades et des personnes âgées dans les hôpitaux, cliniques et maisons de retraite du Havre. C\'est un métier du cœur, en forte demande.',
    conditions:'• En hôpital, clinique, EHPAD ou à domicile\n• Horaires décalés (nuit, week-end, jours fériés)\n• Travail en équipe soignante\n• Manutention des patients (formation gestes/postures)',
-   video:'https://www.youtube.com/watch?v=nFITQjdiHXQ',
+   video:'https://www.youtube.com/watch?v=pVTlYEr3Ldo',
    videoLabel:'Une journée d\'une aide-soignante en EHPAD',
    tags:['Santé','Relationnel','CDI'],
    niveauFr:'B1',
@@ -1818,7 +1900,7 @@ const METIERS = [
   {id:'conducteur-spl',nom:'Conducteur SPL',emoji:'🚛',cat:'porteur-lh',couleur:'#2c3e50',
    desc:'Le conducteur SPL conduit des camions semi-remorques pour livrer des marchandises. Au Havre, le port génère énormément de trafic routier et les conducteurs SPL sont très demandés.',
    conditions:'• Travail en cabine, debout pour charger/décharger\n• Longues distances ou trajets régionaux\n• Permis C+E obligatoire (anciennement EC)\n• Travail de nuit possible',
-   video:'https://www.youtube.com/watch?v=LYfWrqT9_qI',
+   video:'https://www.youtube.com/watch?v=K8hx5UsmAqM',
    videoLabel:'Conducteur SPL – une journée dans un camion semi-remorque',
    tags:['Transport','Autonomie','Permis requis'],
    niveauFr:'A2',
@@ -1840,7 +1922,7 @@ const METIERS = [
   {id:'electricien',nom:'Électricien(ne)',emoji:'⚡',cat:'porteur-lh',couleur:'#f39c12',
    desc:'L\'électricien installe, répare et entretient les installations électriques dans les maisons, les bâtiments et les usines. Dans l\'agglomération havraise en pleine croissance, ce métier est en forte demande.',
    conditions:'• Sur chantier, en logement ou en industrie\n• Travail en hauteur possible\n• Habilitations électriques obligatoires\n• Travail en équipe sur les grands chantiers',
-   video:'https://www.youtube.com/watch?v=xXRBYzMFvHo',
+   video:'https://www.youtube.com/watch?v=nANhpLxTQXs',
    videoLabel:'Le métier d\'électricien bâtiment – installation et travaux',
    tags:['BTP','Qualifié','Chantier'],
    niveauFr:'A2',
@@ -1863,7 +1945,7 @@ const METIERS = [
   {id:'agent-logistique',nom:'Agent logistique',emoji:'📦',cat:'porteur-lh',couleur:'#8e44ad',
    desc:'L\'agent logistique gère les stocks, prépare les commandes et organise les expéditions dans un entrepôt. La zone logistique havraise est l\'une des plus importantes de France.',
    conditions:'• En entrepôt (chaud en été, froid en hiver)\n• Travail debout, marche fréquente\n• Utilisation de scanners et d\'outils numériques\n• Horaires en 2x8 ou 3x8',
-   video:'https://www.youtube.com/watch?v=uGFl2PYDQHA',
+   video:'https://www.youtube.com/watch?v=h_pPeGMjcO8',
    videoLabel:'Agent logistique – préparation de commandes en entrepôt',
    tags:['Logistique','Entrepôt','Polyvalent'],
    niveauFr:'A2',
@@ -1887,7 +1969,7 @@ const METIERS = [
   {id:'infirmier',nom:'Infirmier(ère)',emoji:'🏥',cat:'porteur-agglo',couleur:'#e91e8c',
    desc:'L\'infirmier(ère) soigne les malades, administre des médicaments et surveille l\'état de santé des patients. Très forte demande dans l\'ensemble de l\'agglomération havraise.',
    conditions:'• Hôpital, clinique, domicile, EHPAD\n• Travail debout, rythme intense\n• 12h de travail par poste possibles\n• Nuits, week-ends et jours fériés',
-   video:'https://www.youtube.com/watch?v=Dv_kHwFMpAo',
+   video:'https://www.youtube.com/watch?v=f8amXvC5cks',
    videoLabel:'Le métier d\'infirmier(ère) – présentation et formation',
    tags:['Santé','Diplôme d\'État','Forte demande'],
    niveauFr:'B2',
@@ -1908,7 +1990,7 @@ const METIERS = [
   {id:'dev-web',nom:'Développeur web',emoji:'💻',cat:'porteur-agglo',couleur:'#2ecc71',
    desc:'Le développeur web crée des sites internet et des applications en ligne. Le numérique est un secteur en pleine croissance, avec l\'école 42 implantée au Havre.',
    conditions:'• En bureau ou en télétravail\n• Travail assis devant ordinateur\n• Créativité et logique nécessaires\n• Missions en freelance possibles',
-   video:'https://www.youtube.com/watch?v=ysEN5RaKOlA',
+   video:'https://www.youtube.com/watch?v=WJx2s_4e0fI',
    videoLabel:'Développeur web – présentation du métier et formations',
    tags:['Numérique','Télétravail','Avenir'],
    niveauFr:'B1',
@@ -1932,7 +2014,7 @@ const METIERS = [
   {id:'maçon',nom:'Maçon(ne)',emoji:'🏗',cat:'porteur-agglo',couleur:'#7f8c8d',
    desc:'Le maçon construit et rénove des bâtiments. Dans l\'agglomération havraise et notamment à Montivilliers, Harfleur et Gonfreville, de nombreux chantiers recrutent des maçons qualifiés.',
    conditions:'• En extérieur et en intérieur selon les chantiers\n• Travail physique et en équipe\n• Horaires de journée en général\n• Conduite de minibus de chantier',
-   video:'https://www.youtube.com/watch?v=P5sZt49JKNY',
+   video:'https://www.youtube.com/watch?v=yABvPGhEbXM',
    videoLabel:'Le métier de maçon – construction et rénovation',
    tags:['BTP','Extérieur','Chantier'],
    niveauFr:'A2',
@@ -1977,7 +2059,7 @@ const METIERS = [
   {id:'operateur-chimie',nom:'Opérateur de production chimie',emoji:'🧪',cat:'porteur-agglo',couleur:'#16a085',
    desc:'L\'opérateur de production chimique surveille et conduit des installations industrielles chimiques. À Gonfreville-l\'Orcher et Harfleur (TotalEnergies, Exxon, Air Liquide), c\'est l\'un des métiers les plus demandés.',
    conditions:'• En usine, en 3x8 ou 4x8\n• Environnement chimique (EPI obligatoires)\n• Travail debout et surveillance d\'écrans\n• Astreintes possibles',
-   video:'https://www.youtube.com/watch?v=4KpLP9fGgMY',
+   video:'https://www.youtube.com/watch?v=V85T6WMWCak',
    videoLabel:'Opérateur de production en raffinerie – industrie pétrolière',
    tags:['Industrie','Chimie','3x8'],
    niveauFr:'B1',
@@ -2001,7 +2083,7 @@ const METIERS = [
   {id:'agent-securite',nom:'Agent de sécurité',emoji:'🛡️',cat:'porteur-agglo',couleur:'#2c3e50',
    desc:'L\'agent de sécurité surveille des sites industriels, des magasins ou des événements. Dans la zone industrielle havraise (Gonfreville, Harfleur), de nombreux postes sont à pourvoir.',
    conditions:'• Travail en extérieur ou en intérieur\n• Horaires décalés (nuit, week-end)\n• Station debout prolongée\n• Carte professionnelle CNAPS obligatoire',
-   video:'https://www.youtube.com/watch?v=sVFsODq3ZaI',
+   video:'https://www.youtube.com/watch?v=nVJGCDkNwnA',
    videoLabel:'Métier d\'agent de sécurité – présentation',
    tags:['Sécurité','Industrie','CDI'],
    niveauFr:'B1',
@@ -2023,7 +2105,7 @@ const METIERS = [
   {id:'plombier',nom:'Plombier / Chauffagiste',emoji:'🔧',cat:'porteur-agglo',couleur:'#2980b9',
    desc:'Le plombier installe et répare les canalisations d\'eau et les systèmes de chauffage. Dans l\'agglomération havraise (Montivilliers, Octeville-sur-Mer, Harfleur), ce métier est en tension constante.',
    conditions:'• En intérieur principalement (logements, entreprises)\n• Positions contraignantes (accroupi, couché)\n• Déplacements fréquents chez les clients\n• Astreintes possibles',
-   video:'https://www.youtube.com/watch?v=YGFdMVT4Dks',
+   video:'https://www.youtube.com/watch?v=aNuJaH3Gejg',
    videoLabel:'Le métier de plombier chauffagiste',
    tags:['BTP','Artisanat','Autonomie'],
    niveauFr:'A2',
@@ -2047,7 +2129,7 @@ const METIERS = [
   {id:'aide-domicile',nom:'Auxiliaire de vie / Aide à domicile',emoji:'🏠',cat:'porteur-agglo',couleur:'#8e44ad',
    desc:'L\'auxiliaire de vie aide les personnes âgées, handicapées ou malades à vivre chez elles. À Sainte-Adresse, Octeville-sur-Mer et dans toute l\'agglomération havraise, ce métier est très recherché.',
    conditions:'• À domicile des bénéficiaires\n• Déplacements quotidiens (voiture recommandée)\n• Horaires fractionnés (matin et soir)\n• Travail le week-end possible',
-   video:'https://www.youtube.com/watch?v=nPo6Eb7lMVA',
+   video:'https://www.youtube.com/watch?v=X6mDRLFSSz4',
    videoLabel:'Auxiliaire de vie à domicile – une journée type',
    tags:['Santé','Domicile','CDI partiel/plein'],
    niveauFr:'B1',
@@ -2070,7 +2152,7 @@ const METIERS = [
   {id:'conducteur-engins',nom:'Conducteur d\'engins de chantier',emoji:'🚜',cat:'porteur-agglo',couleur:'#d35400',
    desc:'Le conducteur d\'engins conduit des pelleteuses, chargeuses et grues sur les chantiers du BTP. Dans les communes de Montivilliers, Harfleur et Gonfreville en développement, les recrutements sont importants.',
    conditions:'• En extérieur sur chantier\n• Vibrations, poussières, bruit\n• CACES obligatoires\n• Port de charges légères',
-   video:'https://www.youtube.com/watch?v=4P_RCMUB52c',
+   video:'https://www.youtube.com/watch?v=LpZTvPX1xbg',
    videoLabel:'Conducteur d\'engins BTP – présentation du métier',
    tags:['BTP','CACES','Extérieur'],
    niveauFr:'A2',
@@ -2315,6 +2397,13 @@ function logout(){
 }
 
 // ==================== TEST ORIENTATION ====================
+function selectRQTH(val){
+  document.getElementById('rqth-oui').classList.toggle('selected', val==='oui');
+  document.getElementById('rqth-non').classList.toggle('selected', val==='non');
+  const idx = selectedHandicap.indexOf('rqth');
+  if(val==='oui' && idx<0) selectedHandicap.push('rqth');
+  if(val==='non' && idx>=0) selectedHandicap.splice(idx,1);
+}
 function selectNiveau(n){
   selectedNiveauFr = n;
   document.querySelectorAll('#niv-french .quiz-option').forEach(el => el.classList.remove('selected'));
@@ -2386,9 +2475,61 @@ function generateResults(){
     </div>`;
   });
   
-  document.getElementById('strengths-section').innerHTML = `<div class="alert alert-success" style="margin-top:0.5rem;">
-    <span>⭐</span><div><strong>Points forts détectés :</strong><br>${selectedSkills.map(s=>({conduire:'Permis de conduire',chariot:'Chariot élévateur',ordi:'Bureautique',accueil:'Accueil client',cuisine:'Cuisine',bricolage:'Bricolage/Mécanique',soin:'Soin aux personnes',langues:'Langues étrangères'}[s]||s)).join(', ')||'À découvrir lors des jeux !'}</div>
-  </div>`;
+  document.getElementById('strengths-section').innerHTML = (function(){
+    // Points forts
+    const skillLabels = {
+      conduire:'Permis de conduire B',chariot:'Chariot élévateur (CACES)',
+      ordi:'Bureautique / Ordinateur',accueil:'Accueil & relation client',
+      cuisine:'Cuisine et alimentation',bricolage:'Bricolage & mécanique',
+      soin:'Soin aux personnes',langues:'Langues étrangères'
+    };
+    const prefLabels = {
+      manuel:'Travail manuel',bureau:'Travail en bureau',exterieur:'Travail en extérieur',
+      equipe:'Travail en équipe',seul:'Autonomie / Travail seul',
+      contact:'Contact client',technique:'Technique & précision',creatif:'Créativité'
+    };
+    const strengths = selectedSkills.map(s => skillLabels[s]||s).filter(Boolean);
+    const prefs = selectedPrefs.map(p => prefLabels[p]||p).filter(Boolean);
+
+    // Compétences à développer (ce qui n'a pas été sélectionné mais utile)
+    const allUsefulSkills = ['conduire','ordi','langues','soin','bricolage','accueil'];
+    const todev = allUsefulSkills.filter(s => !selectedSkills.includes(s)).slice(0,3).map(s => skillLabels[s]);
+
+    // RQTH info
+    const hasRQTH = selectedHandicap.includes('rqth');
+    const hasHandicap = selectedHandicap.filter(h => h!=='rqth').length > 0;
+
+    let html = '';
+    if(strengths.length > 0){
+      html += '<div class="alert alert-success" style="margin-top:0.5rem;"><span>⭐</span>'
+        +'<div><strong>Vos points forts :</strong><br>'
+        + strengths.map(s => '<span style="display:inline-block;background:rgba(26,138,74,0.15);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">✅ '+s+'</span>').join('')
+        + '</div></div>';
+    } else {
+      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>💡</span><span>Vos points forts seront identifiés au fil des jeux et quiz !</span></div>';
+    }
+    if(prefs.length > 0){
+      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>🎯</span>'
+        +'<div><strong>Vos préférences de travail :</strong><br>'
+        + prefs.map(p => '<span style="display:inline-block;background:rgba(10,61,107,0.1);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">'+p+'</span>').join('')
+        + '</div></div>';
+    }
+    if(todev.length > 0){
+      html += '<div class="alert alert-warning" style="margin-top:0.5rem;"><span>🚀</span>'
+        +'<div><strong>Compétences utiles à développer :</strong><br>'
+        + todev.map(s => '<span style="display:inline-block;background:rgba(230,126,34,0.1);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">📈 '+s+'</span>').join('')
+        + '<br><span style="font-size:0.75rem;color:var(--text3);">Les formations de votre région peuvent vous y aider !</span>'
+        + '</div></div>';
+    }
+    if(hasRQTH){
+      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>♿</span>'
+        +'<div><strong>RQTH :</strong> Vous bénéficiez d\'aides spécifiques à l\'emploi. Pensez à en parler à Cap Emploi 76 pour un accompagnement renforcé.</div></div>';
+    } else if(hasHandicap){
+      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>♿</span>'
+        +'<div><strong>Conseil :</strong> Votre conseillère peut vous aider à obtenir la RQTH, qui ouvre des droits à des aménagements de poste et des aides à l\'emploi.</div></div>';
+    }
+    return html;
+  })();
 }
 function goToMetiers(){ showPage('page-metiers'); renderMetiers(); }
 
@@ -3228,8 +3369,74 @@ const MAP_CENTRES = [
   {nom:'M2i Formation Le Havre',secteurs:['Num\u00e9rique','Bureautique'],adresse:'76600 Le Havre',lien:'https://www.m2iformation.fr/centre-de-formation/le-havre/',lat:49.494,lng:0.108,tel:''},
 ];
 
+var leafletMap = null;
+
 function renderMapPage(){
   renderMapList('all');
+  // Init Leaflet map after a small delay to ensure DOM is ready
+  setTimeout(function(){
+    initLeafletMap();
+  }, 100);
+}
+
+function initLeafletMap(){
+  if(typeof L === 'undefined') return;
+  var mapDiv = document.getElementById('leaflet-map');
+  if(!mapDiv) return;
+  if(leafletMap){ leafletMap.remove(); leafletMap = null; }
+  leafletMap = L.map('leaflet-map').setView([49.500, 0.145], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(leafletMap);
+
+  // Custom icons
+  var iconFormation = L.divIcon({
+    className: '',
+    html: '<div style="background:#0a3d6b;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#127891;</div>',
+    iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]
+  });
+  var iconEntreprise = L.divIcon({
+    className: '',
+    html: '<div style="background:#f4a020;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">&#127970;</div>',
+    iconSize: [28,28], iconAnchor: [14,14], popupAnchor: [0,-14]
+  });
+
+  // Add formation markers
+  MAP_CENTRES.forEach(function(c){
+    var popupHtml = '<div style="min-width:180px;font-family:sans-serif;">'
+      +'<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;">&#127891; '+c.nom+'</div>'
+      +'<div style="font-size:0.78rem;color:#555;margin-bottom:4px;">&#128205; '+c.adresse+'</div>'
+      +(c.tel ? '<div style="font-size:0.78rem;color:#555;margin-bottom:6px;">&#128222; '+c.tel+'</div>' : '')
+      +'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px;">'
+      +(c.secteurs||[]).slice(0,4).map(function(s){ return '<span style="background:#e8f2fc;color:#0a3d6b;padding:2px 6px;border-radius:10px;font-size:0.68rem;">'+s+'</span>'; }).join('')
+      +'</div>'
+      +(c.lien ? '<a href="'+c.lien+'" target="_blank" rel="noopener noreferrer" style="background:#0a3d6b;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;display:inline-block;">Voir le site &#8599;</a>' : '')
+      +'</div>';
+    L.marker([c.lat, c.lng], {icon: iconFormation}).addTo(leafletMap).bindPopup(popupHtml);
+  });
+
+  // Add enterprise markers (main ones with coordinates)
+  var entrepriseCoords = [
+    {nom:'Haropa Port Le Havre', lat:49.481, lng:0.138, secteur:'Maritime', lien:'https://www.haropaports.com'},
+    {nom:'CHU du Havre', lat:49.551, lng:0.200, secteur:'Santé', lien:'https://www.chu-lehavre.fr'},
+    {nom:'TotalEnergies Gonfreville', lat:49.503, lng:0.228, secteur:'Industrie', lien:'https://totalenergies.com'},
+    {nom:'XPO Logistics', lat:49.487, lng:0.162, secteur:'Logistique', lien:'https://www.xpo.com'},
+    {nom:'CMA CGM', lat:49.492, lng:0.105, secteur:'Maritime', lien:'https://www.cma-cgm.fr'},
+    {nom:'Eiffage Construction', lat:49.494, lng:0.108, secteur:'BTP', lien:'https://www.eiffage.com'},
+    {nom:'École 42 Le Havre', lat:49.490, lng:0.110, secteur:'Numérique', lien:'https://42lehavre.fr'},
+    {nom:'AFPA Le Havre', lat:49.509, lng:0.195, secteur:'Formation', lien:'https://www.afpa.fr'},
+    {nom:'Air Liquide Harfleur', lat:49.507, lng:0.193, secteur:'Industrie', lien:'https://www.airliquide.com'},
+    {nom:'Kiabi / Auchan Montivilliers', lat:49.546, lng:0.196, secteur:'Commerce', lien:''},
+  ];
+  entrepriseCoords.forEach(function(e){
+    var popupHtml = '<div style="min-width:160px;font-family:sans-serif;">'
+      +'<div style="font-weight:700;font-size:0.88rem;margin-bottom:4px;">&#127970; '+e.nom+'</div>'
+      +'<div style="font-size:0.78rem;color:#555;margin-bottom:6px;"><span style="background:#fdf3e0;color:#b07a10;padding:2px 6px;border-radius:10px;font-size:0.68rem;">'+e.secteur+'</span></div>'
+      +(e.lien ? '<a href="'+e.lien+'" target="_blank" rel="noopener noreferrer" style="background:#f4a020;color:#fff;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;display:inline-block;">Site web &#8599;</a>' : '')
+      +'</div>';
+    L.marker([e.lat, e.lng], {icon: iconEntreprise}).addTo(leafletMap).bindPopup(popupHtml);
+  });
 }
 
 function filterMap(type, btn){
@@ -3551,5 +3758,7 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
+<!-- Leaflet.js for interactive map - loaded after page content -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </body>
 </html>
