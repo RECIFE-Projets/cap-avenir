@@ -161,19 +161,58 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .nav-item .nav-label{font-size:0.62rem;font-weight:600;}
 
 /* LANDING */
-#page-landing{background:var(--primary);color:#fff;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;}
-.landing-hero{max-width:520px;margin:0 auto;}
-.landing-logo{width:80px;height:80px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:2rem;font-weight:800;margin:0 auto 1.5rem;box-shadow:0 8px 32px rgba(244,160,32,0.4);}
-.landing-title{font-family:var(--font);font-size:2rem;font-weight:800;line-height:1.15;margin-bottom:0.8rem;}
-.landing-title span{color:var(--accent);}
-.landing-sub{font-size:0.95rem;opacity:0.85;line-height:1.6;margin-bottom:2rem;}
-.landing-offline-note{background:rgba(255,255,255,0.1);border-radius:12px;padding:0.85rem 1rem;font-size:0.82rem;margin-bottom:2rem;display:flex;align-items:center;gap:8px;text-align:left;}
-.landing-btns{display:flex;gap:12px;flex-direction:column;}
-.landing-btns .btn{font-size:1rem;padding:0.95rem 2rem;}
-.btn-white{background:#fff;color:var(--primary);}
-.btn-white:hover{background:rgba(255,255,255,0.9);transform:translateY(-1px);}
-.btn-outline-white{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.6);}
-.btn-outline-white:hover{background:rgba(255,255,255,0.1);}
+#page-landing{background:#07243f;color:#fff;overflow-y:auto;}
+.landing-wrap{min-height:100vh;display:flex;flex-direction:column;}
+
+/* HERO */
+.land-hero{padding:3rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.land-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(20,90,160,0.55) 0%,transparent 70%);}
+.land-anchor{width:88px;height:88px;background:var(--accent);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin:0 auto 1.5rem;position:relative;z-index:1;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes popIn{from{opacity:0;transform:scale(0.6)}to{opacity:1;transform:scale(1)}}
+.land-title{font-family:var(--font);font-size:2.1rem;font-weight:800;line-height:1.12;margin-bottom:1rem;position:relative;z-index:1;animation:fadeUp .6s .15s both ease-out;}
+.land-title span{color:var(--accent);}
+.land-sub{font-size:0.97rem;opacity:0.82;line-height:1.65;max-width:420px;margin:0 auto 2rem;position:relative;z-index:1;animation:fadeUp .6s .25s both ease-out;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.land-btns{display:flex;flex-direction:column;gap:12px;max-width:360px;margin:0 auto;position:relative;z-index:1;animation:fadeUp .6s .35s both ease-out;}
+.btn-white{background:#fff;color:#07243f;font-weight:700;}
+.btn-white:hover{background:rgba(255,255,255,0.92);transform:translateY(-2px);}
+.btn-outline-white{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.45);font-weight:600;}
+.btn-outline-white:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.7);}
+
+/* STATS STRIP */
+.land-stats{display:flex;justify-content:center;gap:0;margin:2rem 1.5rem 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);}
+.land-stat{flex:1;padding:1rem 0.5rem;text-align:center;background:rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.08);}
+.land-stat:last-child{border-right:none;}
+.land-stat-num{font-family:var(--font);font-size:1.5rem;font-weight:800;color:var(--accent);}
+.land-stat-label{font-size:0.68rem;opacity:0.65;margin-top:2px;line-height:1.3;}
+
+/* FEATURES */
+.land-features{padding:2rem 1.25rem;display:flex;flex-direction:column;gap:12px;}
+.land-feat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1rem 1.1rem;display:flex;align-items:center;gap:14px;transition:background .2s;}
+.land-feat:hover{background:rgba(255,255,255,0.1);}
+.land-feat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.land-feat-icon.blue{background:rgba(58,143,217,0.25);}
+.land-feat-icon.amber{background:rgba(244,160,32,0.25);}
+.land-feat-icon.green{background:rgba(26,138,74,0.25);}
+.land-feat-icon.purple{background:rgba(130,80,220,0.25);}
+.land-feat-title{font-weight:700;font-size:0.9rem;margin-bottom:2px;}
+.land-feat-desc{font-size:0.78rem;opacity:0.65;line-height:1.45;}
+
+/* TESTIMONIALS */
+.land-testimonials{padding:0 1.25rem 1.5rem;}
+.land-section-label{font-size:0.72rem;font-weight:700;letter-spacing:0.08em;opacity:0.5;text-transform:uppercase;margin-bottom:0.85rem;}
+.land-testi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1rem 1.1rem;margin-bottom:10px;}
+.land-testi-text{font-size:0.85rem;line-height:1.6;opacity:0.85;font-style:italic;margin-bottom:0.6rem;}
+.land-testi-author{display:flex;align-items:center;gap:8px;}
+.land-testi-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;}
+.land-testi-name{font-size:0.78rem;font-weight:600;opacity:0.7;}
+
+/* OFFLINE NOTE */
+.land-offline{margin:0 1.25rem 1.5rem;background:rgba(26,138,74,0.15);border:1px solid rgba(26,138,74,0.3);border-radius:12px;padding:0.85rem 1rem;display:flex;gap:10px;align-items:center;font-size:0.82rem;opacity:0.9;}
+
+/* BOTTOM CTA */
+.land-cta-bottom{padding:1.5rem 1.25rem 2.5rem;text-align:center;}
+.land-cta-bottom p{font-size:0.78rem;opacity:0.45;margin-top:1rem;}
 
 /* QUIZ / TEST */
 .quiz-question{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:1rem;line-height:1.5;}
@@ -307,20 +346,110 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
 <!-- ===== PAGE LANDING ===== -->
 <div id="page-landing" class="page active">
-  <div class="landing-hero">
-    <div class="landing-logo">⚓</div>
-    <h1 class="landing-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
-    <p class="landing-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — avec ou sans connexion Internet.</p>
-    <div class="landing-offline-note">
-      <span style="font-size:1.2rem">📶</span>
-      <span>Cette application fonctionne avec ou sans connexion Internet. Vos données sont sauvegardées automatiquement.</span>
+<div class="landing-wrap">
+
+  <!-- HERO -->
+  <div class="land-hero">
+    <div class="land-anchor">⚓</div>
+    <h1 class="land-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
+    <p class="land-sub">Découvrez les métiers qui recrutent près de chez vous, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
+    <div class="land-btns">
+      <button class="btn btn-white btn-lg" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem 2rem;border-radius:14px;">✨ Commencer maintenant — c'est gratuit</button>
+      <button class="btn btn-outline-white btn-lg" onclick="showPage('page-login')" style="font-size:0.95rem;padding:0.9rem 2rem;border-radius:14px;">🔑 J'ai déjà un compte</button>
     </div>
-    <div class="landing-btns">
-      <button class="btn btn-white btn-lg" onclick="showPage('page-register')">✨ S'inscrire — c'est gratuit</button>
-      <button class="btn btn-outline-white btn-lg" onclick="showPage('page-login')">🔑 Se connecter</button>
-    </div>
-    <p style="margin-top:1.5rem;font-size:0.78rem;opacity:0.6;">Plateforme RÉCIFE × GRETA Côtes Normandes · Le Havre</p>
   </div>
+
+  <!-- STATS -->
+  <div class="land-stats">
+    <div class="land-stat">
+      <div class="land-stat-num">12+</div>
+      <div class="land-stat-label">Métiers du Havre</div>
+    </div>
+    <div class="land-stat">
+      <div class="land-stat-num">100%</div>
+      <div class="land-stat-label">Gratuit</div>
+    </div>
+    <div class="land-stat">
+      <div class="land-stat-num">6</div>
+      <div class="land-stat-label">Jeux par métier</div>
+    </div>
+    <div class="land-stat">
+      <div class="land-stat-num">A1→C2</div>
+      <div class="land-stat-label">Tous niveaux</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="land-features">
+    <div class="land-section-label">Ce que vous pouvez faire</div>
+
+    <div class="land-feat">
+      <div class="land-feat-icon blue">🗺️</div>
+      <div>
+        <div class="land-feat-title">Découvrir les métiers qui recrutent</div>
+        <div class="land-feat-desc">Ports, industrie, logistique, santé, numérique… explorez les métiers porteurs du Havre et de l'agglomération.</div>
+      </div>
+    </div>
+
+    <div class="land-feat">
+      <div class="land-feat-icon amber">🎮</div>
+      <div>
+        <div class="land-feat-title">Apprendre en jouant</div>
+        <div class="land-feat-desc">Quiz, glisser-déposer, vrai ou faux, situations professionnelles… gagnez des badges et des points !</div>
+      </div>
+    </div>
+
+    <div class="land-feat">
+      <div class="land-feat-icon green">🎯</div>
+      <div>
+        <div class="land-feat-title">Un test d'orientation personnalisé</div>
+        <div class="land-feat-desc">Répondez à quelques questions sur vous et recevez 3 métiers qui correspondent à votre profil.</div>
+      </div>
+    </div>
+
+    <div class="land-feat">
+      <div class="land-feat-icon purple">🚀</div>
+      <div>
+        <div class="land-feat-title">Passer à l'action concrètement</div>
+        <div class="land-feat-desc">CV, lettre de motivation, simulation d'entretien, formations locales et entreprises qui recrutent.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="land-testimonials">
+    <div class="land-section-label">Ils ont trouvé leur voie</div>
+
+    <div class="land-testi">
+      <div class="land-testi-text">« J'avais peur de ne pas comprendre. Mais les jeux m'ont aidée à apprendre les métiers sans stress. Maintenant je sais que je veux devenir aide-soignante. »</div>
+      <div class="land-testi-author">
+        <div class="land-testi-avatar" style="background:rgba(244,160,32,0.3);color:var(--accent);">F</div>
+        <span class="land-testi-name">Fatima, 34 ans — Niveau A2</span>
+      </div>
+    </div>
+
+    <div class="land-testi">
+      <div class="land-testi-text">« Le test m'a recommandé cariste. Je n'y avais jamais pensé. J'ai passé mon CACES et j'ai trouvé un CDI au port en 2 mois. »</div>
+      <div class="land-testi-author">
+        <div class="land-testi-avatar" style="background:rgba(58,143,217,0.3);color:#5aa8f0;">A</div>
+        <span class="land-testi-name">Ahmed, 28 ans — Le Havre</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFLINE NOTE -->
+  <div class="land-offline">
+    <span style="font-size:1.3rem;flex-shrink:0;">📶</span>
+    <span>Fonctionne <strong>avec ou sans connexion Internet</strong>. Vos données sont sauvegardées automatiquement sur votre appareil.</span>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="land-cta-bottom">
+    <button class="btn btn-white btn-lg btn-full" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;max-width:360px;">✨ Créer mon compte gratuitement</button>
+    <p>Application d'orientation professionnelle · Le Havre</p>
+  </div>
+
+</div>
 </div>
 
 <!-- ===== PAGE INSCRIPTION ===== -->
