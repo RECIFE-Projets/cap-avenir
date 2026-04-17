@@ -2343,6 +2343,7 @@ function showPage(id){
   if(id === 'page-dashboard-stagiaire') renderDashboard();
   if(id === 'page-attestations') renderAttestations();
   if(id === 'page-dashboard-referente') renderReferenteDashboard();
+  if(id === 'page-glossaire') showPage_glossaire();
 }
 function updateFab(pageId){
   const fab = document.getElementById('help-fab');
@@ -3939,12 +3940,7 @@ async function searchGlossaire(){
   }
 }
 
-// Hook into showPage for glossaire
-const _origShowPage = showPage;
-function showPage(id){
-  _origShowPage(id);
-  if(id === 'page-glossaire') showPage_glossaire();
-}
+// (glossaire init déclenché depuis showPage principal)
 
 // ==================== VIDEO SOUS-TITRES ====================
 function openVideoModal(){
