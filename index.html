@@ -174,14 +174,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .btn-outline-white:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.7);}
 
 /* HERO with skyline */
-.land-hero{position:relative;text-align:center;padding:2.5rem 1.25rem 0;overflow:hidden;min-height:420px;display:flex;flex-direction:column;align-items:center;}
-.land-skyline-wrap{position:absolute;bottom:0;left:0;right:0;z-index:0;}
-.land-hero-content{position:relative;z-index:2;width:100%;}
+.land-hero{text-align:center;padding:2.5rem 1.25rem 1.75rem;background:#04182e;}
 .land-anchor{width:80px;height:80px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1.25rem;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 8px 32px rgba(244,160,32,0.45);}
 .land-title{font-family:var(--font);font-size:2.2rem;font-weight:800;line-height:1.1;margin-bottom:0.9rem;animation:fadeUp .6s .15s both ease-out;}
 .land-title span{color:var(--accent);}
 .land-sub{font-size:0.93rem;opacity:0.78;line-height:1.65;max-width:380px;margin:0 auto 1.75rem;animation:fadeUp .6s .25s both ease-out;}
-.land-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;margin:0 auto;animation:fadeUp .6s .35s both ease-out;padding-bottom:180px;}
+.land-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;margin:0 auto;animation:fadeUp .6s .35s both ease-out;}
 
 /* STATS STRIP */
 .land-stats{display:grid;grid-template-columns:repeat(4,1fr);margin:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
@@ -352,220 +350,161 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 <div id="page-landing" class="page active">
 <div class="landing-wrap">
 
-  <!-- HERO with Le Havre skyline -->
+  <!-- HERO : texte + boutons -->
   <div class="land-hero">
-    <div class="land-hero-content">
-      <div class="land-anchor">⚓</div>
-      <h1 class="land-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
-      <p class="land-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
-      <div class="land-btns">
-        <button class="btn btn-white btn-lg" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem 1.5rem;border-radius:14px;width:100%;">✨ Commencer — c'est gratuit</button>
-        <button class="btn btn-outline-white" onclick="showPage('page-login')" style="font-size:0.92rem;padding:0.85rem 1.5rem;border-radius:14px;width:100%;">🔑 J'ai déjà un compte</button>
-      </div>
+    <div class="land-anchor">⚓</div>
+    <h1 class="land-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
+    <p class="land-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
+    <div class="land-btns">
+      <button class="btn btn-white" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;width:100%;max-width:340px;">&#10024; Commencer — c'est gratuit</button>
+      <button class="btn btn-outline-white" onclick="showPage('page-login')" style="font-size:0.92rem;padding:0.85rem;border-radius:14px;width:100%;max-width:340px;">&#128273; J'ai déjà un compte</button>
     </div>
+  </div>
 
-    <!-- SVG Skyline Le Havre -->
-    <div class="land-skyline-wrap">
-      <svg width="100%" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-        <!-- Sky gradient layer -->
-        <rect x="0" y="0" width="800" height="200" fill="#04182e"/>
-        <!-- Stars -->
-        <circle cx="60" cy="18" r="1.2" fill="#fff" opacity=".6" style="animation:starPulse 3s 0.2s infinite ease-in-out"/>
-        <circle cx="140" cy="10" r="1" fill="#fff" opacity=".5" style="animation:starPulse 2.5s 0.8s infinite ease-in-out"/>
-        <circle cx="240" cy="22" r="1.3" fill="#fff" opacity=".7" style="animation:starPulse 3.5s 0.4s infinite ease-in-out"/>
-        <circle cx="380" cy="8" r="1" fill="#fff" opacity=".4" style="animation:starPulse 2.8s 1s infinite ease-in-out"/>
-        <circle cx="500" cy="16" r="1.2" fill="#fff" opacity=".6" style="animation:starPulse 3.2s 0.6s infinite ease-in-out"/>
-        <circle cx="620" cy="9" r="1" fill="#fff" opacity=".5" style="animation:starPulse 2.6s 1.3s infinite ease-in-out"/>
-        <circle cx="720" cy="20" r="1.3" fill="#fff" opacity=".6" style="animation:starPulse 3s 0.9s infinite ease-in-out"/>
-        <circle cx="760" cy="12" r="1" fill="#fff" opacity=".4" style="animation:starPulse 2.4s 0.3s infinite ease-in-out"/>
-        <!-- Moon -->
-        <circle cx="720" cy="35" r="14" fill="#f0e8c8" opacity=".9"/>
-        <circle cx="726" cy="30" r="12" fill="#04182e" opacity=".85"/>
-
-        <!-- Water reflection -->
-        <rect x="0" y="158" width="800" height="42" fill="#061e35" opacity=".9"/>
-        <!-- Water shimmer lines -->
-        <path d="M0 165 Q100 162 200 165 Q300 168 400 165 Q500 162 600 165 Q700 168 800 165" fill="none" stroke="#1a4a7a" stroke-width="1" opacity=".4" style="animation:waveFade 4s infinite ease-in-out"/>
-        <path d="M0 172 Q120 169 240 172 Q360 175 480 172 Q600 169 720 172 Q760 173 800 172" fill="none" stroke="#1a4a7a" stroke-width="0.8" opacity=".3" style="animation:waveFade 5s 1s infinite ease-in-out"/>
-        <path d="M0 180 Q80 177 160 180 Q280 183 400 180 Q520 177 640 180 Q720 183 800 180" fill="none" stroke="#1a4a7a" stroke-width="0.6" opacity=".25" style="animation:waveFade 6s 2s infinite ease-in-out"/>
-
-        <!-- CITYSCAPE - BUILDINGS -->
-        <!-- Left: industrial zone Gonfreville -->
-        <rect x="0" y="110" width="30" height="50" fill="#0a2a45" opacity=".9"/>
-        <rect x="8" y="95" width="14" height="65" fill="#0d3055" opacity=".9"/>
-        <!-- Refinery pipes/tanks -->
-        <rect x="38" y="120" width="18" height="40" fill="#0a2a45"/>
-        <rect x="42" y="112" width="10" height="8" fill="#0d3055" rx="5"/>
-        <!-- Smoke wisps -->
-        <path d="M47 112 Q44 100 48 90 Q52 80 49 70" fill="none" stroke="#1a3a55" stroke-width="2" opacity=".4"/>
-        <path d="M47 112 Q50 100 47 88 Q44 76 48 65" fill="none" stroke="#1a3a55" stroke-width="1.5" opacity=".3"/>
-
-        <!-- Port cranes (centre-gauche) -->
-        <g style="animation:crane 6s 0s infinite ease-in-out;transform-origin:110px 160px">
-          <rect x="105" y="60" width="5" height="100" fill="#1a5a8a"/>
-          <rect x="70" y="63" width="75" height="4" fill="#1a5a8a"/>
-          <rect x="70" y="63" width="4" height="30" fill="#1a5a8a"/>
-          <line x1="110" y1="67" x2="80" y2="90" stroke="#1a5a8a" stroke-width="1.5"/>
-          <line x1="110" y1="67" x2="140" y2="80" stroke="#1a5a8a" stroke-width="1.5"/>
-          <!-- Cabin -->
-          <rect x="104" y="75" width="12" height="9" fill="#2a6a9a" rx="1"/>
-        </g>
-
-        <g style="animation:crane 7s 1s infinite ease-in-out;transform-origin:175px 160px">
-          <rect x="172" y="50" width="5" height="110" fill="#1a5a8a"/>
-          <rect x="145" y="53" width="60" height="4" fill="#1a5a8a"/>
-          <rect x="145" y="53" width="4" height="28" fill="#1a5a8a"/>
-          <line x1="175" y1="57" x2="155" y2="78" stroke="#1a5a8a" stroke-width="1.5"/>
-          <line x1="175" y1="57" x2="200" y2="68" stroke="#1a5a8a" stroke-width="1.5"/>
-          <rect x="171" y="65" width="11" height="8" fill="#2a6a9a" rx="1"/>
-        </g>
-
-        <!-- Container ship hull -->
-        <path d="M60 158 L220 158 L230 165 L50 165 Z" fill="#0e3558" stroke="#1a4a6a" stroke-width="0.5"/>
-        <!-- Containers on ship -->
-        <rect x="70" y="148" width="22" height="10" fill="#c0392b" rx="1"/>
-        <rect x="95" y="148" width="22" height="10" fill="#1a5a8a" rx="1"/>
-        <rect x="120" y="148" width="22" height="10" fill="#f4a020" rx="1"/>
-        <rect x="145" y="148" width="22" height="10" fill="#2c7a3a" rx="1"/>
-        <rect x="170" y="148" width="22" height="10" fill="#c0392b" rx="1"/>
-        <rect x="82" y="138" width="22" height="10" fill="#1a5a8a" rx="1"/>
-        <rect x="107" y="138" width="22" height="10" fill="#f4a020" rx="1"/>
-        <rect x="132" y="138" width="22" height="10" fill="#2c7a3a" rx="1"/>
-        <rect x="157" y="138" width="22" height="10" fill="#c0392b" rx="1"/>
-
-        <!-- Centre: Le Havre buildings -->
-        <rect x="270" y="105" width="28" height="55" fill="#0c2d4a" rx="1"/>
-        <rect x="275" y="110" width="5" height="4" fill="#f4a020" opacity=".5"/>
-        <rect x="283" y="110" width="5" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="275" y="118" width="5" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="283" y="118" width="5" height="4" fill="#f4a020" opacity=".4"/>
-        <rect x="275" y="126" width="5" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="283" y="126" width="5" height="4" fill="#c8d8e8" opacity=".15"/>
-
-        <rect x="302" y="90" width="22" height="70" fill="#0e3356"/>
-        <rect x="305" y="95" width="4" height="4" fill="#f4a020" opacity=".6"/>
-        <rect x="312" y="95" width="4" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="305" y="103" width="4" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="312" y="103" width="4" height="4" fill="#f4a020" opacity=".4"/>
-        <rect x="305" y="111" width="4" height="4" fill="#c8d8e8" opacity=".15"/>
-        <rect x="312" y="111" width="4" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="305" y="119" width="4" height="4" fill="#f4a020" opacity=".5"/>
-        <rect x="312" y="119" width="4" height="4" fill="#c8d8e8" opacity=".15"/>
-
-        <!-- Tall tower centre -->
-        <rect x="328" y="72" width="18" height="88" fill="#102040"/>
-        <rect x="332" y="60" width="10" height="16" fill="#122445" rx="1"/>
-        <rect x="335" y="55" width="4" height="8" fill="#c8d8e8" opacity=".3"/>
-        <rect x="331" y="78" width="3" height="3" fill="#f4a020" opacity=".7"/>
-        <rect x="336" y="78" width="3" height="3" fill="#c8d8e8" opacity=".2"/>
-        <rect x="342" y="78" width="3" height="3" fill="#c8d8e8" opacity=".2"/>
-        <rect x="331" y="86" width="3" height="3" fill="#c8d8e8" opacity=".15"/>
-        <rect x="336" y="86" width="3" height="3" fill="#f4a020" opacity=".45"/>
-        <rect x="342" y="86" width="3" height="3" fill="#c8d8e8" opacity=".2"/>
-
-        <rect x="350" y="100" width="25" height="60" fill="#0c2d4a"/>
-        <rect x="354" y="106" width="5" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="362" y="106" width="5" height="4" fill="#f4a020" opacity=".5"/>
-        <rect x="354" y="114" width="5" height="4" fill="#f4a020" opacity=".4"/>
-        <rect x="362" y="114" width="5" height="4" fill="#c8d8e8" opacity=".15"/>
-
-        <!-- Lighthouse / church -->
-        <rect x="385" y="115" width="14" height="45" fill="#0d2e4a"/>
-        <polygon points="385,115 399,115 392,95" fill="#102040"/>
-        <circle cx="392" cy="112" r="3" fill="#f4a020" opacity=".8"/>
-
-        <!-- Right: more buildings -->
-        <rect x="410" y="108" width="20" height="52" fill="#0c2d4a"/>
-        <rect x="433" y="95" width="24" height="65" fill="#0e3356"/>
-        <rect x="436" y="100" width="4" height="4" fill="#f4a020" opacity=".55"/>
-        <rect x="443" y="100" width="4" height="4" fill="#c8d8e8" opacity=".2"/>
-        <rect x="436" y="108" width="4" height="4" fill="#c8d8e8" opacity=".15"/>
-        <rect x="443" y="108" width="4" height="4" fill="#f4a020" opacity=".4"/>
-        <rect x="436" y="116" width="4" height="4" fill="#c8d8e8" opacity=".2"/>
-
-        <rect x="460" y="118" width="18" height="42" fill="#0a2a42"/>
-        <rect x="481" y="105" width="22" height="55" fill="#0c2d4a"/>
-        <rect x="506" y="115" width="16" height="45" fill="#0a2840"/>
-
-        <!-- Right: second crane -->
-        <g style="animation:crane 8s 2s infinite ease-in-out;transform-origin:550px 160px">
-          <rect x="547" y="55" width="5" height="105" fill="#1a5a8a"/>
-          <rect x="520" y="58" width="60" height="4" fill="#1a5a8a"/>
-          <rect x="520" y="58" width="4" height="26" fill="#1a5a8a"/>
-          <line x1="550" y1="62" x2="530" y2="82" stroke="#1a5a8a" stroke-width="1.5"/>
-          <line x1="550" y1="62" x2="575" y2="72" stroke="#1a5a8a" stroke-width="1.5"/>
-          <rect x="546" y="68" width="11" height="8" fill="#2a6a9a" rx="1"/>
-        </g>
-
-        <!-- Far right: industrial -->
-        <rect x="590" y="120" width="20" height="40" fill="#0a2840"/>
-        <rect x="614" y="110" width="16" height="50" fill="#0c2d4a"/>
-        <rect x="634" y="118" width="22" height="42" fill="#0a2840"/>
-        <rect x="660" y="105" width="18" height="55" fill="#0c2d4a"/>
-        <rect x="682" y="115" width="14" height="45" fill="#0a2840"/>
-        <rect x="700" y="100" width="20" height="60" fill="#0c2d4a"/>
-        <!-- Refinery right -->
-        <rect x="725" y="112" width="15" height="48" fill="#0a2840"/>
-        <rect x="727" y="100" width="11" height="14" rx="5" fill="#0c2d4a"/>
-        <path d="M732 100 Q729 88 733 78 Q737 68 734 58" fill="none" stroke="#1a3a55" stroke-width="1.8" opacity=".35"/>
-        <rect x="745" y="120" width="30" height="40" fill="#0a2840"/>
-        <rect x="750" y="108" width="20" height="14" fill="#0c2d4a" rx="1"/>
-        <rect x="780" y="115" width="20" height="45" fill="#0a2840"/>
-
-        <!-- Horizon glow (light pollution) -->
-        <ellipse cx="400" cy="158" rx="350" ry="20" fill="#0d3060" opacity=".45"/>
-        <ellipse cx="150" cy="158" rx="120" ry="12" fill="#0d3060" opacity=".3"/>
-        <ellipse cx="550" cy="158" rx="100" ry="10" fill="#0d3060" opacity=".25"/>
-
-        <!-- Foreground quay -->
-        <rect x="0" y="158" width="800" height="6" fill="#071828"/>
-        <!-- Bollards -->
-        <rect x="40" y="154" width="4" height="8" fill="#0f2a40" rx="1"/>
-        <rect x="200" y="154" width="4" height="8" fill="#0f2a40" rx="1"/>
-        <rect x="400" y="154" width="4" height="8" fill="#0f2a40" rx="1"/>
-        <rect x="600" y="154" width="4" height="8" fill="#0f2a40" rx="1"/>
-        <rect x="750" y="154" width="4" height="8" fill="#0f2a40" rx="1"/>
-      </svg>
-    </div>
+  <!-- SKYLINE Le Havre : flux normal, après le hero -->
+  <div style="background:#04182e;line-height:0;margin-top:-2px;">
+    <svg width="100%" viewBox="0 0 800 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" style="display:block;">
+      <rect x="0" y="0" width="800" height="210" fill="#04182e"/>
+      <!-- Étoiles -->
+      <circle cx="60" cy="18" r="1.2" fill="#fff" opacity=".6"/>
+      <circle cx="140" cy="10" r="1" fill="#fff" opacity=".5"/>
+      <circle cx="240" cy="22" r="1.3" fill="#fff" opacity=".7"/>
+      <circle cx="380" cy="8" r="1" fill="#fff" opacity=".4"/>
+      <circle cx="500" cy="16" r="1.2" fill="#fff" opacity=".6"/>
+      <circle cx="620" cy="9" r="1" fill="#fff" opacity=".5"/>
+      <circle cx="720" cy="20" r="1.3" fill="#fff" opacity=".6"/>
+      <circle cx="760" cy="12" r="1" fill="#fff" opacity=".4"/>
+      <!-- Lune -->
+      <circle cx="720" cy="35" r="14" fill="#f0e8c8" opacity=".9"/>
+      <circle cx="726" cy="30" r="12" fill="#04182e" opacity=".88"/>
+      <!-- Zone industrielle gauche Gonfreville -->
+      <rect x="0" y="115" width="30" height="55" fill="#0a2a45"/>
+      <rect x="8" y="98" width="14" height="72" fill="#0d3055"/>
+      <rect x="38" y="122" width="18" height="48" fill="#0a2a45"/>
+      <rect x="42" y="113" width="10" height="10" rx="5" fill="#0d3055"/>
+      <path d="M47 113 Q44 100 48 88 Q52 76 49 64" fill="none" stroke="#1a3a55" stroke-width="2" opacity=".5"/>
+      <path d="M47 113 Q50 100 47 87 Q44 74 48 62" fill="none" stroke="#1a3a55" stroke-width="1.5" opacity=".3"/>
+      <!-- Grue 1 -->
+      <rect x="105" y="62" width="5" height="108" fill="#1a5a8a"/>
+      <rect x="70" y="65" width="75" height="4" fill="#1a5a8a"/>
+      <rect x="70" y="65" width="4" height="30" fill="#1a5a8a"/>
+      <line x1="110" y1="69" x2="80" y2="92" stroke="#1a5a8a" stroke-width="1.5"/>
+      <line x1="110" y1="69" x2="140" y2="82" stroke="#1a5a8a" stroke-width="1.5"/>
+      <rect x="104" y="77" width="12" height="9" fill="#2a6a9a" rx="1"/>
+      <!-- Grue 2 -->
+      <rect x="172" y="52" width="5" height="118" fill="#1a5a8a"/>
+      <rect x="145" y="55" width="60" height="4" fill="#1a5a8a"/>
+      <rect x="145" y="55" width="4" height="28" fill="#1a5a8a"/>
+      <line x1="175" y1="59" x2="155" y2="80" stroke="#1a5a8a" stroke-width="1.5"/>
+      <line x1="175" y1="59" x2="200" y2="70" stroke="#1a5a8a" stroke-width="1.5"/>
+      <rect x="171" y="67" width="11" height="8" fill="#2a6a9a" rx="1"/>
+      <!-- Navire porte-conteneurs -->
+      <path d="M55 162 L230 162 L240 170 L45 170 Z" fill="#0e3558" stroke="#1a4a6a" stroke-width="0.5"/>
+      <rect x="68" y="150" width="22" height="12" fill="#c0392b" rx="1"/>
+      <rect x="93" y="150" width="22" height="12" fill="#1a5a8a" rx="1"/>
+      <rect x="118" y="150" width="22" height="12" fill="#f4a020" rx="1"/>
+      <rect x="143" y="150" width="22" height="12" fill="#2c7a3a" rx="1"/>
+      <rect x="168" y="150" width="22" height="12" fill="#c0392b" rx="1"/>
+      <rect x="80" y="138" width="22" height="12" fill="#1a5a8a" rx="1"/>
+      <rect x="105" y="138" width="22" height="12" fill="#f4a020" rx="1"/>
+      <rect x="130" y="138" width="22" height="12" fill="#2c7a3a" rx="1"/>
+      <rect x="155" y="138" width="22" height="12" fill="#c0392b" rx="1"/>
+      <!-- Immeubles centre Le Havre -->
+      <rect x="268" y="108" width="28" height="62" fill="#0c2d4a" rx="1"/>
+      <rect x="273" y="113" width="5" height="4" fill="#f4a020" opacity=".6"/>
+      <rect x="281" y="113" width="5" height="4" fill="#8cc4e8" opacity=".3"/>
+      <rect x="273" y="121" width="5" height="4" fill="#8cc4e8" opacity=".25"/>
+      <rect x="281" y="121" width="5" height="4" fill="#f4a020" opacity=".4"/>
+      <rect x="273" y="129" width="5" height="4" fill="#8cc4e8" opacity=".2"/>
+      <rect x="300" y="92" width="22" height="78" fill="#0e3356"/>
+      <rect x="303" y="97" width="4" height="4" fill="#f4a020" opacity=".65"/>
+      <rect x="310" y="97" width="4" height="4" fill="#8cc4e8" opacity=".25"/>
+      <rect x="303" y="105" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
+      <rect x="310" y="105" width="4" height="4" fill="#f4a020" opacity=".5"/>
+      <rect x="303" y="113" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
+      <rect x="310" y="113" width="4" height="4" fill="#f4a020" opacity=".4"/>
+      <!-- Tour principale -->
+      <rect x="326" y="74" width="18" height="96" fill="#102040"/>
+      <rect x="330" y="62" width="10" height="16" fill="#122445" rx="1"/>
+      <rect x="333" y="56" width="4" height="9" fill="#8cc4e8" opacity=".35"/>
+      <rect x="329" y="80" width="3" height="3" fill="#f4a020" opacity=".75"/>
+      <rect x="334" y="80" width="3" height="3" fill="#8cc4e8" opacity=".25"/>
+      <rect x="340" y="80" width="3" height="3" fill="#8cc4e8" opacity=".2"/>
+      <rect x="329" y="88" width="3" height="3" fill="#8cc4e8" opacity=".2"/>
+      <rect x="334" y="88" width="3" height="3" fill="#f4a020" opacity=".5"/>
+      <rect x="348" y="102" width="25" height="68" fill="#0c2d4a"/>
+      <rect x="352" y="108" width="5" height="4" fill="#8cc4e8" opacity=".25"/>
+      <rect x="360" y="108" width="5" height="4" fill="#f4a020" opacity=".55"/>
+      <rect x="352" y="116" width="5" height="4" fill="#f4a020" opacity=".45"/>
+      <!-- Clocher/phare -->
+      <rect x="383" y="118" width="14" height="52" fill="#0d2e4a"/>
+      <polygon points="383,118 397,118 390,97" fill="#102040"/>
+      <circle cx="390" cy="115" r="3" fill="#f4a020" opacity=".85"/>
+      <!-- Immeubles droite -->
+      <rect x="408" y="110" width="20" height="60" fill="#0c2d4a"/>
+      <rect x="431" y="97" width="24" height="73" fill="#0e3356"/>
+      <rect x="434" y="102" width="4" height="4" fill="#f4a020" opacity=".6"/>
+      <rect x="441" y="102" width="4" height="4" fill="#8cc4e8" opacity=".25"/>
+      <rect x="434" y="110" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
+      <rect x="441" y="110" width="4" height="4" fill="#f4a020" opacity=".45"/>
+      <rect x="458" y="120" width="18" height="50" fill="#0a2a42"/>
+      <rect x="479" y="107" width="22" height="63" fill="#0c2d4a"/>
+      <rect x="504" y="117" width="16" height="53" fill="#0a2840"/>
+      <!-- Grue 3 droite -->
+      <rect x="547" y="57" width="5" height="113" fill="#1a5a8a"/>
+      <rect x="520" y="60" width="60" height="4" fill="#1a5a8a"/>
+      <rect x="520" y="60" width="4" height="26" fill="#1a5a8a"/>
+      <line x1="550" y1="64" x2="530" y2="84" stroke="#1a5a8a" stroke-width="1.5"/>
+      <line x1="550" y1="64" x2="575" y2="74" stroke="#1a5a8a" stroke-width="1.5"/>
+      <rect x="546" y="70" width="11" height="8" fill="#2a6a9a" rx="1"/>
+      <!-- Zone industrielle droite -->
+      <rect x="588" y="122" width="20" height="48" fill="#0a2840"/>
+      <rect x="612" y="112" width="16" height="58" fill="#0c2d4a"/>
+      <rect x="632" y="120" width="22" height="50" fill="#0a2840"/>
+      <rect x="658" y="107" width="18" height="63" fill="#0c2d4a"/>
+      <rect x="680" y="117" width="14" height="53" fill="#0a2840"/>
+      <rect x="698" y="102" width="20" height="68" fill="#0c2d4a"/>
+      <rect x="723" y="114" width="15" height="56" fill="#0a2840"/>
+      <rect x="725" y="102" width="11" height="14" rx="5" fill="#0c2d4a"/>
+      <path d="M730 102 Q727 90 731 80 Q735 70 732 60" fill="none" stroke="#1a3a55" stroke-width="1.8" opacity=".4"/>
+      <rect x="743" y="122" width="30" height="48" fill="#0a2840"/>
+      <rect x="778" y="117" width="22" height="53" fill="#0a2840"/>
+      <!-- Halo lumineux horizon -->
+      <ellipse cx="400" cy="170" rx="380" ry="22" fill="#0d3060" opacity=".5"/>
+      <ellipse cx="140" cy="170" rx="120" ry="14" fill="#0d3060" opacity=".3"/>
+      <!-- Quai et eau -->
+      <rect x="0" y="170" width="800" height="5" fill="#071828"/>
+      <rect x="0" y="175" width="800" height="35" fill="#061e35"/>
+      <path d="M0 183 Q200 180 400 183 Q600 186 800 183" fill="none" stroke="#1a4a7a" stroke-width="1" opacity=".4"/>
+      <path d="M0 191 Q200 188 400 191 Q600 194 800 191" fill="none" stroke="#1a4a7a" stroke-width="0.7" opacity=".3"/>
+    </svg>
   </div>
 
   <!-- STATS -->
   <div class="land-stats">
-    <div class="land-stat">
-      <div class="land-stat-num">12+</div>
-      <div class="land-stat-label">Métiers du Havre</div>
-    </div>
-    <div class="land-stat">
-      <div class="land-stat-num">100%</div>
-      <div class="land-stat-label">Gratuit</div>
-    </div>
-    <div class="land-stat">
-      <div class="land-stat-num">6</div>
-      <div class="land-stat-label">Jeux / métier</div>
-    </div>
-    <div class="land-stat">
-      <div class="land-stat-num">A1→C2</div>
-      <div class="land-stat-label">Tous niveaux</div>
-    </div>
+    <div class="land-stat"><div class="land-stat-num">12+</div><div class="land-stat-label">Métiers du Havre</div></div>
+    <div class="land-stat"><div class="land-stat-num">100%</div><div class="land-stat-label">Gratuit</div></div>
+    <div class="land-stat"><div class="land-stat-num">6</div><div class="land-stat-label">Jeux / métier</div></div>
+    <div class="land-stat"><div class="land-stat-num">A1&#8594;C2</div><div class="land-stat-label">Tous niveaux</div></div>
   </div>
 
   <!-- FEATURES -->
   <div class="land-features">
     <div class="land-section-label">Ce que vous pouvez faire</div>
     <div class="land-feat">
-      <div class="land-feat-icon blue">🗺️</div>
+      <div class="land-feat-icon blue" style="font-size:1.4rem;">&#128506;</div>
       <div><div class="land-feat-title">Découvrir les métiers qui recrutent</div><div class="land-feat-desc">Port, industrie, logistique, santé, numérique… explorez les métiers porteurs du Havre et de l'agglomération.</div></div>
     </div>
     <div class="land-feat">
-      <div class="land-feat-icon amber">🎮</div>
+      <div class="land-feat-icon amber" style="font-size:1.4rem;">&#127918;</div>
       <div><div class="land-feat-title">Apprendre en jouant</div><div class="land-feat-desc">Quiz, glisser-déposer, vrai ou faux, situations pro… gagnez des badges et des points !</div></div>
     </div>
     <div class="land-feat">
-      <div class="land-feat-icon green">🎯</div>
+      <div class="land-feat-icon green" style="font-size:1.4rem;">&#127919;</div>
       <div><div class="land-feat-title">Un test d'orientation personnalisé</div><div class="land-feat-desc">Répondez à quelques questions et recevez 3 métiers qui correspondent à votre profil et situation.</div></div>
     </div>
     <div class="land-feat">
-      <div class="land-feat-icon purple">🚀</div>
+      <div class="land-feat-icon purple" style="font-size:1.4rem;">&#128640;</div>
       <div><div class="land-feat-title">Passer à l'action concrètement</div><div class="land-feat-desc">CV, lettre de motivation, simulation d'entretien, formations locales et entreprises qui recrutent.</div></div>
     </div>
   </div>
@@ -585,13 +524,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
   <!-- OFFLINE NOTE -->
   <div class="land-offline">
-    <span style="font-size:1.2rem;flex-shrink:0;">📶</span>
+    <span style="font-size:1.2rem;flex-shrink:0;">&#128246;</span>
     <span>Fonctionne <strong>avec ou sans connexion Internet</strong>. Vos données sont sauvegardées automatiquement.</span>
   </div>
 
   <!-- BOTTOM CTA -->
   <div class="land-cta-bottom">
-    <button class="btn btn-white btn-lg" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem 2rem;border-radius:14px;width:100%;max-width:340px;">✨ Créer mon compte gratuitement</button>
+    <button class="btn btn-white" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;width:100%;max-width:340px;">&#10024; Créer mon compte gratuitement</button>
     <p>Application d'orientation professionnelle · Le Havre</p>
   </div>
 
