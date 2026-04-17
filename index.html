@@ -1162,26 +1162,31 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Entreprises locales</div>
         <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Qui recrute près de chez vous</div>
       </div>
-      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;grid-column:1/-1;" onclick="showPage('page-carte')">
+      <div class="card" style="grid-column:1/-1;cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-immersion')">
+        <div style="font-size:2rem;margin-bottom:6px;">👀</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Stage & Immersion professionnelle</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Découvrir un métier avant de se former</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-carte')">
         <div style="font-size:2rem;margin-bottom:6px;">🗺️</div>
-        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Carte interactive — Formations & Entreprises</div>
-        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Centres de formation et employeurs près de chez vous</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Carte interactive</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Formations & Entreprises</div>
       </div>
     </div>
 
     <div class="section-title">Liens utiles</div>
     <div class="card" style="display:flex;flex-direction:column;gap:8px;">
-      <a href="https://www.francetravail.fr" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🔍 France Travail — Offres d'emploi</a>
-      <a href="https://greta.ac-normandie.fr/greta/greta-cotes-normandes/" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🎓 GRETA Côtes Normandes</a>
-      <a href="https://42lehavre.fr" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">💻 École 42 Le Havre — Numérique gratuit</a>
-      <a href="https://www.cvdesignr.com" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">📄 CVDesignr — Créer mon CV en ligne</a>
-      <a href="https://www.cap-emploi-76.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">♿ Cap Emploi 76 — Accompagnement handicap</a>
-      <a href="https://www.apec.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">👔 APEC — Cadres et ingénieurs</a>
-      <a href="https://www.alternance.emploi.gouv.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🔄 Portail Alternance — Trouver un contrat</a>
-      <a href="https://www.moncompteformation.gouv.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">💰 Mon Compte Formation — CPF</a>
-      <a href="https://www.hellowork.com/fr-fr/emploi/ville_le-havre-76600.html" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌐 HelloWork — Emploi Le Havre</a>
-      <a href="https://www.missions-locales-normandie.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌟 Mission Locale Normandie — Jeunes</a>
-      <a href="https://www.imilo.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">📱 i-milo — Suivi jeunes</a>
+      <a href="https://www.francetravail.fr" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🔍 France Travail — Offres d'emploi</a>
+      <a href="https://greta.ac-normandie.fr/greta/greta-cotes-normandes/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🎓 GRETA Côtes Normandes</a>
+      <a href="https://42lehavre.fr" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">💻 École 42 Le Havre — Numérique gratuit</a>
+      <a href="https://www.cvdesignr.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">📄 CVDesignr — Créer mon CV en ligne</a>
+      <a href="https://www.cap-emploi-76.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">♿ Cap Emploi 76 — Accompagnement handicap</a>
+      <a href="https://www.apec.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">👔 APEC — Cadres et ingénieurs</a>
+      <a href="https://www.alternance.emploi.gouv.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🔄 Portail Alternance — Trouver un contrat</a>
+      <a href="https://www.moncompteformation.gouv.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">💰 Mon Compte Formation — CPF</a>
+      <a href="https://www.hellowork.com/fr-fr/emploi/ville_le-havre-76600.html" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌐 HelloWork — Emploi Le Havre</a>
+      <a href="https://www.missions-locales-normandie.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌟 Mission Locale Normandie — Jeunes</a>
+      <a href="https://www.imilo.fr" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">📱 i-milo — Suivi jeunes</a>
     </div>
   </div>
   <nav class="bottom-nav visible">
@@ -1278,13 +1283,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <button class="btn btn-sm btn-ghost" id="map-btn-entreprise" onclick="filterMap('entreprise',this)">🏢 Entreprises</button>
     </div>
 
-    <!-- Carte Google Maps embed -->
+    <!-- Carte OpenStreetMap (fonctionne sans clé API) -->
     <div style="border-radius:12px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:1rem;">
       <iframe id="map-frame"
-        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42000!2d0.107929!3d49.493898!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1"
-        width="100%" height="360" style="border:0;display:block;" allowfullscreen="" loading="lazy">
+        src="https://www.openstreetmap.org/export/embed.html?bbox=0.05%2C49.46%2C0.25%2C49.57&amp;layer=mapnik&amp;marker=49.493%2C0.107"
+        width="100%" height="340" style="border:0;display:block;" loading="lazy"
+        title="Carte Le Havre et agglomération">
       </iframe>
     </div>
+    <p style="font-size:0.75rem;color:var(--text3);margin-bottom:0.75rem;text-align:center;">
+      <a href="https://www.openstreetmap.org/#map=12/49.493/0.150" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Agrandir la carte ↗</a>
+    </p>
 
     <!-- Liste des lieux -->
     <div class="section-title">🎓 Centres de formation</div>
@@ -1421,21 +1430,21 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
       <div class="section-title" style="margin-bottom:0.5rem;">Créer son CV en ligne gratuitement</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <a href="https://www.cvdesignr.com" target="_blank" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
+        <a href="https://www.cvdesignr.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
           <span style="font-size:1.2rem;">🎨</span>
           <div style="text-align:left;">
             <div style="font-weight:700;">CVDesignr.com</div>
             <div style="font-size:0.73rem;opacity:0.85;">Modèles professionnels · Simple · Gratuit · PDF</div>
           </div>
         </a>
-        <a href="https://www.canva.com/fr_fr/creer/cv/" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">
+        <a href="https://www.canva.com/fr_fr/creer/cv/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">
           <span style="font-size:1.2rem;">🖼️</span>
           <div style="text-align:left;">
             <div style="font-weight:700;">Canva — CV</div>
             <div style="font-size:0.73rem;color:var(--text3);">Nombreux modèles colorés · Design soigné</div>
           </div>
         </a>
-        <a href="https://candidat.francetravail.fr/candidat/cv.html" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">
+        <a href="https://candidat.francetravail.fr/candidat/cv.html" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">
           <span style="font-size:1.2rem;">🔍</span>
           <div style="text-align:left;">
             <div style="font-weight:700;">CV France Travail</div>
@@ -1532,6 +1541,58 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-entretien')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- Modal Immersion / Stage -->
+<div class="modal-overlay" id="modal-immersion">
+  <div class="modal">
+    <div class="modal-header"><h3 style="font-family:var(--font);">👀 Stage & Immersion professionnelle</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-immersion')">✕</button></div>
+    <div class="modal-body">
+      <div class="alert alert-info" style="margin-bottom:1rem;">
+        <span>💡</span><span>L'immersion professionnelle permet de découvrir un métier de l'intérieur avant de se former ou postuler. C'est gratuit et sans engagement !</span>
+      </div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Qu'est-ce qu'une immersion ?</div>
+      <div style="font-size:0.85rem;line-height:1.7;color:var(--text2);margin-bottom:1rem;">
+        Une <strong>Période de Mise en Situation en Milieu Professionnel (PMSMP)</strong> vous permet de passer quelques jours ou semaines dans une entreprise pour confirmer votre projet professionnel. Elle est organisée par France Travail, une Mission Locale ou votre conseillère.
+      </div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Comment faire une demande ?</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--primary);">
+          <div style="font-weight:700;font-size:0.85rem;">① Parlez-en à votre conseillère</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Votre référente CIP peut vous accompagner dans la démarche et contacter l'entreprise pour vous.</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--accent);">
+          <div style="font-weight:700;font-size:0.85rem;">② Contacter France Travail</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">France Travail peut organiser et valider une PMSMP pour les demandeurs d'emploi inscrits.</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--success);">
+          <div style="font-weight:700;font-size:0.85rem;">③ Contacter directement les entreprises</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Expliquez votre démarche par téléphone ou email. Beaucoup d'entreprises acceptent pour 1 à 5 jours.</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid #8e44ad;">
+          <div style="font-weight:700;font-size:0.85rem;">④ La Mission Locale (si vous avez moins de 26 ans)</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">La Mission Locale du Havre propose aussi des stages de découverte et des immersions pour les jeunes.</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Ce que vous pouvez dire à une entreprise</div>
+      <div style="background:var(--primary-pale);border-radius:10px;padding:0.85rem;font-size:0.82rem;line-height:1.7;color:var(--text2);margin-bottom:1rem;font-style:italic;">
+        « Bonjour, je suis en reconversion professionnelle et je m'intéresse au métier de [X]. Je souhaiterais réaliser une courte immersion dans votre entreprise, de 1 à 3 jours, pour mieux comprendre le métier. Seriez-vous disponible pour en discuter ? »
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="https://www.francetravail.fr/candidat/accompagnement/le-pmsmp.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
+          &#128269; France Travail — PMSMP
+        </a>
+        <a href="https://www.missions-locales-normandie.fr" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">
+          &#127775; Mission Locale Normandie
+        </a>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-immersion')">Fermer</button></div>
   </div>
 </div>
 
@@ -1655,7 +1716,9 @@ const METIERS = [
    secteur:'maritime',
    formations:[
      {nom:'Titre Pro Agent de Terminal Portuaire',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-01'},
-     {nom:'CAP Opérateur Logistique',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'https://porte-oceane.ac-normandie.fr',updated:'2025-01'}
+     {nom:'CAP Opérateur Logistique',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Licence Pro Gestion Logistique Portuaire',centre:'Université Le Havre Normandie',ville:'Le Havre',duree:'1 an (Bac+3)',financement:'Bourses, Apprentissage',lien:'https://www.univ-lehavre.fr',updated:'2025-02'},
+     {nom:'CACES R489 (chariots portuaires)',centre:'ABSKILL Le Havre',ville:'Harfleur',duree:'5 jours',financement:'CPF, OPCO',lien:'https://www.abskill.com',updated:'2025-02'}
    ],
    entreprises:['Haropa Port Le Havre','CMA CGM','MSC France','Sogestran'],
    questions:[
@@ -1675,8 +1738,10 @@ const METIERS = [
    competences:['manuel','technique','chariot'],
    secteur:'logistique',
    formations:[
-     {nom:'CACES R489 (Chariots)',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 jours',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
-     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF',lien:'https://www.afpa.fr',updated:'2025-01'}
+     {nom:'CACES R489 (Chariots élévateurs)',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 jours',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'CACES R489 + logistique',centre:'ABSKILL Le Havre',ville:'Harfleur',duree:'1 semaine',financement:'CPF, OPCO',lien:'https://www.abskill.com',updated:'2025-02'},
+     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Harfleur',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr/centre/centre-du-havre',updated:'2025-01'},
+     {nom:'Titre Pro Préparateur de Commandes',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'2 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
    ],
    entreprises:['XPO Logistics','ID Logistics','Kuehne+Nagel Le Havre','DHL Supply Chain'],
    questions:[
@@ -1719,7 +1784,8 @@ const METIERS = [
    secteur:'industrie',
    formations:[
      {nom:'BTS Maintenance des Systèmes',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
-     {nom:'Titre Pro Maintenance des Équipements Industriels',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+     {nom:'Titre Pro Maintenance des Équipements Industriels',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Formations maintenance industrielle',centre:'Pôle Formation UIMM Le Havre',ville:'Le Havre',duree:'Variable',financement:'OPCO, CPF, Entreprise',lien:'https://formation-industries-eure-seine-estuaire.fr/nos-centres/le-havre',updated:'2025-02'}
    ],
    entreprises:['TotalEnergies Le Havre','Exxon Mobil (Port-Jérôme)','Renault Trucks','Air Liquide'],
    questions:[
@@ -1760,8 +1826,9 @@ const METIERS = [
    competences:['conduire','seul','technique'],
    secteur:'transport',
    formations:[
-     {nom:'Permis C+E + FIMO Marchandises',centre:'Auto-école CFA Transport Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr/transport',updated:'2025-01'},
-     {nom:'Titre Pro Conducteur du Transport Routier Marchandises',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+     {nom:'Permis C+E + FIMO Marchandises',centre:'Promotrans Montivilliers',ville:'Montivilliers',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.promotrans.fr/ville/le-havre-centre-de-formation/',updated:'2025-01'},
+     {nom:'Titre Pro Conducteur Transport Routier',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'FIMO / FCO Marchandises',centre:'AFPA Le Havre',ville:'Harfleur',duree:'5 jours (FCO)',financement:'CPF, OPCO Transport',lien:'https://www.afpa.fr/centre/centre-du-havre',updated:'2025-01'}
    ],
    entreprises:['Normatrans','Transports Robbe','Geodis Le Havre','DB Schenker'],
    questions:[
@@ -1781,8 +1848,9 @@ const METIERS = [
    competences:['manuel','technique','bricolage'],
    secteur:'batiment',
    formations:[
-     {nom:'CAP Électricien',centre:'Lycée des Métiers Fernand Léger',ville:'Ste-Marie-des-Champs (près Le Havre)',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'CAP Électricien',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
      {nom:'Titre Pro Électricien d\'Équipement',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Habilitations électriques B1/BR/BC',centre:'Pôle Formation UIMM Le Havre',ville:'Le Havre',duree:'3 jours',financement:'OPCO, CPF',lien:'https://formation-industries-eure-seine-estuaire.fr/nos-centres/le-havre',updated:'2025-02'},
      {nom:'Bac Pro MELEC',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
    ],
    entreprises:['Bouygues Énergies & Services','Enedis Normandie','Serelec Le Havre','Spie Batignolles'],
@@ -1804,8 +1872,9 @@ const METIERS = [
    secteur:'logistique',
    formations:[
      {nom:'CAP Opérateur Logistique',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
-     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr',updated:'2025-01'},
-     {nom:'Titre Pro Préparateur de Commandes',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'2 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+     {nom:'Titre Pro Agent Magasinier',centre:'AFPA Le Havre',ville:'Harfleur',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr/centre/centre-du-havre',updated:'2025-01'},
+     {nom:'Titre Pro Préparateur de Commandes',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'2 mois',financement:'CPF, Région',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Formation Logistique & Supply Chain',centre:'Promotrans Montivilliers',ville:'Montivilliers',duree:'Variable',financement:'CPF, OPCO',lien:'https://www.promotrans.fr/ville/le-havre-centre-de-formation/',updated:'2025-01'}
    ],
    entreprises:['XPO Logistics','ID Logistics Le Havre','Norbert Dentressangle','Kuehne+Nagel'],
    questions:[
@@ -1849,7 +1918,9 @@ const METIERS = [
    formations:[
      {nom:'École 42 Le Havre (formation gratuite)',centre:'42 Le Havre',ville:'Le Havre',duree:'3 à 5 ans',financement:'Gratuit (sélection sur test)',lien:'https://42lehavre.fr',updated:'2025-03'},
      {nom:'Titre Pro Développeur Web et Web Mobile',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'12 mois',financement:'CPF, France Travail, OPCO',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
-     {nom:'BTS SIO option SLAM',centre:'Lycée Jules Siegfried',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+     {nom:'BTS SIO option SLAM',centre:'Lycée Jules Siegfried',ville:'Le Havre',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Formations bureautique & digital',centre:'M2i Formation Le Havre',ville:'Le Havre',duree:'Variable',financement:'CPF, OPCO',lien:'https://www.m2iformation.fr/centre-de-formation/le-havre/',updated:'2025-02'},
+     {nom:'Licence / Master Informatique',centre:'Université Le Havre Normandie',ville:'Le Havre',duree:'3-5 ans',financement:'Bourses, APL',lien:'https://www.univ-lehavre.fr',updated:'2025-02'}
    ],
    entreprises:['Capgemini Normandie','42 Le Havre','Openfield','Normandie Webschool'],
    questions:[
@@ -1869,8 +1940,9 @@ const METIERS = [
    competences:['manuel','exterieur','equipe','bricolage'],
    secteur:'batiment',
    formations:[
-     {nom:'CAP Maçon',centre:'Lycée des Métiers du BTP Rouen',ville:'Rouen (cours à distance possible)',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
-     {nom:'Titre Pro Maçon',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'}
+     {nom:'CAP Maçon',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage',lien:'https://lycee-edgar-pisani.ac-normandie.fr',updated:'2025-01'},
+     {nom:'Titre Pro Maçon',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'4 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Formations BTP - Maçonnerie',centre:'ABSKILL Le Havre',ville:'Harfleur',duree:'Variable',financement:'CPF, OPCO BTP',lien:'https://www.abskill.com',updated:'2025-02'}
    ],
    entreprises:['Eiffage Construction Normandie','Vinci Construction','SHAM BTP','Normabat Harfleur'],
    questions:[
@@ -1914,9 +1986,10 @@ const METIERS = [
    secteur:'industrie',
    ville:'Gonfreville-l\'Orcher',
    formations:[
-     {nom:'Bac Pro Procédés de la Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
-     {nom:'Titre Pro Conducteur d\'Appareils des Industries Chimiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
-     {nom:'BTS Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+     {nom:'Bac Pro Procédés de la Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'3 ans',financement:'Apprentissage',lien:'https://lycee-edgar-pisani.ac-normandie.fr',updated:'2025-01'},
+     {nom:'Titre Pro Conducteur d\'Appareils Industries Chimiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'BTS Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Formations process industriel',centre:'Pôle Formation UIMM Le Havre',ville:'Le Havre',duree:'Variable',financement:'OPCO, CPF, Entreprise',lien:'https://formation-industries-eure-seine-estuaire.fr/nos-centres/le-havre',updated:'2025-02'}
    ],
    entreprises:['TotalEnergies Gonfreville','ExxonMobil Normandie','Air Liquide Harfleur','INEOS (Gonfreville)'],
    questions:[
@@ -1959,9 +2032,10 @@ const METIERS = [
    secteur:'batiment',
    ville:'Montivilliers / Harfleur',
    formations:[
-     {nom:'CAP Monteur en Installations Thermiques',centre:'Lycée des Métiers Fernand Léger',ville:'Sainte-Marie-des-Champs',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
-     {nom:'Titre Pro Monteur Dépanneur en Installations Thermiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
-     {nom:'Bac Pro TISEC (Thermique, Installation Sanitaire)',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+     {nom:'CAP Monteur en Installations Thermiques',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage',lien:'https://lycee-edgar-pisani.ac-normandie.fr',updated:'2025-01'},
+     {nom:'Titre Pro Monteur Dépanneur Installations Thermiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Formations plomberie / thermique',centre:'ABSKILL Le Havre',ville:'Harfleur',duree:'Variable',financement:'CPF, OPCO BTP',lien:'https://www.abskill.com',updated:'2025-02'},
+     {nom:'Bac Pro TISEC',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
    ],
    entreprises:['Ineo (Engie group)','Dalkia Normandie','Vinci Facilities','Artisans locaux Montivilliers'],
    questions:[
@@ -2376,7 +2450,7 @@ function openMetier(id){
       <div class="formation-card">
         <div class="formation-card-header">
           <div><div class="formation-name">${f.nom}</div><div class="formation-centre">${f.centre} — ${f.ville}</div></div>
-          ${f.lien?`<a href="${f.lien}" target="_blank" class="btn btn-sm btn-outline">🔗</a>`:''}
+          ${f.lien?`<a href="${f.lien}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">🔗</a>`:''}
         </div>
         <div class="formation-meta">
           ${f.duree?`<span class="badge badge-gray">⏱ ${f.duree}</span>`:''}
@@ -2386,21 +2460,6 @@ function openMetier(id){
       </div>
     `).join('');
   }
-
-  // Games grid
-  const games = [
-    {id:'qcm',icon:'🧠',name:'Quiz QCM',pts:'20 pts'},
-    {id:'vraifaux',icon:'✅',name:'Vrai ou Faux',pts:'15 pts'},
-    {id:'glisser',icon:'🎯',name:'Glisser-Déposer',pts:'25 pts'},
-    {id:'situation',icon:'💡',name:'Situation pro',pts:'30 pts'},
-  ];
-  document.getElementById('games-grid').innerHTML = games.map(g => `
-    <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;" onclick="startGame('${g.id}')">
-      <div style="font-size:1.8rem;margin-bottom:4px">${g.icon}</div>
-      <div style="font-size:0.8rem;font-weight:700;font-family:var(--font);">${g.name}</div>
-      <span class="badge badge-amber" style="margin-top:6px;">${g.pts}</span>
-    </div>
-  `).join('');
 
   showPage('page-metier-detail');
 }
@@ -3144,7 +3203,7 @@ function renderEntreprisesFiltered(secteur){
         + '<div class="formation-card-header">'
         + '<div><div class="formation-name">' + e.nom + '</div>'
         + '<div class="formation-centre">' + e.ville + (e.desc ? ' &middot; ' + e.desc : '') + '</div></div>'
-        + (e.lien ? '<a href="' + e.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + (e.lien ? '<a href="' + e.lien + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">&#127760;</a>' : '')
         + '</div></div>';
     });
     html += '</div>';
@@ -3152,16 +3211,21 @@ function renderEntreprisesFiltered(secteur){
   div.innerHTML = html;
 }
 
-// MAP DATA
+// MAP DATA - Centres de formation avec vraies adresses
 const MAP_CENTRES = [
-  {nom:'GRETA Côtes Normandes',type:'formation',ville:'Le Havre',adresse:'Rue du Maréchal Joffre, 76600 Le Havre',lien:'https://greta.ac-normandie.fr',lat:49.493,lng:0.107},
-  {nom:'IFSI / IFAS CHU du Havre',type:'formation',ville:'Le Havre',adresse:'29 Av. Pierre Mendès France, 76290 Montivilliers',lien:'https://www.chu-lehavre.fr',lat:49.551,lng:0.195},
-  {nom:'École 42 Le Havre',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://42lehavre.fr',lat:49.490,lng:0.108},
-  {nom:'Lycée Edgar Pisani',type:'formation',ville:'Montivilliers',adresse:'Montivilliers (76290)',lien:'',lat:49.551,lng:0.191},
-  {nom:'Lycée Porte Océane',type:'formation',ville:'Le Havre',adresse:'76600 Le Havre',lien:'',lat:49.484,lng:0.115},
-  {nom:'AFPA Le Havre',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://www.afpa.fr',lat:49.505,lng:0.125},
-  {nom:'Croix-Rouge Compétence',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://formation.croix-rouge.fr',lat:49.492,lng:0.116},
-  {nom:'Lycée Jules Siegfried',type:'formation',ville:'Le Havre',adresse:'76600 Le Havre',lien:'',lat:49.495,lng:0.106},
+  {nom:'GRETA C\u00f4tes Normandes',secteurs:['Industrie','Logistique','Transport','BTP','Num\u00e9rique','Sant\u00e9'],adresse:'42 rue Jules Lecesne, 76600 Le Havre',lien:'https://greta.ac-normandie.fr/greta/greta-cotes-normandes/',lat:49.495,lng:0.107,tel:'02 35 19 10 50'},
+  {nom:'IFSI / IFAS - CHU du Havre',secteurs:['Sant\u00e9'],adresse:'29 Av. Pierre Mend\u00e8s France, 76290 Montivilliers',lien:'https://www.chu-lehavre.fr/formation',lat:49.551,lng:0.200,tel:'02 32 73 32 32'},
+  {nom:'\u00c9cole 42 Le Havre',secteurs:['Num\u00e9rique'],adresse:'3 Rue de Normandie, 76600 Le Havre',lien:'https://42lehavre.fr',lat:49.490,lng:0.110,tel:''},
+  {nom:'Lyc\u00e9e Edgar Pisani',secteurs:['Industrie','BTP'],adresse:'Rue Th\u00e9odore Monod, 76290 Montivilliers',lien:'https://lycee-edgar-pisani.ac-normandie.fr',lat:49.548,lng:0.194,tel:'02 35 30 12 12'},
+  {nom:'Lyc\u00e9e Porte Oc\u00e9ane',secteurs:['BTP','Num\u00e9rique','Logistique'],adresse:'Rue d\u0027Alsace, 76600 Le Havre',lien:'',lat:49.484,lng:0.118,tel:'02 35 22 47 00'},
+  {nom:'AFPA Le Havre',secteurs:['Logistique','Transport','Sant\u00e9','Industrie'],adresse:'Rue des Cateliers, 76700 Harfleur',lien:'https://www.afpa.fr/centre/centre-du-havre',lat:49.509,lng:0.195,tel:'3682'},
+  {nom:'Croix-Rouge Comp\u00e9tence',secteurs:['Sant\u00e9'],adresse:'76600 Le Havre',lien:'https://formation.croix-rouge.fr',lat:49.492,lng:0.114,tel:''},
+  {nom:'Lyc\u00e9e Jules Siegfried',secteurs:['Commerce','Num\u00e9rique','Tertiaire'],adresse:'Rue Jules Siegfried, 76600 Le Havre',lien:'',lat:49.495,lng:0.104,tel:'02 35 22 15 66'},
+  {nom:'Promotrans - Montivilliers',secteurs:['Transport','Logistique'],adresse:'3 rue Georges Mahieu, 76290 Montivilliers',lien:'https://www.promotrans.fr/ville/le-havre-centre-de-formation/',lat:49.546,lng:0.196,tel:'02 35 30 11 00'},
+  {nom:'ABSKILL Le Havre (ex C\u00e9foras)',secteurs:['BTP','Industrie'],adresse:'Zone Industrielle, 76700 Harfleur',lien:'https://www.abskill.com/centres/normandie/abskill-le-havre/',lat:49.507,lng:0.193,tel:'02 35 13 10 40'},
+  {nom:'P\u00f4le Formation UIMM - Le Havre',secteurs:['Industrie','Maintenance'],adresse:'115 rue Desram\u00e9, 76620 Le Havre',lien:'https://formation-industries-eure-seine-estuaire.fr/nos-centres/le-havre',lat:49.486,lng:0.115,tel:'02 35 25 22 22'},
+  {nom:'Universit\u00e9 Le Havre Normandie',secteurs:['Logistique','Num\u00e9rique','Maritime'],adresse:'25 rue Philippe Lebon, 76600 Le Havre',lien:'https://www.univ-lehavre.fr',lat:49.492,lng:0.103,tel:'02 32 74 40 00'},
+  {nom:'M2i Formation Le Havre',secteurs:['Num\u00e9rique','Bureautique'],adresse:'76600 Le Havre',lien:'https://www.m2iformation.fr/centre-de-formation/le-havre/',lat:49.494,lng:0.108,tel:''},
 ];
 
 function renderMapPage(){
@@ -3182,34 +3246,41 @@ function renderMapList(type){
   var titleEl = document.getElementById('map-entreprises-title');
   if(!formDiv || !entDiv) return;
 
-  var formParent = formDiv.previousElementSibling;
+  var formSectionTitle = document.querySelector('#page-carte .section-title');
 
   if(type !== 'entreprise'){
-    if(formParent) formParent.style.display = 'flex';
+    if(formSectionTitle) formSectionTitle.style.display = 'flex';
     formDiv.innerHTML = MAP_CENTRES.map(function(c){
+      var secBadges = (c.secteurs||[]).slice(0,3).map(function(s){
+        return '<span class="badge badge-blue" style="font-size:0.65rem;">'+s+'</span>';
+      }).join('');
       return '<div class="formation-card" style="margin-bottom:6px;">'
         + '<div class="formation-card-header">'
-        + '<div><div class="formation-name">&#127891; ' + c.nom + '</div>'
-        + '<div class="formation-centre">' + c.ville + ' &middot; ' + c.adresse + '</div></div>'
-        + (c.lien ? '<a href="' + c.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + '<div style="flex:1;">'
+        + '<div class="formation-name">&#127891; ' + c.nom + '</div>'
+        + '<div class="formation-centre">&#128205; ' + c.adresse + '</div>'
+        + (c.tel ? '<div style="font-size:0.75rem;color:var(--text3);margin-top:2px;">&#128222; ' + c.tel + '</div>' : '')
+        + '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;">' + secBadges + '</div>'
+        + '</div>'
+        + (c.lien ? '<a href="' + c.lien + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline" style="flex-shrink:0;">&#127760;</a>' : '')
         + '</div></div>';
     }).join('');
   } else {
-    if(formParent) formParent.style.display = 'none';
+    if(formSectionTitle) formSectionTitle.style.display = 'none';
     formDiv.innerHTML = '';
   }
 
   if(type !== 'formation'){
     if(titleEl) titleEl.style.display = 'flex';
-    entDiv.innerHTML = ENTREPRISES.slice(0,15).map(function(e){
+    entDiv.innerHTML = ENTREPRISES.slice(0,18).map(function(e){
       return '<div class="formation-card" style="margin-bottom:6px;">'
         + '<div class="formation-card-header">'
         + '<div><div class="formation-name">&#127970; ' + e.nom + '</div>'
         + '<div class="formation-centre">' + e.secteur + ' &middot; ' + e.ville + '</div></div>'
-        + (e.lien ? '<a href="' + e.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + (e.lien ? '<a href="' + e.lien + '" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">&#127760;</a>' : '')
         + '</div></div>';
     }).join('')
-    + '<div class="alert alert-info" style="margin-top:0.5rem;"><span>&#128205;</span><span>Retrouvez toutes les entreprises dans la section "Entreprises locales".</span></div>';
+    + '<div class="alert alert-info" style="margin-top:0.5rem;"><span>&#128205;</span><span>Retrouvez toutes les entreprises avec filtres dans la section "Entreprises locales".</span></div>';
   } else {
     if(titleEl) titleEl.style.display = 'none';
     entDiv.innerHTML = '';
