@@ -962,11 +962,35 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <div id="formations-list"></div>
     </div>
 
-    <!-- GAMES -->
+    <!-- GAMES - 5 jeux -->
     <div class="section-title" style="margin-top:1rem;">🎮 Jeux & Quiz</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;" id="games-grid"></div>
-
-    <button class="btn btn-accent btn-full" onclick="startGame('qcm')">🎮 Commencer les jeux</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+      <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;border:2px solid var(--accent);" onclick="startGame('qcm')">
+        <div style="font-size:1.8rem;margin-bottom:4px">🧠</div>
+        <div style="font-size:0.82rem;font-weight:700;font-family:var(--font);">Quiz QCM</div>
+        <span class="badge badge-amber" style="margin-top:6px;">🏅 Badge</span>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;" onclick="startGame('vraifaux')">
+        <div style="font-size:1.8rem;margin-bottom:4px">✅</div>
+        <div style="font-size:0.82rem;font-weight:700;font-family:var(--font);">Vrai ou Faux</div>
+        <span class="badge badge-blue" style="margin-top:6px;">15 pts / bonne rép.</span>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;" onclick="startGame('glisser')">
+        <div style="font-size:1.8rem;margin-bottom:4px">🎯</div>
+        <div style="font-size:0.82rem;font-weight:700;font-family:var(--font);">Associer les outils</div>
+        <span class="badge badge-green" style="margin-top:6px;">25 pts / bonne rép.</span>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;" onclick="startGame('situation')">
+        <div style="font-size:1.8rem;margin-bottom:4px">💡</div>
+        <div style="font-size:0.82rem;font-weight:700;font-family:var(--font);">Situation pro</div>
+        <span class="badge badge-amber" style="margin-top:6px;">30 pts / bonne rép.</span>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1rem 0.75rem;grid-column:1/-1;" onclick="startGame('journee')">
+        <div style="font-size:1.8rem;margin-bottom:4px">🗓️</div>
+        <div style="font-size:0.82rem;font-weight:700;font-family:var(--font);">Journée type — Remettre dans l'ordre</div>
+        <span class="badge badge-blue" style="margin-top:6px;">50 pts si tout juste</span>
+      </div>
+    </div>
   </div>
   <nav class="bottom-nav visible">
     <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
@@ -1002,7 +1026,109 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   </div>
 </div>
 
-<!-- ===== PAGE ACTION ===== -->
+<!-- ===== PAGE GAME VRAI OU FAUX ===== -->
+<div id="page-game-vraifaux" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="vf-title">Vrai ou Faux</span></div>
+    <button class="btn-icon" onclick="showPage('page-metier-detail')">✕</button>
+  </div>
+  <div class="scroll-content">
+    <div class="score-bar">
+      <div><div class="score-num" id="vf-score">0</div><div class="score-label">points</div></div>
+      <div style="flex:1;margin:0 12px;">
+        <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px;">Question <span id="vf-current">1</span>/<span id="vf-total">6</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="vf-progress" style="width:16%"></div></div>
+      </div>
+      <span class="badge badge-blue" id="vf-serie-badge" style="display:none;">🔥 Série !</span>
+    </div>
+    <div class="card" id="vf-card" style="text-align:center;padding:1.5rem 1rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;" id="vf-emoji">❓</div>
+      <div class="quiz-question" id="vf-statement" style="font-size:1rem;margin-bottom:1.5rem;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="vf-btns">
+        <button class="btn" style="padding:1.1rem;font-size:1.1rem;border-radius:14px;background:#1a8a4a;color:#fff;font-weight:700;" onclick="answerVF(true)">✅ VRAI</button>
+        <button class="btn" style="padding:1.1rem;font-size:1.1rem;border-radius:14px;background:#c0392b;color:#fff;font-weight:700;" onclick="answerVF(false)">❌ FAUX</button>
+      </div>
+    </div>
+    <div id="vf-feedback" style="display:none;margin-top:0.75rem;"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="vf-next-btn" onclick="nextVF()">Suivant →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE GAME GLISSER-DEPOSER ===== -->
+<div id="page-game-glisser" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="gl-title">Associer</span></div>
+    <button class="btn-icon" onclick="showPage('page-metier-detail')">✕</button>
+  </div>
+  <div class="scroll-content">
+    <div class="score-bar">
+      <div><div class="score-num" id="gl-score">0</div><div class="score-label">points</div></div>
+      <div style="flex:1;margin:0 12px;">
+        <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px;">Associez chaque élément à sa catégorie</div>
+        <div class="progress-bar"><div class="progress-fill" id="gl-progress" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div id="gl-instructions" class="alert alert-info" style="margin-bottom:1rem;">
+      <span>👆</span><span>Tapez sur un élément, puis tapez sur sa catégorie pour les associer.</span>
+    </div>
+    <div id="gl-game-area"></div>
+    <div id="gl-feedback" style="display:none;margin-top:0.75rem;"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="gl-check-btn" onclick="checkGlisser()">Vérifier mes réponses ✓</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;display:none;" id="gl-next-btn" onclick="showPage('page-metier-detail')">← Retour au métier</button>
+  </div>
+</div>
+
+<!-- ===== PAGE GAME SITUATION PRO ===== -->
+<div id="page-game-situation" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="sit-title">Situation pro</span></div>
+    <button class="btn-icon" onclick="showPage('page-metier-detail')">✕</button>
+  </div>
+  <div class="scroll-content">
+    <div class="score-bar">
+      <div><div class="score-num" id="sit-score">0</div><div class="score-label">points</div></div>
+      <div style="flex:1;margin:0 12px;">
+        <div style="font-size:0.75rem;color:var(--text3);margin-bottom:4px;">Scénario <span id="sit-current">1</span>/<span id="sit-total">3</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="sit-progress" style="width:33%"></div></div>
+      </div>
+    </div>
+    <div class="card" id="sit-card" style="margin-bottom:1rem;">
+      <div style="background:var(--primary-pale);border-radius:10px;padding:0.85rem;margin-bottom:1rem;">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--primary);margin-bottom:4px;">📋 SITUATION</div>
+        <div id="sit-context" style="font-size:0.88rem;line-height:1.6;"></div>
+      </div>
+      <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.75rem;" id="sit-question"></div>
+      <div id="sit-options" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+    <div id="sit-feedback" style="display:none;margin-top:0.5rem;"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="sit-next-btn" onclick="nextSituation()">Scénario suivant →</button>
+  </div>
+</div>
+
+<!-- ===== PAGE GAME JOURNEE TYPE ===== -->
+<div id="page-game-journee" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="jt-title">Journée type</span></div>
+    <button class="btn-icon" onclick="showPage('page-metier-detail')">✕</button>
+  </div>
+  <div class="scroll-content">
+    <div class="score-bar">
+      <div><div class="score-num" id="jt-score">0</div><div class="score-label">points</div></div>
+      <div style="flex:1;margin:0 12px;">
+        <div style="font-size:0.78rem;color:var(--text3);">Remettez les tâches dans le bon ordre</div>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin-bottom:1rem;">
+      <span>👆</span><span>Tapez sur une tâche pour la sélectionner, puis tapez sur sa position dans la liste.</span>
+    </div>
+    <div id="jt-task-pool" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;"></div>
+    <div class="section-title" style="margin-bottom:0.5rem;">Ma journée</div>
+    <div id="jt-slots"></div>
+    <div id="jt-feedback" style="display:none;margin-top:1rem;"></div>
+    <button class="btn btn-accent btn-full" style="margin-top:1rem;display:none;" id="jt-check-btn" onclick="checkJournee()">Vérifier mon ordre ✓</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;display:none;" id="jt-next-btn" onclick="showPage('page-metier-detail')">← Retour au métier</button>
+  </div>
+</div>
 <div id="page-action" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div>Passer à l'action</div>
@@ -1019,26 +1145,43 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-cv')">
         <div style="font-size:2rem;margin-bottom:6px;">📄</div>
         <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Créer mon CV</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Guide + CVDesignr</div>
       </div>
       <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-lettre')">
         <div style="font-size:2rem;margin-bottom:6px;">✉️</div>
-        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Ma lettre de motivation</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Lettre de motivation</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Structure + exemple</div>
       </div>
       <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-entretien')">
         <div style="font-size:2rem;margin-bottom:6px;">🎤</div>
         <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Simuler un entretien</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">20 questions + conseils</div>
       </div>
       <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showPage('page-entreprises')">
         <div style="font-size:2rem;margin-bottom:6px;">🏢</div>
         <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Entreprises locales</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Qui recrute près de chez vous</div>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;grid-column:1/-1;" onclick="showPage('page-carte')">
+        <div style="font-size:2rem;margin-bottom:6px;">🗺️</div>
+        <div style="font-size:0.85rem;font-weight:700;font-family:var(--font);">Carte interactive — Formations & Entreprises</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Centres de formation et employeurs près de chez vous</div>
       </div>
     </div>
 
     <div class="section-title">Liens utiles</div>
     <div class="card" style="display:flex;flex-direction:column;gap:8px;">
-      <a href="https://www.francetravail.fr" target="_blank" class="btn btn-outline btn-full">🔗 France Travail</a>
-      <a href="https://greta.ac-normandie.fr/greta/greta-cotes-normandes/" target="_blank" class="btn btn-outline btn-full">🎓 GRETA Côtes Normandes</a>
-      <a href="https://www.cap-emploi-76.fr" target="_blank" class="btn btn-ghost btn-full">♿ Cap Emploi 76 (handicap)</a>
+      <a href="https://www.francetravail.fr" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🔍 France Travail — Offres d'emploi</a>
+      <a href="https://greta.ac-normandie.fr/greta/greta-cotes-normandes/" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">🎓 GRETA Côtes Normandes</a>
+      <a href="https://42lehavre.fr" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">💻 École 42 Le Havre — Numérique gratuit</a>
+      <a href="https://www.cvdesignr.com" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">📄 CVDesignr — Créer mon CV en ligne</a>
+      <a href="https://www.cap-emploi-76.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">♿ Cap Emploi 76 — Accompagnement handicap</a>
+      <a href="https://www.apec.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">👔 APEC — Cadres et ingénieurs</a>
+      <a href="https://www.alternance.emploi.gouv.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🔄 Portail Alternance — Trouver un contrat</a>
+      <a href="https://www.moncompteformation.gouv.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">💰 Mon Compte Formation — CPF</a>
+      <a href="https://www.hellowork.com/fr-fr/emploi/ville_le-havre-76600.html" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌐 HelloWork — Emploi Le Havre</a>
+      <a href="https://www.missions-locales-normandie.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">🌟 Mission Locale Normandie — Jeunes</a>
+      <a href="https://www.imilo.fr" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">📱 i-milo — Suivi jeunes</a>
     </div>
   </div>
   <nav class="bottom-nav visible">
@@ -1093,7 +1236,62 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span class="nav-trail-sep">›</span>
       <span class="nav-trail-current">Entreprises</span>
     </div>
-    <div id="entreprises-list"></div>
+
+    <!-- Filtre secteur -->
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:1rem;">
+      <button class="btn btn-sm btn-primary" onclick="filterEntreprises('all',this)">Tous</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Maritime',this)">⚓ Maritime</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Industrie',this)">🏭 Industrie</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Logistique',this)">📦 Logistique</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Santé',this)">🏥 Santé</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('BTP',this)">🏗 BTP</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Numérique',this)">💻 Numérique</button>
+      <button class="btn btn-sm btn-ghost" onclick="filterEntreprises('Transport',this)">🚛 Transport</button>
+    </div>
+
+    <div id="entreprises-list-full"></div>
+
+    <div class="alert alert-info" style="margin-top:1rem;">
+      <span>💡</span>
+      <span>Pour postuler, visitez le site de l'entreprise ou rendez-vous sur <strong>France Travail</strong> pour voir leurs offres d'emploi.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE CARTE ===== -->
+<div id="page-carte" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Carte interactive</div>
+    <button class="btn-icon" onclick="showPage('page-action')">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="nav-trail">
+      <span class="nav-trail-item" onclick="showPage('page-action')">Action</span>
+      <span class="nav-trail-sep">›</span>
+      <span class="nav-trail-current">Carte</span>
+    </div>
+
+    <!-- Filtre carte -->
+    <div style="display:flex;gap:6px;margin-bottom:0.75rem;flex-wrap:wrap;">
+      <button class="btn btn-sm btn-primary" id="map-btn-all" onclick="filterMap('all',this)">Tout afficher</button>
+      <button class="btn btn-sm btn-ghost" id="map-btn-formation" onclick="filterMap('formation',this)">🎓 Formations</button>
+      <button class="btn btn-sm btn-ghost" id="map-btn-entreprise" onclick="filterMap('entreprise',this)">🏢 Entreprises</button>
+    </div>
+
+    <!-- Carte Google Maps embed -->
+    <div style="border-radius:12px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:1rem;">
+      <iframe id="map-frame"
+        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d42000!2d0.107929!3d49.493898!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1"
+        width="100%" height="360" style="border:0;display:block;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- Liste des lieux -->
+    <div class="section-title">🎓 Centres de formation</div>
+    <div id="map-formations-list" style="margin-bottom:1rem;"></div>
+
+    <div class="section-title" id="map-entreprises-title">🏢 Entreprises qui recrutent</div>
+    <div id="map-entreprises-list"></div>
   </div>
 </div>
 
@@ -1191,14 +1389,65 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   <div class="modal">
     <div class="modal-header"><h3 style="font-family:var(--font);">📄 Créer mon CV</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-cv')">✕</button></div>
     <div class="modal-body">
-      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Voici les étapes pour créer votre CV :</p>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div class="alert alert-info"><span>1️⃣</span><span>Rassemblez vos informations personnelles (nom, prénom, adresse, téléphone)</span></div>
-        <div class="alert alert-info"><span>2️⃣</span><span>Listez vos expériences professionnelles et bénévoles</span></div>
-        <div class="alert alert-info"><span>3️⃣</span><span>Notez vos compétences et langues parlées</span></div>
-        <div class="alert alert-info"><span>4️⃣</span><span>Votre référente peut vous aider à le mettre en forme</span></div>
+      <div class="alert alert-info" style="margin-bottom:1rem;"><span>💡</span><span>Un bon CV tient sur <strong>1 page</strong>, il est clair et sans fautes.</span></div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Structure de votre CV</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--primary);">
+          <div style="font-weight:700;font-size:0.85rem;">① En-tête</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Prénom NOM · Adresse · Téléphone · Email · (Photo facultative)</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--accent);">
+          <div style="font-weight:700;font-size:0.85rem;">② Accroche (2-3 phrases)</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">« Personne motivée, cherchant un poste de [métier] dans [secteur] »</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--success);">
+          <div style="font-weight:700;font-size:0.85rem;">③ Expériences professionnelles</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Poste · Entreprise · Dates · 2-3 tâches réalisées (du plus récent au plus ancien)</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid #8e44ad;">
+          <div style="font-weight:700;font-size:0.85rem;">④ Formation / Diplômes</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Diplôme · Établissement · Année</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid #e67e22;">
+          <div style="font-weight:700;font-size:0.85rem;">⑤ Compétences & Langues</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Permis B · CACES · Langues parlées · Logiciels maîtrisés</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.75rem;border-left:3px solid var(--text3);">
+          <div style="font-weight:700;font-size:0.85rem;">⑥ Loisirs (optionnel)</div>
+          <div style="font-size:0.78rem;color:var(--text3);margin-top:2px;">Sport · Bénévolat · Activités culturelles</div>
+        </div>
       </div>
-      <a href="https://www.francetravail.fr/candidat/vos-services-en-ligne/application-mobile-pole-emploi.html" target="_blank" class="btn btn-primary btn-full" style="margin-top:1rem;">🔗 Aide France Travail</a>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Créer son CV en ligne gratuitement</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="https://www.cvdesignr.com" target="_blank" class="btn btn-primary btn-full" style="justify-content:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">🎨</span>
+          <div style="text-align:left;">
+            <div style="font-weight:700;">CVDesignr.com</div>
+            <div style="font-size:0.73rem;opacity:0.85;">Modèles professionnels · Simple · Gratuit · PDF</div>
+          </div>
+        </a>
+        <a href="https://www.canva.com/fr_fr/creer/cv/" target="_blank" class="btn btn-outline btn-full" style="justify-content:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">🖼️</span>
+          <div style="text-align:left;">
+            <div style="font-weight:700;">Canva — CV</div>
+            <div style="font-size:0.73rem;color:var(--text3);">Nombreux modèles colorés · Design soigné</div>
+          </div>
+        </a>
+        <a href="https://candidat.francetravail.fr/candidat/cv.html" target="_blank" class="btn btn-ghost btn-full" style="justify-content:flex-start;gap:10px;">
+          <span style="font-size:1.2rem;">🔍</span>
+          <div style="text-align:left;">
+            <div style="font-weight:700;">CV France Travail</div>
+            <div style="font-size:0.73rem;color:var(--text3);">Visible par les employeurs · Outil officiel</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="alert alert-warning" style="margin-top:1rem;">
+        <span>⭐</span>
+        <span>Votre référente peut relire et corriger votre CV. N'hésitez pas à lui demander !</span>
+      </div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-cv')">Fermer</button></div>
   </div>
@@ -1209,12 +1458,45 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   <div class="modal">
     <div class="modal-header"><h3 style="font-family:var(--font);">✉️ Lettre de motivation</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-lettre')">✕</button></div>
     <div class="modal-body">
-      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Une lettre de motivation explique pourquoi vous voulez ce travail. Elle doit :</p>
-      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
-        <div class="alert alert-success"><span>✅</span><span>Être courte (1 page maximum)</span></div>
-        <div class="alert alert-success"><span>✅</span><span>Dire pourquoi ce métier vous plaît</span></div>
-        <div class="alert alert-success"><span>✅</span><span>Expliquer vos compétences utiles</span></div>
-        <div class="alert alert-success"><span>✅</span><span>Demander un entretien</span></div>
+      <div class="alert alert-info" style="margin-bottom:1rem;"><span>💡</span><span>Une lettre de motivation doit être courte (1 page), personnalisée et sincère.</span></div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Structure en 4 paragraphes</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;">
+        <div style="background:var(--primary-pale);border-radius:10px;padding:0.85rem;border-left:3px solid var(--primary);">
+          <div style="font-weight:700;font-size:0.85rem;color:var(--primary);">§1 — Introduction : Qui je suis + pourquoi j'écris</div>
+          <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;font-style:italic;">« Suite à votre annonce sur [site], je me permets de vous adresser ma candidature pour le poste de [métier]. Motivé(e) et disponible immédiatement... »</div>
+        </div>
+        <div style="background:var(--accent-light);border-radius:10px;padding:0.85rem;border-left:3px solid var(--accent);">
+          <div style="font-weight:700;font-size:0.85rem;color:#a06010;">§2 — Pourquoi cette entreprise / ce métier ?</div>
+          <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;font-style:italic;">« Votre entreprise m'attire particulièrement car [raison précise]. Le métier de [X] correspond à mes compétences en [Y] et à ma passion pour [Z]. »</div>
+        </div>
+        <div style="background:var(--success-light);border-radius:10px;padding:0.85rem;border-left:3px solid var(--success);">
+          <div style="font-weight:700;font-size:0.85rem;color:var(--success);">§3 — Mes compétences et expériences</div>
+          <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;font-style:italic;">« Fort(e) de [X années/mois] d'expérience dans [domaine], j'ai acquis des compétences en [compétence 1] et [compétence 2]. Je suis titulaire de [diplôme/CACES/permis]. »</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;border-left:3px solid var(--text3);">
+          <div style="font-weight:700;font-size:0.85rem;">§4 — Conclusion + demande d'entretien</div>
+          <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;font-style:italic;">« Convaincu(e) de pouvoir apporter une contribution positive à votre équipe, je reste disponible pour un entretien à votre convenance. Dans l'attente de vous lire, veuillez agréer l'expression de mes cordiales salutations. »</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">En-tête de la lettre</div>
+      <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;font-size:0.8rem;line-height:1.7;margin-bottom:1rem;">
+        <strong>Prénom NOM</strong><br>
+        Adresse · Téléphone · Email<br><br>
+        <strong>Nom de l'entreprise</strong><br>
+        Adresse de l'entreprise<br><br>
+        Le Havre, le [date]<br><br>
+        <strong>Objet : Candidature au poste de [intitulé]</strong>
+      </div>
+
+      <div class="section-title" style="margin-bottom:0.5rem;">Conseils importants</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="alert alert-success"><span>✅</span><span>Personnalisez chaque lettre selon l'entreprise</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Relisez 2 fois pour éviter les fautes</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Utilisez un ton professionnel mais naturel</span></div>
+        <div class="alert alert-danger"><span>❌</span><span>Ne copiez pas une lettre trouvée sur Internet</span></div>
+        <div class="alert alert-danger"><span>❌</span><span>Ne mentez jamais sur vos compétences</span></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-lettre')">Fermer</button></div>
@@ -1226,12 +1508,27 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   <div class="modal">
     <div class="modal-header"><h3 style="font-family:var(--font);">🎤 Simuler un entretien</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-entretien')">✕</button></div>
     <div class="modal-body">
-      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Questions fréquentes en entretien :</p>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Parlez-moi de vous.&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Présentez votre parcours en 2-3 minutes</p></div>
-        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Pourquoi ce poste ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Expliquez votre motivation sincère</p></div>
-        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Quelles sont vos qualités ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Citez 3 qualités avec des exemples concrets</p></div>
-        <div class="card" style="padding:0.75rem;"><p style="font-weight:600;font-size:0.85rem;">«&nbsp;Avez-vous des questions ?&nbsp;»</p><p style="font-size:0.78rem;color:var(--text3);margin-top:4px;">Toujours préparer 2-3 questions sur le poste</p></div>
+      <div class="alert alert-info" style="margin-bottom:1rem;"><span>💡</span><span>Entraînez-vous à répondre à voix haute. Plus vous pratiquez, plus vous serez à l'aise !</span></div>
+
+      <div style="display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;">
+        <button class="btn btn-sm btn-primary" onclick="filterQuestions('tous',this)">Toutes</button>
+        <button class="btn btn-sm btn-ghost" onclick="filterQuestions('presentation',this)">🙋 Présentation</button>
+        <button class="btn btn-sm btn-ghost" onclick="filterQuestions('motivation',this)">💪 Motivation</button>
+        <button class="btn btn-sm btn-ghost" onclick="filterQuestions('competences',this)">⭐ Compétences</button>
+        <button class="btn btn-sm btn-ghost" onclick="filterQuestions('pratique',this)">🔧 Pratique</button>
+        <button class="btn btn-sm btn-ghost" onclick="filterQuestions('fin',this)">🤝 Fin</button>
+      </div>
+
+      <div id="questions-entretien" style="display:flex;flex-direction:column;gap:8px;"></div>
+
+      <div class="section-title" style="margin-top:1rem;margin-bottom:0.5rem;">Avant l'entretien</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="alert alert-success"><span>✅</span><span>Renseignez-vous sur l'entreprise (site web, actualités)</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Préparez 3 questions à poser à l'employeur</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Arrivez 10 minutes avant l'heure</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Habillez-vous proprement et sobrement</span></div>
+        <div class="alert alert-success"><span>✅</span><span>Apportez votre CV et vos diplômes</span></div>
+        <div class="alert alert-warning"><span>📵</span><span>Éteignez votre téléphone pendant l'entretien</span></div>
       </div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-entretien')">Fermer</button></div>
@@ -1348,8 +1645,8 @@ const METIERS = [
   {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
    desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
    conditions:'• Travail en extérieur et en intérieur\n• Horaires décalés (nuit, week-end)\n• Port de charges\n• Équipements de sécurité obligatoires',
-   video:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-   videoLabel:'Visite du port du Havre – métiers portuaires',
+   video:'https://www.youtube.com/watch?v=F2hc2FLOdhI',
+   videoLabel:'Agent portuaire – métiers du port du Havre',
    tags:['Extérieur','Équipe','Physique'],
    niveauFr:'A2',
    handicap:['moteur'],
@@ -1370,8 +1667,8 @@ const METIERS = [
   {id:'cariste',nom:'Cariste',emoji:'🏗',cat:'porteur-lh',couleur:'#e67e22',
    desc:'Le cariste conduit des chariots élévateurs pour déplacer des marchandises dans des entrepôts ou sur des quais. Au Havre, de nombreuses entreprises logistiques recrutent des caristes.',
    conditions:'• En entrepôt ou sur quai\n• Debout et assis alternativement\n• CACES obligatoire\n• Manutention de charges',
-   video:'https://youtu.be/cariste-metier',
-   videoLabel:'Le métier de cariste – logistique',
+   video:'https://www.youtube.com/watch?v=8mCDGMfGMtY',
+   videoLabel:'Le métier de cariste – entrepôt logistique',
    tags:['Entrepôt','CACES','Recrutement élevé'],
    niveauFr:'A1',
    incompatible:['visuel','moteur'],
@@ -1391,8 +1688,8 @@ const METIERS = [
   {id:'soudeur',nom:'Soudeur / Soudeuse',emoji:'🔥',cat:'porteur-lh',couleur:'#c0392b',
    desc:'Le soudeur assemble des pièces métalliques par soudage. À Gonfreville-l\'Orcher et dans la zone industrielle havraise, de nombreuses entreprises de chaudronnerie recrutent des soudeurs qualifiés.',
    conditions:'• En atelier ou sur chantier\n• Travail debout, positions contraignantes\n• Chaleur et fumées (protection obligatoire)\n• Travail à la lumière artificielle',
-   video:'https://youtu.be/soudeur-metier',
-   videoLabel:'Démonstration de soudure à l\'arc – industrie havraise',
+   video:'https://www.youtube.com/watch?v=njFXCcThigk',
+   videoLabel:'Démonstration soudure à l\'arc MIG MAG – industrie',
    tags:['Industrie','Manuel','Qualifié'],
    niveauFr:'A2',
    incompatible:['visuel','moteur'],
@@ -1413,8 +1710,8 @@ const METIERS = [
   {id:'technicien-maintenance',nom:'Technicien de maintenance',emoji:'⚙️',cat:'porteur-lh',couleur:'#1a5fa0',
    desc:'Le technicien de maintenance répare et entretient les machines et équipements industriels. Dans les usines et raffineries de la zone havraise, ce métier est très recherché.',
    conditions:'• En atelier, usine ou sur site industriel\n• Horaires en 3×8 possibles\n• Lecture de plans techniques\n• Travail en hauteur possible',
-   video:'https://youtu.be/maintenance-industrie',
-   videoLabel:'Technicien de maintenance industrielle – zone havraise',
+   video:'https://www.youtube.com/watch?v=7_Tol3EoxdA',
+   videoLabel:'Technicien de maintenance industrielle – présentation du métier',
    tags:['Industrie','Qualifié','CDI facile'],
    niveauFr:'B1',
    incompatible:['moteur','visuel'],
@@ -1434,8 +1731,8 @@ const METIERS = [
   {id:'aide-soignant',nom:'Aide-soignant(e)',emoji:'💝',cat:'porteur-lh',couleur:'#e91e8c',
    desc:'L\'aide-soignant(e) aide les infirmiers et prend soin des malades et des personnes âgées dans les hôpitaux, cliniques et maisons de retraite du Havre. C\'est un métier du cœur, en forte demande.',
    conditions:'• En hôpital, clinique, EHPAD ou à domicile\n• Horaires décalés (nuit, week-end, jours fériés)\n• Travail en équipe soignante\n• Manutention des patients (formation gestes/postures)',
-   video:'https://youtu.be/aide-soignant',
-   videoLabel:'Une journée d\'une aide-soignante au CHU du Havre',
+   video:'https://www.youtube.com/watch?v=nFITQjdiHXQ',
+   videoLabel:'Une journée d\'une aide-soignante en EHPAD',
    tags:['Santé','Relationnel','CDI'],
    niveauFr:'B1',
    incompatible:['moteur'],
@@ -1455,8 +1752,8 @@ const METIERS = [
   {id:'conducteur-spl',nom:'Conducteur SPL',emoji:'🚛',cat:'porteur-lh',couleur:'#2c3e50',
    desc:'Le conducteur SPL conduit des camions semi-remorques pour livrer des marchandises. Au Havre, le port génère énormément de trafic routier et les conducteurs SPL sont très demandés.',
    conditions:'• Travail en cabine, debout pour charger/décharger\n• Longues distances ou trajets régionaux\n• Permis C+E obligatoire (anciennement EC)\n• Travail de nuit possible',
-   video:'https://youtu.be/spl-conducteur',
-   videoLabel:'Conducteur SPL au port du Havre',
+   video:'https://www.youtube.com/watch?v=LYfWrqT9_qI',
+   videoLabel:'Conducteur SPL – une journée dans un camion semi-remorque',
    tags:['Transport','Autonomie','Permis requis'],
    niveauFr:'A2',
    incompatible:['visuel','moteur','auditif'],
@@ -1476,8 +1773,8 @@ const METIERS = [
   {id:'electricien',nom:'Électricien(ne)',emoji:'⚡',cat:'porteur-lh',couleur:'#f39c12',
    desc:'L\'électricien installe, répare et entretient les installations électriques dans les maisons, les bâtiments et les usines. Dans l\'agglomération havraise en pleine croissance, ce métier est en forte demande.',
    conditions:'• Sur chantier, en logement ou en industrie\n• Travail en hauteur possible\n• Habilitations électriques obligatoires\n• Travail en équipe sur les grands chantiers',
-   video:'https://youtu.be/electricien-batiment',
-   videoLabel:'Électricien sur chantier au Havre',
+   video:'https://www.youtube.com/watch?v=xXRBYzMFvHo',
+   videoLabel:'Le métier d\'électricien bâtiment – installation et travaux',
    tags:['BTP','Qualifié','Chantier'],
    niveauFr:'A2',
    incompatible:['auditif','moteur'],
@@ -1498,8 +1795,8 @@ const METIERS = [
   {id:'agent-logistique',nom:'Agent logistique',emoji:'📦',cat:'porteur-lh',couleur:'#8e44ad',
    desc:'L\'agent logistique gère les stocks, prépare les commandes et organise les expéditions dans un entrepôt. La zone logistique havraise est l\'une des plus importantes de France.',
    conditions:'• En entrepôt (chaud en été, froid en hiver)\n• Travail debout, marche fréquente\n• Utilisation de scanners et d\'outils numériques\n• Horaires en 2x8 ou 3x8',
-   video:'https://youtu.be/agent-logistique',
-   videoLabel:'Agent logistique en entrepôt havrais',
+   video:'https://www.youtube.com/watch?v=uGFl2PYDQHA',
+   videoLabel:'Agent logistique – préparation de commandes en entrepôt',
    tags:['Logistique','Entrepôt','Polyvalent'],
    niveauFr:'A2',
    incompatible:['moteur','visuel'],
@@ -1521,8 +1818,8 @@ const METIERS = [
   {id:'infirmier',nom:'Infirmier(ère)',emoji:'🏥',cat:'porteur-agglo',couleur:'#e91e8c',
    desc:'L\'infirmier(ère) soigne les malades, administre des médicaments et surveille l\'état de santé des patients. Très forte demande dans l\'ensemble de l\'agglomération havraise.',
    conditions:'• Hôpital, clinique, domicile, EHPAD\n• Travail debout, rythme intense\n• 12h de travail par poste possibles\n• Nuits, week-ends et jours fériés',
-   video:'https://youtu.be/infirmier-metier',
-   videoLabel:'Une journée d\'une infirmière au CHU du Havre',
+   video:'https://www.youtube.com/watch?v=Dv_kHwFMpAo',
+   videoLabel:'Le métier d\'infirmier(ère) – présentation et formation',
    tags:['Santé','Diplôme d\'État','Forte demande'],
    niveauFr:'B2',
    incompatible:['moteur'],
@@ -1542,8 +1839,8 @@ const METIERS = [
   {id:'dev-web',nom:'Développeur web',emoji:'💻',cat:'porteur-agglo',couleur:'#2ecc71',
    desc:'Le développeur web crée des sites internet et des applications en ligne. Le numérique est un secteur en pleine croissance, avec l\'école 42 implantée au Havre.',
    conditions:'• En bureau ou en télétravail\n• Travail assis devant ordinateur\n• Créativité et logique nécessaires\n• Missions en freelance possibles',
-   video:'https://youtu.be/dev-web-metier',
-   videoLabel:'École 42 Le Havre – parcours développeur',
+   video:'https://www.youtube.com/watch?v=ysEN5RaKOlA',
+   videoLabel:'Développeur web – présentation du métier et formations',
    tags:['Numérique','Télétravail','Avenir'],
    niveauFr:'B1',
    incompatible:[],
@@ -1564,8 +1861,8 @@ const METIERS = [
   {id:'maçon',nom:'Maçon(ne)',emoji:'🏗',cat:'porteur-agglo',couleur:'#7f8c8d',
    desc:'Le maçon construit et rénove des bâtiments. Dans l\'agglomération havraise et notamment à Montivilliers, Harfleur et Gonfreville, de nombreux chantiers recrutent des maçons qualifiés.',
    conditions:'• En extérieur et en intérieur selon les chantiers\n• Travail physique et en équipe\n• Horaires de journée en général\n• Conduite de minibus de chantier',
-   video:'https://youtu.be/maçon-btp',
-   videoLabel:'Maçon sur chantier en Normandie',
+   video:'https://www.youtube.com/watch?v=P5sZt49JKNY',
+   videoLabel:'Le métier de maçon – construction et rénovation',
    tags:['BTP','Extérieur','Chantier'],
    niveauFr:'A2',
    incompatible:['moteur','visuel'],
@@ -1586,8 +1883,8 @@ const METIERS = [
   {id:'secretaire',nom:'Secrétaire / Assistant(e)',emoji:'📋',cat:'nonporteur',couleur:'#95a5a6',
    desc:'Le ou la secrétaire gère l\'accueil, le courrier, les appels téléphoniques et organise les rendez-vous dans une entreprise. Ce métier existe mais évolue avec le numérique.',
    conditions:'• En bureau, travail assis\n• Contact régulier avec le public\n• Maîtrise des outils informatiques\n• Horaires de journée',
-   video:'https://youtu.be/secretaire-admin',
-   videoLabel:'Le métier de secrétaire administrative',
+   video:'https://www.youtube.com/watch?v=kVoAUH6V5eA',
+   videoLabel:'Le métier de secrétaire / assistant administratif',
    tags:['Bureau','Bureautique','Évolution'],
    niveauFr:'B1',
    incompatible:['visuel','cognitif'],
@@ -1603,29 +1900,174 @@ const METIERS = [
      {q:'Quelle qualité est fondamentale pour un secrétaire ?',opts:['La force physique','L\'organisation et la discrétion','La vitesse de course','La connaissance en mécanique'],rep:1,expl:'L\'organisation, la rigueur et la discrétion (confidentialité) sont des qualités essentielles.'},
      {q:'Comment évolue ce métier avec le numérique ?',opts:['Il disparaît totalement','Il se transforme avec de nouvelles compétences numériques','Il reste identique','Il devient un métier manuel'],rep:1,expl:'Le métier évolue : de nouvelles compétences numériques sont nécessaires, mais la gestion administrative reste utile.'}
    ]
+  },
+  // MÉTIERS AGGLOMÉRATION HAVRAISE
+  {id:'operateur-chimie',nom:'Opérateur de production chimie',emoji:'🧪',cat:'porteur-agglo',couleur:'#16a085',
+   desc:'L\'opérateur de production chimique surveille et conduit des installations industrielles chimiques. À Gonfreville-l\'Orcher et Harfleur (TotalEnergies, Exxon, Air Liquide), c\'est l\'un des métiers les plus demandés.',
+   conditions:'• En usine, en 3x8 ou 4x8\n• Environnement chimique (EPI obligatoires)\n• Travail debout et surveillance d\'écrans\n• Astreintes possibles',
+   video:'https://www.youtube.com/watch?v=4KpLP9fGgMY',
+   videoLabel:'Opérateur de production en raffinerie – industrie pétrolière',
+   tags:['Industrie','Chimie','3x8'],
+   niveauFr:'B1',
+   incompatible:['chronique','psychique'],
+   competences:['technique','bureau','ordi'],
+   secteur:'industrie',
+   ville:'Gonfreville-l\'Orcher',
+   formations:[
+     {nom:'Bac Pro Procédés de la Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Conducteur d\'Appareils des Industries Chimiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'BTS Chimie',centre:'Lycée Edgar Pisani',ville:'Montivilliers',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['TotalEnergies Gonfreville','ExxonMobil Normandie','Air Liquide Harfleur','INEOS (Gonfreville)'],
+   questions:[
+     {q:'Dans quelle commune se trouve la grande raffinerie TotalEnergies près du Havre ?',opts:['Sainte-Adresse','Montivilliers','Gonfreville-l\'Orcher','Octeville-sur-Mer'],rep:2,expl:'La raffinerie TotalEnergies (anciennement Total) est implantée à Gonfreville-l\'Orcher, dans la zone industrielle de Port-Jérôme.'},
+     {q:'Qu\'est-ce qu\'un EPI ?',opts:['Un logiciel industriel','Un Équipement de Protection Individuelle','Un type de machine','Un diplôme'],rep:1,expl:'Les EPI (casque, lunettes, gants, combinaison) sont obligatoires dans les usines chimiques pour protéger les travailleurs.'},
+     {q:'Qu\'est-ce que le travail en 3x8 ?',opts:['3 pauses par jour','3 équipes qui se relaient sur 24h','3 jours de travail par semaine','3 heures de travail par jour'],rep:1,expl:'En 3x8, trois équipes se relaient toutes les 8 heures pour faire fonctionner l\'usine 24h/24, 7j/7.'}
+   ]
+  },
+  {id:'agent-securite',nom:'Agent de sécurité',emoji:'🛡️',cat:'porteur-agglo',couleur:'#2c3e50',
+   desc:'L\'agent de sécurité surveille des sites industriels, des magasins ou des événements. Dans la zone industrielle havraise (Gonfreville, Harfleur), de nombreux postes sont à pourvoir.',
+   conditions:'• Travail en extérieur ou en intérieur\n• Horaires décalés (nuit, week-end)\n• Station debout prolongée\n• Carte professionnelle CNAPS obligatoire',
+   video:'https://www.youtube.com/watch?v=sVFsODq3ZaI',
+   videoLabel:'Métier d\'agent de sécurité – présentation',
+   tags:['Sécurité','Industrie','CDI'],
+   niveauFr:'B1',
+   incompatible:['moteur','auditif','visuel'],
+   competences:['equipe','exterieur','contact'],
+   secteur:'industrie',
+   ville:'Le Havre / Gonfreville',
+   formations:[
+     {nom:'CQP APS – Agent de Prévention et Sécurité',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'2 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Titre Pro Agent de Sécurité',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr',updated:'2025-01'}
+   ],
+   entreprises:['Securitas (Le Havre)','G4S / Allied Universal','Seris Security','Garda World (port)'],
+   questions:[
+     {q:'Quelle carte est obligatoire pour exercer le métier d\'agent de sécurité ?',opts:['Carte bleue','Carte professionnelle CNAPS','Carte de crédit','Carte d\'étudiant'],rep:1,expl:'La carte professionnelle délivrée par le CNAPS (Conseil National des Activités Privées de Sécurité) est obligatoire pour tout agent de sécurité.'},
+     {q:'Que fait principalement un agent de sécurité ?',opts:['Répare des machines','Surveille et prévient les incidents','Conduit des camions','Soigne les malades'],rep:1,expl:'L\'agent de sécurité surveille les lieux, contrôle les accès et intervient en cas d\'incident pour protéger les personnes et les biens.'},
+     {q:'Dans quel secteur havrais y a-t-il beaucoup de postes pour agents de sécurité ?',opts:['Secteur médical uniquement','Zone industrielle de Gonfreville et le port','Secteur agricole','Secteur touristique'],rep:1,expl:'La zone industrielle de Gonfreville-l\'Orcher et le port du Havre emploient de nombreux agents de sécurité pour surveiller les sites.'}
+   ]
+  },
+  {id:'plombier',nom:'Plombier / Chauffagiste',emoji:'🔧',cat:'porteur-agglo',couleur:'#2980b9',
+   desc:'Le plombier installe et répare les canalisations d\'eau et les systèmes de chauffage. Dans l\'agglomération havraise (Montivilliers, Octeville-sur-Mer, Harfleur), ce métier est en tension constante.',
+   conditions:'• En intérieur principalement (logements, entreprises)\n• Positions contraignantes (accroupi, couché)\n• Déplacements fréquents chez les clients\n• Astreintes possibles',
+   video:'https://www.youtube.com/watch?v=YGFdMVT4Dks',
+   videoLabel:'Le métier de plombier chauffagiste',
+   tags:['BTP','Artisanat','Autonomie'],
+   niveauFr:'A2',
+   incompatible:['moteur'],
+   competences:['manuel','technique','bricolage','exterieur'],
+   secteur:'batiment',
+   ville:'Montivilliers / Harfleur',
+   formations:[
+     {nom:'CAP Monteur en Installations Thermiques',centre:'Lycée des Métiers Fernand Léger',ville:'Sainte-Marie-des-Champs',duree:'2 ans',financement:'Apprentissage',lien:'',updated:'2025-01'},
+     {nom:'Titre Pro Monteur Dépanneur en Installations Thermiques',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'5 mois',financement:'CPF, France Travail, OPCO BTP',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Bac Pro TISEC (Thermique, Installation Sanitaire)',centre:'Lycée Porte Océane',ville:'Le Havre',duree:'3 ans',financement:'Apprentissage',lien:'',updated:'2025-01'}
+   ],
+   entreprises:['Ineo (Engie group)','Dalkia Normandie','Vinci Facilities','Artisans locaux Montivilliers'],
+   questions:[
+     {q:'Que répare principalement un plombier ?',opts:['Les voitures','Les canalisations et systèmes de chauffage','Les ordinateurs','Les toitures'],rep:1,expl:'Le plombier intervient sur les réseaux d\'eau (eau froide, eau chaude) et les systèmes de chauffage (chaudières, radiateurs).'},
+     {q:'Qu\'est-ce qu\'une colonne montante en plomberie ?',opts:['Une tuyauterie verticale principale dans un immeuble','Un outil de bricolage','Un type de chaudière','Un contrat de travail'],rep:0,expl:'Une colonne montante est la canalisation principale verticale qui alimente en eau ou en gaz les différents étages d\'un immeuble.'},
+     {q:'Quel document est obligatoire après intervention sur une chaudière ?',opts:['Un selfie','Une attestation de conformité','Un devis','Un bon de commande'],rep:1,expl:'Une attestation ou rapport d\'intervention est obligatoire après tout travail sur une installation de chauffage, pour la sécurité et la garantie.'}
+   ]
+  },
+  {id:'aide-domicile',nom:'Auxiliaire de vie / Aide à domicile',emoji:'🏠',cat:'porteur-agglo',couleur:'#8e44ad',
+   desc:'L\'auxiliaire de vie aide les personnes âgées, handicapées ou malades à vivre chez elles. À Sainte-Adresse, Octeville-sur-Mer et dans toute l\'agglomération havraise, ce métier est très recherché.',
+   conditions:'• À domicile des bénéficiaires\n• Déplacements quotidiens (voiture recommandée)\n• Horaires fractionnés (matin et soir)\n• Travail le week-end possible',
+   video:'https://www.youtube.com/watch?v=nPo6Eb7lMVA',
+   videoLabel:'Auxiliaire de vie à domicile – une journée type',
+   tags:['Santé','Domicile','CDI partiel/plein'],
+   niveauFr:'B1',
+   incompatible:['moteur'],
+   competences:['soin','contact','equipe'],
+   secteur:'sante',
+   ville:'Sainte-Adresse / Octeville',
+   formations:[
+     {nom:'DEAVS / DEAES – Diplôme d\'État Accompagnant',centre:'IFAS CHU du Havre',ville:'Le Havre',duree:'12 mois',financement:'Région, CPF, OPCO Santé',lien:'https://www.chu-lehavre.fr',updated:'2025-03'},
+     {nom:'Titre Pro ADVF (Assistant de Vie aux Familles)',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'6 mois',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'Formation ADVF accélérée',centre:'Croix-Rouge compétence',ville:'Le Havre',duree:'3 mois',financement:'France Travail, OPCO',lien:'https://formation.croix-rouge.fr',updated:'2025-02'}
+   ],
+   entreprises:['ADMR 76','O2 Le Havre','Petits-fils (Sainte-Adresse)','SSIAD du Havre','Familles Rurales 76'],
+   questions:[
+     {q:'Chez qui travaille une auxiliaire de vie ?',opts:['Dans un hôpital uniquement','Au domicile de la personne aidée','Dans une école','Dans une usine'],rep:1,expl:'L\'auxiliaire de vie intervient directement au domicile des personnes pour les aider dans les actes de la vie quotidienne.'},
+     {q:'Quelle qualité est essentielle dans ce métier ?',opts:['La force physique uniquement','L\'empathie et la patience','La rapidité','Les diplômes universitaires'],rep:1,expl:'L\'empathie (comprendre ce que ressent l\'autre), la patience et la bienveillance sont fondamentales pour accompagner des personnes fragiles.'},
+     {q:'Qu\'est-ce que le DEAES ?',opts:['Un diplôme de cuisine','Le Diplôme d\'État d\'Accompagnant Éducatif et Social','Un permis spécial','Un logiciel de santé'],rep:1,expl:'Le DEAES est le diplôme officiel pour devenir accompagnant à domicile ou en structure médico-sociale.'}
+   ]
+  },
+  {id:'conducteur-engins',nom:'Conducteur d\'engins de chantier',emoji:'🚜',cat:'porteur-agglo',couleur:'#d35400',
+   desc:'Le conducteur d\'engins conduit des pelleteuses, chargeuses et grues sur les chantiers du BTP. Dans les communes de Montivilliers, Harfleur et Gonfreville en développement, les recrutements sont importants.',
+   conditions:'• En extérieur sur chantier\n• Vibrations, poussières, bruit\n• CACES obligatoires\n• Port de charges légères',
+   video:'https://www.youtube.com/watch?v=4P_RCMUB52c',
+   videoLabel:'Conducteur d\'engins BTP – présentation du métier',
+   tags:['BTP','CACES','Extérieur'],
+   niveauFr:'A2',
+   incompatible:['moteur','visuel','auditif'],
+   competences:['manuel','exterieur','technique','conduire'],
+   secteur:'batiment',
+   ville:'Montivilliers / Harfleur',
+   formations:[
+     {nom:'CACES R482 (Engins de chantier)',centre:'GRETA Côtes Normandes',ville:'Le Havre',duree:'1 semaine',financement:'CPF, France Travail',lien:'https://greta.ac-normandie.fr',updated:'2025-02'},
+     {nom:'CAP Conducteur d\'Engins',centre:'AFPA Le Havre',ville:'Le Havre',duree:'3 mois',financement:'CPF, France Travail',lien:'https://www.afpa.fr',updated:'2025-01'}
+   ],
+   entreprises:['Eiffage TP Normandie','Colas Normandie','NGE Génie Civil','Vinci Construction'],
+   questions:[
+     {q:'Quel CACES permet de conduire une pelleteuse ?',opts:['CACES R489','CACES R482','CACES R485','Permis B'],rep:1,expl:'Le CACES R482 (anciennement R372) est la certification pour conduire les engins de terrassement comme les pelleteuses et les chargeuses.'},
+     {q:'Qu\'est-ce qu\'une pelleteuse ?',opts:['Un outil de jardinage','Un engin qui creuse la terre','Une grue de port','Un camion benne'],rep:1,expl:'La pelleteuse (ou pelle hydraulique) est un engin de chantier utilisé pour creuser, déplacer de la terre et démolir.'},
+     {q:'Quelle précaution est essentielle avant de commencer à travailler avec un engin ?',opts:['Vérifier son téléphone','Faire le tour de l\'engin et vérifier son état','Boire un café','Appeler un collègue'],rep:1,expl:'Avant chaque utilisation, le conducteur doit effectuer un contrôle visuel de l\'engin pour détecter tout problème (fuite, dégât, manque de carburant).'}
+   ]
   }
 ];
 
 // FORMATIONS BASE (modifiable par référente)
 let FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom') || '[]');
 
-// ENTREPRISES
+// ENTREPRISES enrichies
 const ENTREPRISES = [
-  {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaports.com'},
-  {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.fr'},
-  {nom:'TotalEnergies (Raffinerie)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://totalenergies.com'},
-  {nom:'XPO Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.xpo.com'},
-  {nom:'ID Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.id-logistics.com'},
-  {nom:'CHU du Havre',secteur:'Santé',ville:'Le Havre',lien:'https://www.chu-lehavre.fr'},
-  {nom:'Eiffage Construction',secteur:'BTP',ville:'Le Havre',lien:'https://www.eiffage.com'},
-  {nom:'École 42 Le Havre',secteur:'Numérique',ville:'Le Havre',lien:'https://42lehavre.fr'},
-  {nom:'Normatrans',secteur:'Transport',ville:'Le Havre',lien:''},
-  {nom:'Air Liquide (Zone Industrielle)',secteur:'Industrie',ville:'Harfleur',lien:'https://www.airliquide.com'},
-  {nom:'DB Schenker',secteur:'Logistique',ville:'Le Havre',lien:'https://www.dbschenker.com'},
-  {nom:'Bouygues Énergies & Services',secteur:'BTP/Énergie',ville:'Le Havre',lien:'https://bouygues-es.com'},
-  {nom:'Clinique des Ormeaux',secteur:'Santé',ville:'Le Havre',lien:''},
-  {nom:'Enedis Normandie',secteur:'Énergie',ville:'Le Havre',lien:'https://www.enedis.fr'},
-  {nom:'Saffaf Industrie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:''},
+  // Maritime & Port
+  {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaports.com',desc:'Premier port à conteneurs de France, recrutements réguliers'},
+  {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.fr',desc:'3e armateur mondial, siège mondial au Havre'},
+  {nom:'MSC France',secteur:'Maritime',ville:'Le Havre',lien:'https://www.msc.com',desc:'Compagnie maritime internationale'},
+  {nom:'DP World (Terminal de Normandie)',secteur:'Maritime',ville:'Le Havre',lien:'https://www.dpworld.com',desc:'Terminal portuaire, manutention conteneurs'},
+  {nom:'Sogestran',secteur:'Maritime',ville:'Le Havre',lien:'https://www.sogestran.fr',desc:'Transport fluvial et maritime'},
+  // Industrie
+  {nom:'TotalEnergies (Raffinerie)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://totalenergies.com',desc:'Raffinerie et pétrochimie, nombreux recrutements'},
+  {nom:'ExxonMobil Normandie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://corporate.exxonmobil.com',desc:'Raffinerie pétrochimique'},
+  {nom:'Air Liquide',secteur:'Industrie',ville:'Harfleur',lien:'https://www.airliquide.com',desc:'Gaz industriels, production et maintenance'},
+  {nom:'INEOS (ex Solvay)',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'https://www.ineos.com',desc:'Pétrochimie et matières plastiques'},
+  {nom:'Renault Trucks Normandie',secteur:'Industrie',ville:'Le Havre',lien:'https://www.renault-trucks.fr',desc:'Camions et poids lourds'},
+  {nom:'Saffaf Industrie',secteur:'Industrie',ville:'Gonfreville-l\'Orcher',lien:'',desc:'Chaudronnerie industrielle'},
+  // Logistique
+  {nom:'XPO Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.xpo.com',desc:'Transport et logistique internationale'},
+  {nom:'ID Logistics',secteur:'Logistique',ville:'Le Havre',lien:'https://www.id-logistics.com',desc:'Entrepôts logistiques, nombreux CDI'},
+  {nom:'Kuehne+Nagel',secteur:'Logistique',ville:'Le Havre',lien:'https://www.kuehne-nagel.com',desc:'Logistique internationale'},
+  {nom:'DB Schenker',secteur:'Logistique',ville:'Le Havre',lien:'https://www.dbschenker.com',desc:'Transport et logistique'},
+  {nom:'Geodis',secteur:'Logistique',ville:'Le Havre',lien:'https://www.geodis.com',desc:'Groupage et messagerie'},
+  {nom:'Norbert Dentressangle (XPO)',secteur:'Logistique',ville:'Le Havre',lien:'',desc:'Transport routier'},
+  {nom:'Normatrans',secteur:'Transport',ville:'Le Havre',lien:'',desc:'Transport routier normand'},
+  // Santé
+  {nom:'CHU du Havre',secteur:'Santé',ville:'Le Havre',lien:'https://www.chu-lehavre.fr',desc:'Centre hospitalier universitaire, nombreux recrutements'},
+  {nom:'Clinique des Ormeaux',secteur:'Santé',ville:'Le Havre',lien:'',desc:'Clinique privée, chirurgie et médecine'},
+  {nom:'Polyclinique du Parc',secteur:'Santé',ville:'Le Havre',lien:'',desc:'Polyclinique, recrutements infirmiers'},
+  {nom:'SSIAD du Havre',secteur:'Santé',ville:'Le Havre',lien:'',desc:'Soins infirmiers à domicile'},
+  {nom:'ADMR 76',secteur:'Santé',ville:'Octeville-sur-Mer',lien:'https://www.admr.org',desc:'Aide à domicile, tout le territoire'},
+  {nom:'Petits-fils',secteur:'Santé',ville:'Sainte-Adresse',lien:'https://www.petits-fils.fr',desc:'Aide aux personnes âgées à domicile'},
+  // BTP
+  {nom:'Eiffage Construction Normandie',secteur:'BTP',ville:'Le Havre',lien:'https://www.eiffage.com',desc:'Construction de bâtiments et infrastructures'},
+  {nom:'Vinci Construction',secteur:'BTP',ville:'Le Havre',lien:'https://www.vinci-construction.fr',desc:'Travaux publics et bâtiment'},
+  {nom:'Bouygues Énergies & Services',secteur:'BTP',ville:'Le Havre',lien:'https://bouygues-es.com',desc:'Maintenance et énergie'},
+  {nom:'Enedis Normandie',secteur:'BTP',ville:'Le Havre',lien:'https://www.enedis.fr',desc:'Réseau électrique, électriciens'},
+  {nom:'SHAM BTP',secteur:'BTP',ville:'Montivilliers',lien:'',desc:'Gros œuvre et maçonnerie'},
+  {nom:'Normabat',secteur:'BTP',ville:'Harfleur',lien:'',desc:'Bâtiment tous corps d\'état'},
+  // Numérique
+  {nom:'École 42 Le Havre',secteur:'Numérique',ville:'Le Havre',lien:'https://42lehavre.fr',desc:'Formation développeurs, accès aux entreprises tech'},
+  {nom:'Capgemini Normandie',secteur:'Numérique',ville:'Le Havre',lien:'https://www.capgemini.com',desc:'Conseil IT et développement'},
+  {nom:'Openfield',secteur:'Numérique',ville:'Le Havre',lien:'',desc:'Agence web normande'},
+  // Commerce
+  {nom:'Cora / Grand Littoral',secteur:'Commerce',ville:'Montivilliers',lien:'',desc:'Grande surface, nombreux emplois'},
+  {nom:'Kiabi Montivilliers',secteur:'Commerce',ville:'Montivilliers',lien:'https://www.kiabi.com',desc:'Prêt-à-porter, conseillers de vente'},
+  {nom:'Auchan Montivilliers',secteur:'Commerce',ville:'Montivilliers',lien:'https://www.auchan.fr',desc:'Grande surface alimentaire'},
+  // Sécurité
+  {nom:'Securitas Le Havre',secteur:'Sécurité',ville:'Le Havre',lien:'https://www.securitas.fr',desc:'Gardiennage et sécurité industrielle'},
+  {nom:'Garda World (port)',secteur:'Sécurité',ville:'Le Havre',lien:'',desc:'Sécurité portuaire'},
 ];
 
 // ==================== STATE ====================
@@ -1654,6 +2096,13 @@ function showPage(id){
   if(pg){ pg.classList.add('active'); pg.scrollTop = 0; }
   updateFab(id);
   trackNavigation(id);
+  // Init pages on first show
+  if(id === 'page-metiers') renderMetiers();
+  if(id === 'page-entreprises') renderEntreprisesPage();
+  if(id === 'page-carte') renderMapPage();
+  if(id === 'page-dashboard-stagiaire') renderDashboard();
+  if(id === 'page-attestations') renderAttestations();
+  if(id === 'page-dashboard-referente') renderReferenteDashboard();
 }
 function updateFab(pageId){
   const fab = document.getElementById('help-fab');
@@ -1675,7 +2124,40 @@ function saveCurrentUser(){
   if(idx >= 0) users[idx] = currentUser;
   save('users', users);
 }
-function showModal(id){ document.getElementById(id).classList.add('open'); }
+function showModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id === 'modal-entretien'){
+    renderQuestionsEntretien('tous');
+  }
+}
+function openVideoModal(){
+  if(!currentMetier) return;
+  const url = currentMetier.video;
+  let embedUrl = '';
+  if(url && url.includes('youtube.com/watch?v=')){
+    const vid = url.split('v=')[1].split('&')[0];
+    embedUrl = 'https://www.youtube.com/embed/' + vid + '?cc_load_policy=1&cc_lang_pref=fr';
+  } else if(url && url.includes('youtu.be/')){
+    const vid = url.split('youtu.be/')[1];
+    embedUrl = 'https://www.youtube.com/embed/' + vid + '?cc_load_policy=1';
+  }
+  if(embedUrl){
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay open';
+    modal.id = 'modal-video-temp';
+    const label = (currentMetier.videoLabel||currentMetier.nom).replace(/'/g,'&#39;');
+    modal.innerHTML = '<div class="modal">'
+      + '<div class="modal-header"><h3 style="font-family:var(--font);">&#127902; ' + label + '</h3>'
+      + '<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-video-temp\').remove()">&#10005;</button></div>'
+      + '<div class="modal-body" style="padding:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">'
+      + '<iframe src="' + embedUrl + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>'
+      + '</div></div>'
+      + '<div class="modal-footer"><div style="font-size:0.78rem;color:var(--text3);">Sous-titres disponibles via le bouton CC sur la vid&#233;o</div></div></div>';
+    document.body.appendChild(modal);
+  } else {
+    alert('Vid\u00e9o non disponible. Votre r\u00e9f\u00e9rente peut en ajouter une.');
+  }
+}
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function togglePwd(inputId, btnId){
   const inp = document.getElementById(inputId);
@@ -1927,9 +2409,513 @@ function openMetier(id){
 function startGame(type){
   if(!currentMetier) return;
   if(type === 'qcm') startQCM();
-  else { alert('Ce jeu est en cours de développement. Essayez le Quiz QCM !'); }
+  else if(type === 'vraifaux') startVraiFaux();
+  else if(type === 'glisser') startGlisser();
+  else if(type === 'situation') startSituation();
+  else if(type === 'journee') startJournee();
 }
 function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+
+// --------- DONNÉES JEUX PAR MÉTIER ---------
+const GAMES_DATA = {
+  'agent-portuaire': {
+    vraifaux:[
+      {s:'Le port du Havre est le 1er port de France pour les conteneurs.',r:true,expl:'Vrai ! Le Havre est le 1er port à conteneurs de France.'},
+      {s:'Un agent portuaire travaille uniquement en bureau climatisé.',r:false,expl:'Faux ! L\'agent portuaire travaille principalement en extérieur sur les quais.'},
+      {s:'Les EPI (casque, gilet) sont obligatoires sur le port.',r:true,expl:'Vrai ! Les Équipements de Protection Individuelle sont obligatoires pour la sécurité.'},
+      {s:'Le port du Havre se trouve en Bretagne.',r:false,expl:'Faux ! Le port du Havre est en Normandie, en Seine-Maritime.'},
+      {s:'Les agents portuaires peuvent travailler la nuit.',r:true,expl:'Vrai ! Le port fonctionne 24h/24, 7j/7. Les horaires décalés sont courants.'},
+      {s:'Un conteneur standard mesure 20 ou 40 pieds de long.',r:true,expl:'Vrai ! Les conteneurs standard EVP font 20 pieds (~6m) ou 40 pieds (~12m).'}
+    ],
+    glisser:{
+      question:'Associez chaque équipement à son utilité sur le port',
+      items:['Casque de sécurité','Gilet haute visibilité','Harnais','Radio','Chaussures à embout acier','Gants de manutention'],
+      categories:['Protection de la tête','Être vu','Travail en hauteur','Communication','Protection des pieds','Protection des mains'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous êtes sur le quai. Un colis glisse d\'une palette et tombe près de vous. Personne n\'est blessé mais la zone est encombrée.',q:'Que faites-vous en premier ?',opts:['Ignorer et continuer à travailler','Sécuriser la zone et prévenir votre chef','Ramasser vous-même sans attendre','Appeler un ami'],rep:1,expl:'Sécuriser la zone et prévenir le responsable est la procédure correcte. La sécurité prime toujours.'},
+      {ctx:'Il est 23h, vous êtes de nuit. Un navire arrive plus tôt que prévu et votre équipe n\'est pas complète.',q:'Quelle est la bonne démarche ?',opts:['Commencer seul à décharger','Attendre sans rien faire','Prévenir immédiatement le responsable de shift','Rentrer chez vous'],rep:2,expl:'En cas de changement imprévu, il faut toujours en informer le responsable pour qu\'il organise les ressources nécessaires.'},
+      {ctx:'Vous remarquez qu\'un collègue ne porte pas son casque dans la zone obligatoire.',q:'Que faites-vous ?',opts:['Rien, ce n\'est pas votre problème','Lui rappeler gentiment le règlement','Le dénoncer immédiatement à la direction','Continuer votre travail'],rep:1,expl:'La sécurité est l\'affaire de tous. Un rappel amical est la bonne approche avant d\'escalader.'}
+    ],
+    journee:['6h - Prise de poste et briefing sécurité','7h - Contrôle des équipements et EPI','8h - Arrivée du navire : guidage à quai','9h - Début du déchargement des conteneurs','12h - Pause repas','13h - Reprise : chargement des conteneurs exports','16h - Inventaire et rapport de shift','17h - Passation avec l\'équipe suivante']
+  },
+  'cariste': {
+    vraifaux:[
+      {s:'Le CACES R489 est obligatoire pour conduire un chariot élévateur.',r:true,expl:'Vrai ! Sans CACES valide, il est interdit de conduire un chariot élévateur.'},
+      {s:'Un cariste peut porter des charges illimitées.',r:false,expl:'Faux ! Chaque chariot a une capacité maximale à ne jamais dépasser sous peine d\'accident grave.'},
+      {s:'Il faut vérifier le chariot avant chaque utilisation.',r:true,expl:'Vrai ! Le contrôle avant prise de poste (niveaux, fourches, gyrophare) est obligatoire.'},
+      {s:'On peut klaxonner pour avertir les piétons.',r:true,expl:'Vrai ! Le klaxon est un équipement de sécurité à utiliser pour signaler sa présence.'},
+      {s:'Les fourches doivent être relevées très haut pour se déplacer.',r:false,expl:'Faux ! Pour se déplacer, les fourches doivent être abaissées (15-20cm du sol) pour la stabilité.'},
+      {s:'Un cariste travaille uniquement en extérieur.',r:false,expl:'Faux ! Le cariste travaille principalement en entrepôt, mais peut aussi intervenir en extérieur sur les quais.'}
+    ],
+    glisser:{
+      question:'Associez chaque action à son moment dans la conduite',
+      items:['Vérifier les niveaux','Baisser les fourches','Klaxonner aux intersections','Lever la charge doucement','Vérifier la stabilité','Ranger le chariot'],
+      categories:['Avant de démarrer','Pour se déplacer','Aux carrefours','Pour prendre une palette','Avant de lever haut','En fin de poste'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous devez déplacer une palette mais vous remarquez que la charge dépasse la capacité maximale de votre chariot.',q:'Que faites-vous ?',opts:['Essayer quand même, ça devrait aller','Refuser et signaler à votre chef','Retirer quelques cartons et faire deux voyages sans en parler','Demander à un collègue de pousser pour vous aider'],rep:1,expl:'Surcharger un chariot est extrêmement dangereux. Il faut refuser et en informer le responsable.'},
+      {ctx:'Un piéton traverse l\'allée sans regarder devant votre chariot en marche.',q:'Quelle est la bonne réaction ?',opts:['Continuer, il doit faire attention','Klaxonner et freiner immédiatement','Accélérer pour finir vite','Crier très fort'],rep:1,expl:'La sécurité des piétons est prioritaire. Klaxonner et freiner sans hésiter.'},
+      {ctx:'Vous avez terminé votre poste. Le chariot est chargé à mi-hauteur.',q:'Comment laissez-vous le chariot ?',opts:['Comme ça, c\'est bon','Fourches abaissées, charge posée, clé retirée','Moteur allumé pour le collègue suivant','N\'importe comment, vous êtes pressé'],rep:1,expl:'En fin de poste : fourches au sol, charge posée, clé retirée. C\'est la procédure de sécurité obligatoire.'}
+    ],
+    journee:['7h - Prise de poste et vérification du chariot','7h30 - Briefing de l\'équipe logistique','8h - Déchargement des camions de livraison','10h - Mise en stock dans les allées','12h - Pause repas','13h - Préparation des commandes à expédier','15h - Chargement des camions de départ','16h30 - Rangement, rapport et passation de poste']
+  },
+  'soudeur': {
+    vraifaux:[
+      {s:'Le masque de soudage protège uniquement les yeux.',r:false,expl:'Faux ! Le masque protège les yeux, le visage et la peau des rayonnements UV et des projections.'},
+      {s:'La soudure MIG/MAG utilise un fil électrode consommable.',r:true,expl:'Vrai ! En soudure MIG/MAG, le fil-électrode est automatiquement alimenté et se consomme pendant le soudage.'},
+      {s:'On peut souder dans n\'importe quelle position.',r:true,expl:'Vrai ! Un soudeur qualifié maîtrise les positions à plat, en montant, en plafond et en corniche.'},
+      {s:'Les fumées de soudage sont inoffensives.',r:false,expl:'Faux ! Les fumées de soudage sont nocives. Une bonne ventilation et un masque à filtre sont obligatoires.'},
+      {s:'Le cordonnage (CND) permet de vérifier la qualité d\'une soudure.',r:true,expl:'Vrai ! Le contrôle non-destructif (radiographie, ultrasons) vérifie la qualité interne des soudures.'},
+      {s:'Un soudeur peut travailler sur des pipelines pétroliers.',r:true,expl:'Vrai ! Les soudeurs qualifiés travaillent sur des pipelines, des structures navales et des installations industrielles.'}
+    ],
+    glisser:{
+      question:'Associez chaque procédé de soudage à sa description',
+      items:['Soudure à l\'arc MMA','Soudure MIG/MAG','Soudure TIG','Oxycoupage','Soudure par points','Soudure sous flux'],
+      categories:['Électrode enrobée manuelle','Fil continu + gaz protecteur','Électrode non consommable + tungstène','Découpe au gaz','Résistance électrique','Grande série industrielle'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous devez souder un tuyau en acier inoxydable pour l\'industrie alimentaire. C\'est votre première fois sur ce type de matériau.',q:'Que faites-vous avant de commencer ?',opts:['Vous lancez directement, c\'est pareil que l\'acier','Vous demandez conseil à un collègue expérimenté et lisez la fiche technique','Vous refusez le travail','Vous attendez sans rien dire'],rep:1,expl:'L\'inox demande des réglages spécifiques. Demander conseil et lire la fiche technique évite les défauts coûteux.'},
+      {ctx:'Pendant une soudure, vous remarquez des craquelures dans le cordon. Le chef vous demande si c\'est bon.',q:'Que répondez-vous ?',opts:['Oui c\'est bon, on verra après','Non, je signale le problème et demande à retravailler','Vous camouflez avec de la meuleuse','Vous dites que c\'est normal'],rep:1,expl:'La qualité et la sécurité priment. Signaler un défaut évite des accidents graves plus tard.'},
+      {ctx:'Votre zone de travail est mal ventilée. Les fumées s\'accumulent.',q:'Quelle est votre priorité ?',opts:['Continuer, les fumées c\'est normal','Arrêter le travail et améliorer la ventilation avant de reprendre','Mettre juste un masque de chirurgie','Travailler vite pour terminer avant d\'être trop exposé'],rep:1,expl:'La santé est prioritaire. Il faut toujours assurer une ventilation suffisante avant de souder.'}
+    ],
+    journee:['7h - Lecture des plans et préparation du poste','8h - Préparation des pièces (meulage, dégraissage)','9h - Soudure des assemblages selon les plans','11h - Contrôle visuel des cordons','12h - Pause repas','13h - Reprise des soudures et finitions','15h - Contrôle qualité (CND si requis)','16h30 - Rangement du poste et rapport']
+  },
+  'aide-soignant': {
+    vraifaux:[
+      {s:'L\'aide-soignant peut modifier les prescriptions médicales.',r:false,expl:'Faux ! Seul le médecin prescrit. L\'aide-soignant applique les soins prescrits par l\'infirmier.'},
+      {s:'Le respect de la dignité du patient est fondamental dans ce métier.',r:true,expl:'Vrai ! La dignité, le respect et la bientraitance sont les piliers du métier.'},
+      {s:'Un aide-soignant peut travailler en EHPAD.',r:true,expl:'Vrai ! Les aides-soignants travaillent en hôpital, clinique, EHPAD, ou à domicile.'},
+      {s:'La transmissions orales entre collègues suffisent, pas besoin d\'écrire.',r:false,expl:'Faux ! Les transmissions écrites dans le dossier patient sont obligatoires pour la continuité des soins.'},
+      {s:'Aider un patient à se lever nécessite des gestes et postures adaptés.',r:true,expl:'Vrai ! Les gestes et postures protègent à la fois le patient et le soignant des blessures.'},
+      {s:'L\'aide-soignant peut travailler seul avec un patient grabataire.',r:false,expl:'Faux ! Pour un patient grabataire, il faut souvent être deux pour assurer la sécurité des deux.'}
+    ],
+    glisser:{
+      question:'Associez chaque soin à son objectif',
+      items:['Toilette complète','Aide à la prise de repas','Prise de la tension','Retournement du patient','Aide à la marche','Transmissions écrites'],
+      categories:['Hygiène et dignité','Nutrition et hydratation','Surveillance des constantes','Prévention des escarres','Maintien de l\'autonomie','Continuité des soins'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'M. Martin, 82 ans, refuse sa toilette ce matin. Il dit qu\'il veut rester dans son lit.',q:'Quelle approche adoptez-vous ?',opts:['Faire la toilette de force car c\'est dans le planning','Respecter son choix, expliquer l\'importance et revenir plus tard','Ignorer et passer au patient suivant','Appeler sa famille pour qu\'elle l\'oblige'],rep:1,expl:'Le respect de la volonté du patient est prioritaire. Expliquer, revenir plus tard ou en parler à l\'infirmière.'},
+      {ctx:'Vous aidez Mme Dupont à manger. Elle tousse et semble avoir du mal à avaler.',q:'Que faites-vous immédiatement ?',opts:['Continuer à donner à manger','Arrêter l\'alimentation et appeler l\'infirmière','Lui donner à boire pour faire passer','Continuer mais plus lentement'],rep:1,expl:'Des difficultés à avaler (dysphagie) peuvent indiquer un risque de fausse route grave. Stopper et appeler l\'infirmière.'},
+      {ctx:'En faisant la toilette, vous remarquez une rougeur sur les talons d\'un patient alité.',q:'Quelle est la bonne réaction ?',opts:['Ne rien faire, c\'est normal','Signaler à l\'infirmière et noter dans les transmissions','Mettre une crème quelconque','Dire au patient de faire attention'],rep:1,expl:'Une rougeur sur une zone d\'appui peut être le début d\'une escarre. Il faut toujours signaler et noter.'}
+    ],
+    journee:['6h30 - Prise de poste et transmissions de nuit','7h - Aide au lever et toilettes des résidents','9h - Aide au petit-déjeuner','10h - Soins de confort et accompagnement','12h - Aide à la prise du déjeuner','14h - Reprise après pause : changes et sieste','15h - Animations et mobilisation des résidents','17h - Aide au dîner et transmissions']
+  },
+  'electricien': {
+    vraifaux:[
+      {s:'L\'habilitation électrique B1 permet d\'intervenir sous tension.',r:false,expl:'Faux ! B1 permet de travailler à proximité mais hors tension. Pour sous tension, des habilitations supérieures sont nécessaires.'},
+      {s:'Le fil vert et jaune est toujours le fil de terre.',r:true,expl:'Vrai ! Le bicolore vert/jaune est la norme internationale pour le conducteur de protection (terre).'},
+      {s:'Un électricien peut travailler sans consignation sur une installation sous tension.',r:false,expl:'Faux ! La consignation (mise hors tension + cadenassage) est OBLIGATOIRE avant toute intervention.'},
+      {s:'Le TGBT est le tableau général basse tension d\'un bâtiment.',r:true,expl:'Vrai ! Le TGBT distribue l\'électricité dans tout le bâtiment depuis le compteur général.'},
+      {s:'Un disjoncteur différentiel protège uniquement contre les surcharges.',r:false,expl:'Faux ! Le différentiel protège aussi contre les fuites à la terre (risque électrocution). Le disjoncteur protège contre les surcharges.'},
+      {s:'Le courant 230V est le courant domestique standard en France.',r:true,expl:'Vrai ! En France, le réseau domestique est en 230V monophasé (ou 400V triphasé pour certains équipements).'}
+    ],
+    glisser:{
+      question:'Associez chaque composant à son rôle dans une installation',
+      items:['Disjoncteur','Prise de terre','Câble 2,5mm²','Tube IRL','Testeur de phase','Coupe-circuit fusible'],
+      categories:['Protection contre surcharge','Sécurité contre chocs électriques','Circuit prise de courant','Protection mécanique des câbles','Vérifier la présence de courant','Protection en tête de circuit'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous devez changer un tableau électrique dans un appartement. L\'occupant vous dit que le courant peut rester allumé pour ne pas perdre ses appareils.',q:'Que faites-vous ?',opts:['Accepter et travailler sous tension','Refuser, couper le courant et sécuriser avant de commencer','Travailler vite avec des gants','Appeler votre chef pour décider'],rep:1,expl:'Travailler sur un tableau sous tension est interdit et extrêmement dangereux. Il faut toujours couper et consigner.'},
+      {ctx:'Après avoir terminé une installation, vous testez et une prise ne fonctionne pas.',q:'Quelle est la bonne démarche ?',opts:['Remettre en service et voir si ça revient','Vérifier méthodiquement : disjoncteur, câblage, connexions','Dire au client que c\'est un problème général','Partir, ça marchera sûrement plus tard'],rep:1,expl:'Il faut toujours vérifier et tester chaque installation avant de partir. Diagnostic méthodique : du tableau jusqu\'à la prise.'},
+      {ctx:'Vous remarquez que le câble prévu pour une installation est de section trop faible pour la puissance demandée.',q:'Que faites-vous ?',opts:['L\'utiliser quand même, ça devrait aller','Signaler au client et commander la bonne section','Faire passer 2 câbles en parallèle sans prévenir','Terminer et voir si ça chauffe'],rep:1,expl:'Un câble sous-dimensionné risque de surchauffer et de provoquer un incendie. Il faut systématiquement utiliser la bonne section.'}
+    ],
+    journee:['7h30 - Lecture des plans et préparation du matériel','8h - Tracé des saignées et perçages','9h - Passage des câbles et tubes','11h - Raccordement des prises et interrupteurs','12h - Pause repas','13h - Raccordement du tableau électrique','15h - Tests et vérifications (mesures)','16h30 - Remise en service et rapport au client']
+  },
+  'conducteur-spl': {
+    vraifaux:[
+      {s:'La durée de conduite maximale par jour est de 9 heures.',r:true,expl:'Vrai ! La réglementation européenne fixe 9h de conduite max par jour (10h deux fois par semaine).'},
+      {s:'Le chronotachygraphe enregistre uniquement la vitesse.',r:false,expl:'Faux ! Le chronotachygraphe enregistre la vitesse, les temps de conduite, de repos et d\'activité du conducteur.'},
+      {s:'Un conducteur SPL peut transporter toutes les matières dangereuses sans formation.',r:false,expl:'Faux ! Le transport de matières dangereuses (ADR) nécessite une formation et un certificat spécifique.'},
+      {s:'La vérification du chargement est de la responsabilité du conducteur.',r:true,expl:'Vrai ! Le conducteur est responsable de l\'arrimage et de la sécurité de son chargement avant le départ.'},
+      {s:'On peut conduire après avoir consommé de l\'alcool si on se sent bien.',r:false,expl:'Faux ! Le taux légal est 0,2g/L pour les conducteurs professionnels (contre 0,5 pour les particuliers). Zéro tolérance recommandée.'},
+      {s:'Le permis EC s\'appelle maintenant C+E.',r:true,expl:'Vrai ! Depuis 2013, le permis EC a été renommé C+E dans le cadre de l\'harmonisation européenne.'}
+    ],
+    glisser:{
+      question:'Associez chaque document à son utilité en transport routier',
+      items:['Lettre de voiture CMR','Carte conducteur','Carte verte','ADR','FIMO','Livret kilométrique'],
+      categories:['Contrat de transport international','Chronotachygraphe numérique','Assurance du véhicule','Matières dangereuses','Formation obligatoire initiale','Suivi des kilomètres'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous êtes en route et votre temps de conduite atteint 4h30. Il vous reste encore 1h de trajet.',q:'Que faites-vous ?',opts:['Continuer pour livrer à temps','Prendre votre pause réglementaire de 45 minutes','Appeler le client pour dire que vous serez en retard puis continuer','Rouler plus vite pour compenser'],rep:1,expl:'La pause de 45 min après 4h30 de conduite est OBLIGATOIRE. La sécurité prime sur les délais.'},
+      {ctx:'Lors du chargement, vous remarquez que la marchandise est mal arrimée et risque de bouger en route.',q:'Que faites-vous ?',opts:['Partir, c\'est la responsabilité de l\'entrepôt','Refuser de partir et demander un réarrimage','Aller doucement sur la route','Mettre une couverture par dessus'],rep:1,expl:'Le conducteur est légalement responsable de son chargement. Un arrimage défectueux peut causer un accident grave.'},
+      {ctx:'Votre GPS tombe en panne en plein trajet. Vous ne connaissez pas la route.',q:'Quelle est la meilleure solution ?',opts:['Continuer au hasard','S\'arrêter en sécurité, utiliser le téléphone ou appeler le dispatch','Demander à un autre camionneur en roulant','Faire demi-tour et rentrer'],rep:1,expl:'S\'arrêter en toute sécurité pour se repérer est la bonne solution. Le téléphone ou le dispatch peut aider.'}
+    ],
+    journee:['5h30 - Prise de poste, vérification du camion','6h - Chargement et contrôle de l\'arrimage','7h - Départ et route vers la première livraison','9h - Pause réglementaire','10h - Première livraison au port du Havre','12h - Pause repas et repos réglementaire','13h30 - Reprise : deuxième livraison (agglomération)','16h - Retour dépôt, déchargement et rapport','17h - Fin de poste, carte conducteur retirée']
+  },
+  'infirmier': {
+    vraifaux:[
+      {s:'Une infirmière peut prescrire des médicaments.',r:false,expl:'Faux ! Seul le médecin prescrit. L\'infirmière exécute et surveille les prescriptions médicales.'},
+      {s:'Le DEI se prépare en 3 ans après le baccalauréat.',r:true,expl:'Vrai ! Le Diplôme d\'État Infirmier (DEI) se prépare en 3 ans en IFSI, avec de nombreux stages.'},
+      {s:'L\'infirmière peut réaliser des injections intramusculaires.',r:true,expl:'Vrai ! Les injections (IM, IV, SC) font partie du rôle propre et sur prescription de l\'infirmière.'},
+      {s:'Le secret professionnel ne s\'applique pas aux infirmières.',r:false,expl:'Faux ! Le secret professionnel est une obligation légale et déontologique stricte pour tous les soignants.'},
+      {s:'La traçabilité dans le dossier patient est obligatoire.',r:true,expl:'Vrai ! Tout acte infirmier doit être tracé dans le dossier du patient pour la continuité des soins.'},
+      {s:'Les infirmières ne peuvent pas travailler en libéral.',r:false,expl:'Faux ! Les infirmières peuvent exercer en libéral après quelques années d\'expérience hospitalière.'}
+    ],
+    glisser:{
+      question:'Classez ces actes selon leur appartenance au rôle infirmier',
+      items:['Pansement complexe','Prescription d\'antibiotiques','Pose de perfusion','Éducation thérapeutique','Diagnostic médical','Administration médicaments'],
+      categories:['Rôle propre infirmier','Rôle médical uniquement','Rôle propre infirmier','Rôle propre infirmier','Rôle médical uniquement','Sur prescription médicale'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations:[
+      {ctx:'Vous administrez un médicament et vous réalisez que la dose prescrite vous semble anormalement élevée.',q:'Que faites-vous ?',opts:['Administrer quand même, le médecin sait mieux','Vérifier, contacter le médecin avant d\'administrer','Administrer la moitié par sécurité','Ignorer et noter dans le dossier'],rep:1,expl:'En cas de doute sur une prescription, il faut TOUJOURS contacter le médecin avant d\'administrer. C\'est une règle de sécurité absolue.'},
+      {ctx:'Un patient vous demande de ne pas transmettre certaines informations à sa famille présente.',q:'Que répondez-vous ?',opts:['Promettre mais tout dire quand même','Respecter sa demande, le secret s\'impose','Demander à votre chef','Tout dire à la famille c\'est pour son bien'],rep:1,expl:'Le secret professionnel et le droit du patient à la confidentialité sont des obligations légales. Sa volonté doit être respectée.'},
+      {ctx:'Lors de votre ronde de nuit, un patient sonne en urgence. Il dit avoir une douleur thoracique intense.',q:'Que faites-vous en priorité ?',opts:['Lui donner un antalglique et revenir plus tard','Évaluer rapidement les constantes et appeler le médecin immédiatement','Attendre le lendemain matin','L\'rassurer et revenir dans 1h'],rep:1,expl:'Une douleur thoracique intense peut être un infarctus. Évaluation rapide et appel médical immédiat sont essentiels.'}
+    ],
+    journee:['6h45 - Transmissions avec l\'équipe de nuit','7h - Tour de service : constantes et observations','8h - Préparation et administration des médicaments','9h - Soins infirmiers (pansements, perfusions)','11h - Visites médicales avec le médecin','12h30 - Pause repas','13h - Soins de l\'après-midi et surveillance','15h - Éducation thérapeutique des patients','17h - Transmissions à l\'équipe de soir']
+  }
+};
+
+// Données par défaut pour les métiers sans données spécifiques
+function getGameData(metierID) {
+  if(GAMES_DATA[metierID]) return GAMES_DATA[metierID];
+  // Générer données génériques basées sur questions QCM
+  const m = currentMetier;
+  const qs = m.questions || [];
+  return {
+    vraifaux: qs.slice(0,3).map(q => ({
+      s: q.opts[q.rep] + ' — c\'est lié au métier de ' + m.nom + '.',
+      r: true,
+      expl: q.expl
+    })).concat([
+      {s:'Ce métier ne nécessite aucune formation particulière.', r:false, expl:'Faux ! Tout métier demande des compétences et souvent une formation ou certification.'},
+      {s:'La sécurité est importante dans ce métier.', r:true, expl:'Vrai ! La sécurité est primordiale dans tous les métiers.'},
+      {s:'Ce métier recrute dans l\'agglomération havraise.', r:true, expl:'Vrai ! C\'est pourquoi ce métier figure dans notre plateforme.'}
+    ]),
+    glisser:{
+      question:'Associez chaque compétence à sa description',
+      items:['Ponctualité','Travail en équipe','Rigueur','Initiative','Communication','Adaptabilité'],
+      categories:['Être à l\'heure','Collaborer','Faire correctement','Proposer des idées','Expliquer clairement','S\'adapter aux changements'],
+      correct:[0,1,2,3,4,5]
+    },
+    situations: qs.slice(0,3).map((q,i) => ({
+      ctx:'Dans votre travail de ' + m.nom + ', vous faites face à une situation délicate.',
+      q: q.q,
+      opts: q.opts,
+      rep: q.rep,
+      expl: q.expl
+    })),
+    journee: ['8h - Prise de poste et briefing','9h - Début des activités principales','10h30 - Pause et point avec l\'équipe','12h - Pause repas','13h - Reprise des activités','15h - Tâches secondaires et rangement','16h30 - Compte-rendu et fin de poste']
+  };
+}
+
+// --------- VRAI OU FAUX ---------
+let vfQuestions=[], vfIndex=0, vfScore=0, vfSerie=0;
+function startVraiFaux(){
+  const data = getGameData(currentMetier.id);
+  vfQuestions = shuffle(data.vraifaux || []);
+  vfIndex = 0; vfScore = 0; vfSerie = 0;
+  document.getElementById('vf-title').textContent = '✅ Vrai ou Faux — ' + currentMetier.nom;
+  document.getElementById('vf-total').textContent = vfQuestions.length;
+  document.getElementById('vf-emoji').textContent = currentMetier.emoji;
+  document.getElementById('vf-serie-badge').style.display = 'none';
+  renderVF();
+  showPage('page-game-vraifaux');
+}
+function renderVF(){
+  if(vfIndex >= vfQuestions.length){ endVF(); return; }
+  const q = vfQuestions[vfIndex];
+  document.getElementById('vf-current').textContent = vfIndex+1;
+  document.getElementById('vf-progress').style.width = ((vfIndex+1)/vfQuestions.length*100)+'%';
+  document.getElementById('vf-statement').textContent = q.s;
+  document.getElementById('vf-btns').style.display = 'grid';
+  document.getElementById('vf-feedback').style.display = 'none';
+  document.getElementById('vf-next-btn').style.display = 'none';
+}
+function answerVF(answer){
+  const q = vfQuestions[vfIndex];
+  const correct = answer === q.r;
+  document.getElementById('vf-btns').style.display = 'none';
+  const feed = document.getElementById('vf-feedback');
+  feed.style.display = 'block';
+  if(correct){
+    vfScore += 15; vfSerie++;
+    if(vfSerie >= 3) document.getElementById('vf-serie-badge').style.display = 'inline-flex';
+    feed.innerHTML = '<div class="alert alert-success"><span>✅</span><span><strong>Bonne réponse !</strong> ' + q.expl + '</span></div>';
+  } else {
+    vfSerie = 0;
+    document.getElementById('vf-serie-badge').style.display = 'none';
+    feed.innerHTML = '<div class="alert alert-warning"><span>❌</span><span><strong>Réponse ' + (q.r?'VRAI':'FAUX') + '</strong> — ' + q.expl + '</span></div>';
+  }
+  document.getElementById('vf-score').textContent = vfScore;
+  document.getElementById('vf-next-btn').style.display = 'block';
+  vfIndex++;
+}
+function nextVF(){ renderVF(); }
+function endVF(){
+  const pct = Math.round(vfScore / (vfQuestions.length*15)*100);
+  document.getElementById('vf-statement').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
+    +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
+    +'<div style="font-size:1.1rem;font-weight:700;font-family:var(--font);">Score : '+vfScore+' pts ('+pct+'%)</div>'
+    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent ! Vous maîtrisez ce métier.':'Continuez à vous entraîner !')+'</p></div>';
+  document.getElementById('vf-btns').style.display = 'none';
+  document.getElementById('vf-feedback').style.display = 'none';
+  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  document.getElementById('vf-next-btn').textContent = '← Retour au métier';
+  document.getElementById('vf-next-btn').onclick = function(){ showPage('page-metier-detail'); };
+  document.getElementById('vf-next-btn').style.display = 'block';
+}
+
+// --------- GLISSER-DÉPOSER (tap to match) ---------
+let glSelectedItem = null;
+let glAnswers = {};
+let glData = null;
+function startGlisser(){
+  glData = (getGameData(currentMetier.id)).glisser;
+  glSelectedItem = null;
+  glAnswers = {};
+  document.getElementById('gl-title').textContent = '🎯 Associer — ' + currentMetier.nom;
+  document.getElementById('gl-score').textContent = '0';
+  document.getElementById('gl-progress').style.width = '0%';
+  document.getElementById('gl-feedback').style.display = 'none';
+  document.getElementById('gl-check-btn').style.display = 'none';
+  document.getElementById('gl-next-btn').style.display = 'none';
+  renderGlisser();
+  showPage('page-game-glisser');
+}
+function renderGlisser(){
+  const area = document.getElementById('gl-game-area');
+  const items = glData.items;
+  const cats = glData.categories;
+  const shuffledItems = shuffle(items.map((it,i) => ({text:it, origIdx:i})));
+  area.innerHTML = '<div style="margin-bottom:1rem;">'
+    +'<div style="font-size:0.8rem;font-weight:700;color:var(--text2);margin-bottom:0.5rem;">ÉLÉMENTS — Tapez pour sélectionner</div>'
+    +'<div id="gl-items" style="display:flex;flex-wrap:wrap;gap:8px;">'
+    + shuffledItems.map(it =>
+        '<div class="gl-item" data-idx="'+it.origIdx+'" onclick="selectGLItem(this,'+it.origIdx+')" '
+        +'style="background:var(--primary);color:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;transition:all 0.2s;">'
+        +it.text+'</div>'
+      ).join('')
+    +'</div></div>'
+    +'<div style="font-size:0.8rem;font-weight:700;color:var(--text2);margin-bottom:0.5rem;">CATÉGORIES — Tapez pour associer</div>'
+    + cats.map((cat,i) =>
+        '<div class="gl-cat" data-idx="'+i+'" onclick="assignGLCat('+i+')" '
+        +'style="background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:0.75rem;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'
+        +'<div style="font-size:0.78rem;font-weight:700;color:var(--text2);margin-bottom:4px;">'+cat+'</div>'
+        +'<div id="gl-slot-'+i+'" style="min-height:28px;font-size:0.82rem;color:var(--text3);font-style:italic;">'+(glAnswers[i]!==undefined?'<span style="color:var(--primary);font-weight:600;font-style:normal;">'+items[glAnswers[i]]+'</span>':'Associer ici...')+'</div>'
+        +'</div>'
+      ).join('');
+}
+function selectGLItem(el, idx){
+  document.querySelectorAll('.gl-item').forEach(i => {
+    i.style.background = 'var(--primary)';
+    i.style.transform = 'scale(1)';
+  });
+  // Check if already placed
+  const already = Object.values(glAnswers).includes(idx);
+  if(already){
+    const catIdx = Object.keys(glAnswers).find(k => glAnswers[k]===idx);
+    delete glAnswers[catIdx];
+    document.getElementById('gl-slot-'+catIdx).innerHTML = 'Associer ici...';
+    document.getElementById('gl-slot-'+catIdx).style.fontStyle = 'italic';
+  }
+  glSelectedItem = idx;
+  el.style.background = 'var(--accent)';
+  el.style.transform = 'scale(1.05)';
+  checkAllAssigned();
+}
+function assignGLCat(catIdx){
+  if(glSelectedItem === null) return;
+  // Remove from old cat if was there
+  const oldCat = Object.keys(glAnswers).find(k => glAnswers[k]===glSelectedItem);
+  if(oldCat !== undefined) delete glAnswers[oldCat];
+  // Remove item from this cat if different item was there
+  if(glAnswers[catIdx] !== undefined){
+    const oldItem = glAnswers[catIdx];
+    document.querySelectorAll('.gl-item').forEach(el => {
+      if(parseInt(el.dataset.idx)===oldItem){ el.style.background='var(--primary)'; }
+    });
+  }
+  glAnswers[catIdx] = glSelectedItem;
+  document.querySelectorAll('.gl-item').forEach(el => {
+    if(parseInt(el.dataset.idx)===glSelectedItem){ el.style.background='var(--success)'; el.style.transform='scale(1)'; }
+  });
+  document.getElementById('gl-slot-'+catIdx).innerHTML = '<span style="color:var(--success);font-weight:600;font-style:normal;">' + glData.items[glSelectedItem] + '</span>';
+  glSelectedItem = null;
+  checkAllAssigned();
+}
+function checkAllAssigned(){
+  const total = glData.categories.length;
+  const done = Object.keys(glAnswers).length;
+  document.getElementById('gl-progress').style.width = Math.round(done/total*100)+'%';
+  document.getElementById('gl-check-btn').style.display = done===total ? 'block' : 'none';
+}
+function checkGlisser(){
+  let correct = 0;
+  const items = glData.items;
+  const cats = glData.categories;
+  const correctMap = glData.correct;
+  Object.keys(glAnswers).forEach(catIdx => {
+    const placedItemIdx = glAnswers[catIdx];
+    const correctItemIdx = correctMap[parseInt(catIdx)];
+    const isOk = placedItemIdx === correctItemIdx;
+    if(isOk) correct++;
+    const slot = document.getElementById('gl-slot-'+catIdx);
+    slot.innerHTML = '<span style="color:'+(isOk?'var(--success)':'var(--danger)')+';font-weight:700;">'
+      +(isOk?'✅ ':'❌ ')+items[placedItemIdx]+(isOk?'':' (attendu : '+items[correctItemIdx]+')')+'</span>';
+  });
+  const pts = correct * 25;
+  document.getElementById('gl-score').textContent = pts;
+  const pct = Math.round(correct/cats.length*100);
+  const feed = document.getElementById('gl-feedback');
+  feed.style.display = 'block';
+  feed.innerHTML = '<div class="alert '+(pct>=60?'alert-success':'alert-warning')+'"><span>'+(pct>=60?'🎯':'💪')+'</span><span>'
+    +correct+' / '+cats.length+' bonnes associations ('+pts+' pts). '+(pct>=60?'Excellent travail !':'Réessayez pour vous améliorer !')+'</span></div>';
+  document.getElementById('gl-check-btn').style.display = 'none';
+  document.getElementById('gl-next-btn').style.display = 'block';
+  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+}
+
+// --------- SITUATION PRO ---------
+let sitIndex=0, sitScore=0, sitQuestions=[];
+function startSituation(){
+  const data = getGameData(currentMetier.id);
+  sitQuestions = shuffle(data.situations || []);
+  sitIndex = 0; sitScore = 0;
+  document.getElementById('sit-title').textContent = '💡 Situation pro — ' + currentMetier.nom;
+  document.getElementById('sit-total').textContent = sitQuestions.length;
+  renderSituation();
+  showPage('page-game-situation');
+}
+function renderSituation(){
+  if(sitIndex >= sitQuestions.length){ endSituation(); return; }
+  const s = sitQuestions[sitIndex];
+  document.getElementById('sit-current').textContent = sitIndex+1;
+  document.getElementById('sit-progress').style.width = ((sitIndex+1)/sitQuestions.length*100)+'%';
+  document.getElementById('sit-context').textContent = s.ctx;
+  document.getElementById('sit-question').textContent = s.q;
+  const shuffledOpts = shuffle(s.opts.map((o,i) => ({text:o,origIdx:i})));
+  document.getElementById('sit-options').innerHTML = shuffledOpts.map(o =>
+    '<div class="quiz-option" onclick="selectSitOption(this,'+o.origIdx+','+s.rep+')" data-idx="'+o.origIdx+'">'
+    +'<span class="opt-letter" style="width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;flex-shrink:0;">'
+    +['A','B','C','D'][shuffledOpts.indexOf(o)]+'</span>'+o.text+'</div>'
+  ).join('');
+  document.getElementById('sit-feedback').style.display = 'none';
+  document.getElementById('sit-next-btn').style.display = 'none';
+}
+function selectSitOption(el, chosen, correct){
+  document.querySelectorAll('#sit-options .quiz-option').forEach(o => o.style.pointerEvents = 'none');
+  const isOk = chosen === correct;
+  if(isOk){ el.classList.add('correct'); sitScore += 30; }
+  else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#sit-options .quiz-option').forEach(o => { if(parseInt(o.dataset.idx)===correct) o.classList.add('correct'); });
+  }
+  document.getElementById('sit-score').textContent = sitScore;
+  const feed = document.getElementById('sit-feedback');
+  feed.style.display = 'block';
+  feed.innerHTML = '<div class="alert '+(isOk?'alert-success':'alert-warning')+'"><span>'+(isOk?'✅':'❌')+'</span><span>'+sitQuestions[sitIndex].expl+'</span></div>';
+  document.getElementById('sit-next-btn').style.display = 'block';
+  sitIndex++;
+}
+function nextSituation(){ renderSituation(); }
+function endSituation(){
+  const pct = Math.round(sitScore/(sitQuestions.length*30)*100);
+  document.getElementById('sit-context').textContent = '';
+  document.getElementById('sit-question').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
+    +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
+    +'<div style="font-size:1.1rem;font-weight:700;font-family:var(--font);">Score : '+sitScore+' pts ('+pct+'%)</div>'
+    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent sang-froid !':'Rejouez pour progresser !')+'</p></div>';
+  document.getElementById('sit-options').innerHTML = '';
+  document.getElementById('sit-feedback').style.display = 'none';
+  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  document.getElementById('sit-next-btn').textContent = '← Retour au métier';
+  document.getElementById('sit-next-btn').onclick = function(){ showPage('page-metier-detail'); };
+  document.getElementById('sit-next-btn').style.display = 'block';
+}
+
+// --------- JOURNÉE TYPE ---------
+let jtSelected = null;
+let jtPlaced = [];
+let jtTasks = [];
+let jtCorrectOrder = [];
+function startJournee(){
+  const data = getGameData(currentMetier.id);
+  jtCorrectOrder = data.journee || [];
+  jtTasks = shuffle([...jtCorrectOrder]);
+  jtPlaced = new Array(jtCorrectOrder.length).fill(null);
+  jtSelected = null;
+  document.getElementById('jt-title').textContent = '🗓️ Journée — ' + currentMetier.nom;
+  document.getElementById('jt-score').textContent = '0';
+  document.getElementById('jt-check-btn').style.display = 'none';
+  document.getElementById('jt-next-btn').style.display = 'none';
+  document.getElementById('jt-feedback').style.display = 'none';
+  renderJournee();
+  showPage('page-game-journee');
+}
+function renderJournee(){
+  const pool = document.getElementById('jt-task-pool');
+  pool.innerHTML = jtTasks.filter(t => !jtPlaced.includes(t)).map(t =>
+    '<div class="jt-task" onclick="selectJTTask(this,'+JSON.stringify(t)+')" '
+    +'style="background:var(--primary);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:0.8rem;font-weight:600;line-height:1.3;max-width:200px;text-align:center;border:2px solid transparent;transition:all 0.2s;">'
+    +t+'</div>'
+  ).join('');
+  const slots = document.getElementById('jt-slots');
+  slots.innerHTML = jtCorrectOrder.map((t,i) =>
+    '<div onclick="placeJTTask('+i+')" '
+    +'style="background:var(--surface2);border:2px dashed var(--border);border-radius:10px;padding:0.7rem 0.85rem;margin-bottom:6px;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;transition:all 0.2s;">'
+    +'<span style="background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">'+(i+1)+'</span>'
+    +'<span style="font-size:0.82rem;color:'+(jtPlaced[i]?'var(--text)':'var(--text3)')+';">'+(jtPlaced[i]||'Placer ici...')+'</span>'
+    +'</div>'
+  ).join('');
+  const allPlaced = jtPlaced.every(p => p !== null);
+  document.getElementById('jt-check-btn').style.display = allPlaced ? 'block' : 'none';
+}
+function selectJTTask(el, task){
+  document.querySelectorAll('.jt-task').forEach(t => {
+    t.style.borderColor = 'transparent';
+    t.style.transform = 'scale(1)';
+  });
+  jtSelected = task;
+  el.style.borderColor = 'var(--accent)';
+  el.style.transform = 'scale(1.04)';
+}
+function placeJTTask(slotIdx){
+  if(!jtSelected) return;
+  // If slot already has something, return it to pool
+  if(jtPlaced[slotIdx]) {
+    jtSelected = jtPlaced[slotIdx];
+  }
+  jtPlaced[slotIdx] = jtSelected;
+  jtSelected = null;
+  renderJournee();
+}
+function checkJournee(){
+  let correct = 0;
+  jtPlaced.forEach((placed, i) => {
+    if(placed === jtCorrectOrder[i]) correct++;
+  });
+  const pts = correct * Math.round(50/jtCorrectOrder.length);
+  document.getElementById('jt-score').textContent = pts;
+  const pct = Math.round(correct/jtCorrectOrder.length*100);
+  const slots = document.getElementById('jt-slots');
+  slots.innerHTML = jtCorrectOrder.map((correctTask,i) => {
+    const placed = jtPlaced[i];
+    const isOk = placed === correctTask;
+    return '<div style="background:var(--surface2);border:2px solid '+(isOk?'var(--success)':'var(--danger)')
+      +';border-radius:10px;padding:0.7rem 0.85rem;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px;">'
+      +'<span style="background:'+(isOk?'var(--success)':'var(--danger)')+';color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">'+(isOk?'✓':'✗')+'</span>'
+      +'<div><div style="font-size:0.82rem;font-weight:600;">'+(isOk?placed:'❌ Vous : '+placed)+'</div>'
+      +(isOk?'':'<div style="font-size:0.75rem;color:var(--success);margin-top:2px;">✅ Correct : '+correctTask+'</div>')
+      +'</div></div>';
+  }).join('');
+  const feed = document.getElementById('jt-feedback');
+  feed.style.display = 'block';
+  feed.innerHTML = '<div class="alert '+(pct>=60?'alert-success':'alert-warning')+'"><span>'+(pct>=60?'🗓️':'💪')+'</span><span>'
+    +correct+'/'+jtCorrectOrder.length+' tâches bien placées — '+pts+' points. '+(pct>=60?'Vous connaissez votre journée !':'Rejouer pour mémoriser l\'ordre.')+'</span></div>';
+  document.getElementById('jt-task-pool').innerHTML = '';
+  document.getElementById('jt-check-btn').style.display = 'none';
+  document.getElementById('jt-next-btn').style.display = 'block';
+  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+}
 function startQCM(){
   const qs = shuffle(currentMetier.questions || []);
   qcmQuestions = qs;
@@ -2100,21 +3086,175 @@ function renderDashboard(){
 }
 
 // ==================== ENTREPRISES ====================
-function renderEntreprises(){
-  const div = document.getElementById('entreprises-list');
-  div.innerHTML = `<div class="section-title">🏢 Entreprises qui recrutent</div>` +
-  ENTREPRISES.map(e => `
-    <div class="formation-card">
-      <div class="formation-card-header">
-        <div><div class="formation-name">${e.nom}</div><div class="formation-centre">${e.secteur} — ${e.ville}</div></div>
-        ${e.lien?`<a href="${e.lien}" target="_blank" class="btn btn-sm btn-outline">🔗</a>`:''}
-      </div>
-    </div>
-  `).join('');
+const QUESTIONS_ENTRETIEN = [
+  {cat:'presentation',q:'«\u00a0Parlez-moi de vous.\u00a0»',conseil:'Pr\u00e9sentez votre parcours en 2\u20133 minutes : d\'o\u00f9 venez-vous professionnellement, ce que vous avez fait, et pourquoi vous \u00eates l\u00e0 aujourd\'hui. Restez positif et concis.'},
+  {cat:'presentation',q:'«\u00a0Comment d\u00e9cririez-vous votre parcours professionnel\u00a0?\u00a0»',conseil:'R\u00e9sumez vos exp\u00e9riences les plus importantes en lien avec le poste vis\u00e9. Mettez en avant les comp\u00e9tences acquises.'},
+  {cat:'motivation',q:'«\u00a0Pourquoi postulez-vous \u00e0 ce poste\u00a0?\u00a0»',conseil:'Montrez que vous connaissez l\'entreprise et que vous avez choisi ce poste intentionnellement. \u00c9vitez de dire "pour le salaire".'},
+  {cat:'motivation',q:'«\u00a0Pourquoi avez-vous choisi notre entreprise\u00a0?\u00a0»',conseil:'Renseignez-vous avant sur l\'entreprise. Mentionnez un \u00e9l\u00e9ment pr\u00e9cis (valeurs, secteur, projet, r\u00e9putation locale).'},
+  {cat:'motivation',q:'«\u00a0O\u00f9 vous voyez-vous dans 3 ans\u00a0?\u00a0»',conseil:'Montrez de l\'ambition raisonnable. Parlez d\'\u00e9volution interne possible, d\'apprentissage, de responsabilit\u00e9s croissantes.'},
+  {cat:'motivation',q:'«\u00a0Qu\'est-ce qui vous motive le plus dans ce m\u00e9tier\u00a0?\u00a0»',conseil:'Soyez authentique. Parlez du contact humain, de la cr\u00e9ation, du travail en \u00e9quipe, de l\'utilit\u00e9 sociale\u2026 selon ce qui vous correspond vraiment.'},
+  {cat:'competences',q:'«\u00a0Quelles sont vos principales qualit\u00e9s\u00a0?\u00a0»',conseil:'Citez 2\u20133 qualit\u00e9s avec un exemple concret pour chacune. Ex\u00a0: "Je suis rigoureux(se)\u00a0: dans mon ancien poste, j\'ai r\u00e9duit les erreurs de stock de 30%."'},
+  {cat:'competences',q:'«\u00a0Quels sont vos points \u00e0 am\u00e9liorer\u00a0?\u00a0»',conseil:'Choisissez un vrai d\u00e9faut mais montrez que vous travaillez dessus. Ex\u00a0: "Je suis perfectionniste, j\'apprends \u00e0 d\u00e9l\u00e9guer."'},
+  {cat:'competences',q:'«\u00a0Donnez un exemple d\'une difficult\u00e9 que vous avez surmontée.\u00a0»',conseil:'Utilisez la m\u00e9thode STAR\u00a0: Situation, T\u00e2che, Action, R\u00e9sultat. Montrez que vous avez pris de l\'initiative.'},
+  {cat:'competences',q:'«\u00a0Avez-vous d\u00e9j\u00e0 g\u00e9r\u00e9 un conflit avec un coll\u00e8gue\u00a0?\u00a0»',conseil:'Restez professionnel. Montrez que vous privil\u00e9giez le dialogue et la solution plut\u00f4t que l\u00e2\u20ac\u2122affrontement.'},
+  {cat:'competences',q:'«\u00a0Parlez-moi d\'une r\u00e9ussite dont vous \u00eates fier(e).\u00a0»',conseil:'Choisissez un r\u00e9sultat concret et mesurable si possible. Mettez en valeur votre contribution personnelle.'},
+  {cat:'pratique',q:'«\u00a0Quelle est votre disponibilit\u00e9\u00a0?\u00a0»',conseil:'Soyez pr\u00e9cis sur vos disponibilit\u00e9s (imm\u00e9diate, pr\u00e9avis de X semaines) et vos contraintes \u00e9ventuelles (garde d\'enfants, transport).'},
+  {cat:'pratique',q:'«\u00a0Avez-vous le permis de conduire\u00a0?\u00a0»',conseil:'R\u00e9pondez honnêtement. Si non, mentionnez les transports disponibles ou votre volont\u00e9 de le passer.'},
+  {cat:'pratique',q:'«\u00a0Quelles sont vos pr\u00e9tentions salariales\u00a0?\u00a0»',conseil:'Renseignez-vous sur les salaires du secteur (France Travail, APEC). Donnez une fourchette plut\u00f4t qu\'un chiffre fixe. Pour un premier emploi, mentionnez le SMIC ou les grilles de branche.'},
+  {cat:'pratique',q:'«\u00a0Avez-vous d\'autres entretiens en cours\u00a0?\u00a0»',conseil:'Vous pouvez dire oui si c\'est vrai. Cela montre votre s\u00e9rieux. Pr\u00e9cisez que ce poste est votre priorit\u00e9.'},
+  {cat:'pratique',q:'«\u00a0Parlez-moi de votre situation actuelle.\u00a0»',conseil:'Soyez transparent(e) et positif(ve). Si vous \u00eates en recherche d\'emploi, expliquez br\u00e8vement pourquoi et ce que vous avez fait pendant cette p\u00e9riode (formations, projets).'},
+  {cat:'fin',q:'«\u00a0Avez-vous des questions pour nous\u00a0?\u00a0»',conseil:'Pr\u00e9parez toujours 2\u20133 questions\u00a0: "Comment se passe l\'int\u00e9gration\u00a0?", "Quelles sont les perspectives d\u0027\u00e9volution\u00a0?", "Comment est organis\u00e9e l\u0027\u00e9quipe\u00a0?" Ne posez PAS la question sur les cong\u00e9s ou le salaire lors d\'un premier entretien.'},
+  {cat:'fin',q:'«\u00a0Quand puis-je esp\u00e9rer une r\u00e9ponse\u00a0?\u00a0»',conseil:'Demandez le d\u00e9lai de r\u00e9ponse et le nom de votre interlocuteur. Cela montre votre s\u00e9rieux et vous permet de relancer si n\u00e9cessaire.'},
+  {cat:'fin',q:'«\u00a0Y a-t-il quelque chose dans votre profil que vous souhaiteriez pr\u00e9ciser\u00a0?\u00a0»',conseil:'Profitez de cette question pour mentionner un atout que vous n\'avez pas pu valoriser pendant l\'entretien. Restez bref et pertinent.'},
+  {cat:'presentation',q:'«\u00a0Qu\'avez-vous fait depuis votre dernier emploi\u00a0?\u00a0»',conseil:'Valorisez toutes vos activit\u00e9s\u00a0: formation, b\u00e9n\u00e9volat, projets personnels, soins \u00e0 un proche. Montrez que vous avez mis ce temps \u00e0 profit.'}
+];
+
+function renderEntreprisesPage(){
+  renderEntreprisesFiltered('all');
+}
+
+function filterEntreprises(secteur, btn){
+  currentEntrepriseFilter = secteur;
+  document.querySelectorAll('[onclick^="filterEntreprises"]').forEach(function(b){
+    b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost';
+  });
+  renderEntreprisesFiltered(secteur);
+}
+
+function renderEntreprisesFiltered(secteur){
+  var div = document.getElementById('entreprises-list-full');
+  if(!div) return;
+  var filtered = secteur === 'all' ? ENTREPRISES : ENTREPRISES.filter(function(e){ return e.secteur === secteur; });
+  var grouped = {};
+  filtered.forEach(function(e){
+    if(!grouped[e.secteur]) grouped[e.secteur] = [];
+    grouped[e.secteur].push(e);
+  });
+  var icons = {Maritime:'&#9875;',Industrie:'&#127981;',Logistique:'&#128230;',Transport:'&#128666;',
+    Sante:'&#127973;',BTP:'&#127959;',Numerique:'&#128187;',Commerce:'&#128717;',Securite:'&#128737;'};
+  var secteurLabel = {'Santé':'Santé','Sécurité':'Sécurité'};
+  var html = '';
+  Object.keys(grouped).forEach(function(sec){
+    var companies = grouped[sec];
+    var icon = icons[sec] || icons[sec.replace('é','e').replace('û','u')] || '&#127970;';
+    html += '<div style="margin-bottom:1rem;">';
+    html += '<div class="section-title" style="margin-bottom:0.5rem;">' + icon + ' ' + sec + '</div>';
+    companies.forEach(function(e){
+      html += '<div class="formation-card" style="margin-bottom:6px;">'
+        + '<div class="formation-card-header">'
+        + '<div><div class="formation-name">' + e.nom + '</div>'
+        + '<div class="formation-centre">' + e.ville + (e.desc ? ' &middot; ' + e.desc : '') + '</div></div>'
+        + (e.lien ? '<a href="' + e.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + '</div></div>';
+    });
+    html += '</div>';
+  });
+  div.innerHTML = html;
+}
+
+// MAP DATA
+const MAP_CENTRES = [
+  {nom:'GRETA Côtes Normandes',type:'formation',ville:'Le Havre',adresse:'Rue du Maréchal Joffre, 76600 Le Havre',lien:'https://greta.ac-normandie.fr',lat:49.493,lng:0.107},
+  {nom:'IFSI / IFAS CHU du Havre',type:'formation',ville:'Le Havre',adresse:'29 Av. Pierre Mendès France, 76290 Montivilliers',lien:'https://www.chu-lehavre.fr',lat:49.551,lng:0.195},
+  {nom:'École 42 Le Havre',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://42lehavre.fr',lat:49.490,lng:0.108},
+  {nom:'Lycée Edgar Pisani',type:'formation',ville:'Montivilliers',adresse:'Montivilliers (76290)',lien:'',lat:49.551,lng:0.191},
+  {nom:'Lycée Porte Océane',type:'formation',ville:'Le Havre',adresse:'76600 Le Havre',lien:'',lat:49.484,lng:0.115},
+  {nom:'AFPA Le Havre',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://www.afpa.fr',lat:49.505,lng:0.125},
+  {nom:'Croix-Rouge Compétence',type:'formation',ville:'Le Havre',adresse:'Le Havre',lien:'https://formation.croix-rouge.fr',lat:49.492,lng:0.116},
+  {nom:'Lycée Jules Siegfried',type:'formation',ville:'Le Havre',adresse:'76600 Le Havre',lien:'',lat:49.495,lng:0.106},
+];
+
+function renderMapPage(){
+  renderMapList('all');
+}
+
+function filterMap(type, btn){
+  currentMapFilter = type;
+  document.querySelectorAll('[onclick^="filterMap"]').forEach(function(b){
+    b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost';
+  });
+  renderMapList(type);
+}
+
+function renderMapList(type){
+  var formDiv = document.getElementById('map-formations-list');
+  var entDiv = document.getElementById('map-entreprises-list');
+  var titleEl = document.getElementById('map-entreprises-title');
+  if(!formDiv || !entDiv) return;
+
+  var formParent = formDiv.previousElementSibling;
+
+  if(type !== 'entreprise'){
+    if(formParent) formParent.style.display = 'flex';
+    formDiv.innerHTML = MAP_CENTRES.map(function(c){
+      return '<div class="formation-card" style="margin-bottom:6px;">'
+        + '<div class="formation-card-header">'
+        + '<div><div class="formation-name">&#127891; ' + c.nom + '</div>'
+        + '<div class="formation-centre">' + c.ville + ' &middot; ' + c.adresse + '</div></div>'
+        + (c.lien ? '<a href="' + c.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + '</div></div>';
+    }).join('');
+  } else {
+    if(formParent) formParent.style.display = 'none';
+    formDiv.innerHTML = '';
+  }
+
+  if(type !== 'formation'){
+    if(titleEl) titleEl.style.display = 'flex';
+    entDiv.innerHTML = ENTREPRISES.slice(0,15).map(function(e){
+      return '<div class="formation-card" style="margin-bottom:6px;">'
+        + '<div class="formation-card-header">'
+        + '<div><div class="formation-name">&#127970; ' + e.nom + '</div>'
+        + '<div class="formation-centre">' + e.secteur + ' &middot; ' + e.ville + '</div></div>'
+        + (e.lien ? '<a href="' + e.lien + '" target="_blank" class="btn btn-sm btn-outline">&#127760;</a>' : '')
+        + '</div></div>';
+    }).join('')
+    + '<div class="alert alert-info" style="margin-top:0.5rem;"><span>&#128205;</span><span>Retrouvez toutes les entreprises dans la section "Entreprises locales".</span></div>';
+  } else {
+    if(titleEl) titleEl.style.display = 'none';
+    entDiv.innerHTML = '';
+  }
+}
+
+// QUESTIONS ENTRETIEN
+let currentQuestionFilter = 'tous';
+function filterQuestions(cat, btn){
+  currentQuestionFilter = cat;
+  document.querySelectorAll('[onclick^="filterQuestions"]').forEach(b => {
+    b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost';
+  });
+  renderQuestionsEntretien(cat);
+}
+
+function renderQuestionsEntretien(cat){
+  const div = document.getElementById('questions-entretien');
+  if(!div) return;
+  const filtered = cat === 'tous' ? QUESTIONS_ENTRETIEN : QUESTIONS_ENTRETIEN.filter(function(q){ return q.cat === cat; });
+  div.innerHTML = filtered.map(function(q){
+    return '<div class="card" style="padding:0;overflow:hidden;margin-bottom:8px;">'
+      + '<div style="padding:0.85rem;cursor:pointer;" onclick="toggleQuestion(this)">'
+      + '<div style="display:flex;align-items:flex-start;gap:10px;">'
+      + '<span style="font-size:1.1rem;flex-shrink:0;">&#127908;</span>'
+      + '<div style="font-weight:700;font-size:0.88rem;">' + q.q + '</div>'
+      + '<span style="margin-left:auto;font-size:1rem;flex-shrink:0;">&#9660;</span>'
+      + '</div></div>'
+      + '<div class="question-conseil" style="display:none;padding:0 0.85rem 0.85rem;">'
+      + '<div style="background:var(--primary-pale);border-radius:8px;padding:0.75rem;font-size:0.82rem;color:var(--text2);line-height:1.6;">'
+      + '<strong style="color:var(--primary);">&#128161; Conseil :</strong> ' + q.conseil
+      + '</div></div></div>';
+  }).join('');
+}
+
+function toggleQuestion(el){
+  const conseil = el.nextElementSibling;
+  const arrow = el.querySelector('span:last-child');
+  const isOpen = conseil.style.display !== 'none';
+  conseil.style.display = isOpen ? 'none' : 'block';
+  if(arrow) arrow.textContent = isOpen ? '▼' : '▲';
 }
 
 // ==================== RÉFÉRENTE ====================
-function goToReferente(){ showPage('page-dashboard-referente'); renderReferenteDashboard(); }
+function goToReferente(){ showPage('page-dashboard-referente'); }
 function renderReferenteDashboard(){
   renderStagiairesList();
   renderGroupesList();
@@ -2312,8 +3452,6 @@ function generateRapportPDF(){
 // ==================== INIT ====================
 function goToDashboard(){
   showPage('page-dashboard-stagiaire');
-  renderDashboard();
-  renderMetiers();
 }
 function initHandicapChecks(){
   const types = [
