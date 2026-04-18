@@ -1531,7 +1531,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div class="stat-card"><div class="stat-value" id="r-metiers-explores">0</div><div class="stat-label">Explorations</div></div>
         <div class="stat-card"><div class="stat-value" id="r-attestations">0</div><div class="stat-label">Attestations</div></div>
       </div>
-      <button class="btn btn-primary btn-full" onclick="showModal('modal-rapport')">📄 Générer rapport PDF</button>
+      <button class="btn btn-primary btn-full" onclick="openRapportModal()">📊 Rapports & Graphiques</button>
+      <button class="btn btn-outline btn-full" style="margin-top:8px;" onclick="printAllAttestations()">🖨️ Toutes les attestations</button>
     </div>
 
     <button class="btn btn-ghost btn-full" style="margin-top:1rem;" onclick="logout()">Se déconnecter</button>
@@ -1764,20 +1765,71 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
 <!-- Modal Rapport -->
 <div class="modal-overlay" id="modal-rapport">
-  <div class="modal">
-    <div class="modal-header"><h3 style="font-family:var(--font);">📄 Rapport financeur</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-rapport')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Période</label>
-        <select><option>Ce mois</option><option>Ce trimestre</option><option>Cette année</option><option>Personnalisé</option></select>
-      </div>
-      <div class="form-group">
-        <label>Groupe(s)</label>
-        <select><option>Tous les groupes</option></select>
-      </div>
-      <button class="btn btn-primary btn-full" onclick="generateRapportPDF()">📥 Télécharger le rapport PDF</button>
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <h3 style="font-family:var(--font);">📊 Rapports & Statistiques</h3>
+      <button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-rapport')">✕</button>
     </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Fermer</button></div>
+    <div class="modal-body">
+      <!-- Onglets -->
+      <div style="display:flex;gap:6px;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:8px;">
+        <button class="btn btn-sm btn-primary" id="rtab-global" onclick="switchRapportTab('global',this)">🌐 Global</button>
+        <button class="btn btn-sm btn-ghost" id="rtab-stagiaire" onclick="switchRapportTab('stagiaire',this)">👤 Par stagiaire</button>
+        <button class="btn btn-sm btn-ghost" id="rtab-groupe" onclick="switchRapportTab('groupe',this)">📂 Par groupe</button>
+      </div>
+
+      <!-- Rapport global -->
+      <div id="rapport-global">
+        <div class="stats-grid" style="margin-bottom:1rem;">
+          <div class="stat-card"><div class="stat-value" id="rg-stagiaires">0</div><div class="stat-label">Stagiaires</div></div>
+          <div class="stat-card"><div class="stat-value" id="rg-actifs">0</div><div class="stat-label">Actifs 7j</div></div>
+          <div class="stat-card"><div class="stat-value" id="rg-explorations">0</div><div class="stat-label">Explorations</div></div>
+          <div class="stat-card"><div class="stat-value" id="rg-attestations">0</div><div class="stat-label">Attestations</div></div>
+        </div>
+        <div class="section-title" style="margin-bottom:0.4rem;font-size:0.8rem;">🏆 Métiers les plus explorés</div>
+        <canvas id="chart-metiers" style="width:100%;max-height:180px;"></canvas>
+        <div class="section-title" style="margin-top:0.75rem;margin-bottom:0.4rem;font-size:0.8rem;">📈 Progression des stagiaires</div>
+        <canvas id="chart-progression" style="width:100%;max-height:150px;"></canvas>
+        <div style="margin-top:0.75rem;display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" onclick="generateRapportPDF()">🖨️ Imprimer rapport global</button>
+          <button class="btn btn-outline btn-sm" onclick="printAllAttestations()">📜 Toutes les attestations</button>
+        </div>
+      </div>
+
+      <!-- Rapport par stagiaire -->
+      <div id="rapport-stagiaire" style="display:none;">
+        <div class="form-group">
+          <label>Choisir un stagiaire</label>
+          <select id="rapport-stagiaire-sel" onchange="renderRapportStagiaire()">
+            <option value="">-- Sélectionner --</option>
+          </select>
+        </div>
+        <div id="rapport-stagiaire-content"></div>
+        <div id="rapport-stagiaire-chart-area" style="display:none;margin-top:0.75rem;">
+          <div class="section-title" style="font-size:0.78rem;margin-bottom:0.4rem;">📊 Progression par métier</div>
+          <canvas id="chart-stagiaire-individual" style="width:100%;max-height:170px;border-radius:8px;"></canvas>
+          <div style="display:flex;gap:8px;margin-top:0.75rem;flex-wrap:wrap;" id="rapport-stagiaire-actions"></div>
+        </div>
+      </div>
+
+      <!-- Rapport par groupe -->
+      <div id="rapport-groupe" style="display:none;">
+        <div class="form-group">
+          <label>Choisir un groupe</label>
+          <select id="rapport-groupe-sel" onchange="renderRapportGroupe()">
+            <option value="">-- Sélectionner --</option>
+          </select>
+        </div>
+        <div id="rapport-groupe-content"></div>
+        <div id="rapport-groupe-chart-area" style="display:none;margin-top:0.75rem;">
+          <div class="section-title" style="font-size:0.78rem;margin-bottom:0.4rem;">📊 Comparatif du groupe</div>
+          <canvas id="chart-groupe-compare" style="width:100%;max-height:170px;border-radius:8px;"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Fermer</button>
+    </div>
   </div>
 </div>
 
@@ -2346,10 +2398,16 @@ function showPage(id){
   if(id === 'page-glossaire') showPage_glossaire();
 }
 function updateFab(pageId){
-  const fab = document.getElementById('help-fab');
-  const noFab = ['page-landing','page-login','page-register'];
+  var fab = document.getElementById('help-fab');
+  var gfab = document.getElementById('glossaire-fab');
+  var noFab = ['page-landing','page-login','page-register'];
+  var noGfab = ['page-landing','page-login','page-register','page-glossaire'];
   if(noFab.includes(pageId)) fab.classList.remove('visible');
   else fab.classList.add('visible');
+  if(gfab){
+    if(noGfab.includes(pageId)) gfab.classList.remove('visible');
+    else gfab.classList.add('visible');
+  }
 }
 function trackNavigation(pageId){
   if(!currentUser) return;
@@ -3637,35 +3695,80 @@ function renderStagiairesList(filter=''){
 }
 function filterStagiaires(){ renderStagiairesList(document.getElementById('search-stagiaires').value); }
 function showStagiaireDetail(email){
-  const s = users.find(u => u.email === email);
+  var s = users.find(function(u){ return u.email===email; });
   if(!s) return;
-  showModal('modal-stagiaire-detail');
-  const modal = document.getElementById('modal-stagiaire-detail');
-  if(!modal){
-    // Create modal dynamically
-    const m = document.createElement('div');
-    m.className = 'modal-overlay open';
-    m.id = 'modal-stagiaire-detail';
-    m.innerHTML = `<div class="modal"><div class="modal-header"><h3 style="font-family:var(--font);">📋 ${s.prenom} ${s.nom}</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-stagiaire-detail')">✕</button></div>
-    <div class="modal-body">
-      <div class="card" style="margin-bottom:0.75rem;padding:0.85rem;">
-        <div style="font-size:0.82rem;line-height:1.8;">
-          <div><strong>Email :</strong> ${s.email}</div>
-          <div><strong>Inscrit le :</strong> ${new Date(s.createdAt).toLocaleDateString('fr-FR')}</div>
-          <div><strong>Métiers explorés :</strong> ${(s.stats?.metiersExplored||[]).length}</div>
-          <div><strong>Badges obtenus :</strong> ${(s.stats?.badges||[]).length}</div>
-          <div><strong>Jeux terminés :</strong> ${s.stats?.games||0}</div>
-          <div><strong>Attestations :</strong> ${(s.attestations||[]).length}</div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-stagiaire-detail')">Fermer</button></div></div>`;
-    document.body.appendChild(m);
-  } else { modal.classList.add('open'); }
+  var old = document.getElementById('modal-stagiaire-detail');
+  if(old) old.remove();
+  var allM = [...METIERS,...customMetiers];
+  var metiers = (s.stats&&s.stats.metiersExplored)||[];
+  var badges = (s.stats&&s.stats.badges)||[];
+  var atts = s.attestations||[];
+  var scores = (s.stats&&s.stats.scores)||{};
+  var badgeHtml = badges.map(function(bid){
+    var met=allM.find(function(x){return x.id===bid;});
+    return met?'<span style="background:var(--accent-light);color:#b07a10;padding:3px 8px;border-radius:10px;font-size:0.75rem;margin:2px;display:inline-block;">'+met.emoji+' '+met.nom+'</span>':'';
+  }).join('');
+  var attHtml = atts.length ? atts.map(function(a){
+    var safeN=(s.prenom+' '+s.nom).replace(/'/g,''); var safeM=a.metier.replace(/'/g,'');
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);">'
+      +'<div><div style="font-size:0.82rem;font-weight:600;">&#127885; '+a.metier+'</div>'
+      +'<div style="font-size:0.72rem;color:var(--text3);">'+a.date+'</div></div>'
+      +'<button class="btn btn-sm btn-primary" onclick="printAttestationForStagiaire(\''+safeN+'\',\''+safeM+'\',\''+a.date+'\')">&#128424; Imprimer</button>'
+      +'</div>';
+  }).join('') : '<p style="font-size:0.82rem;color:var(--text3);">Aucune attestation.</p>';
+  var progressHtml = metiers.map(function(mid){
+    var met=allM.find(function(x){return x.id===mid;});
+    var sc=scores[mid]||0; var pct=Math.min(100,Math.round(sc/60*100));
+    return met?'<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">'
+      +'<span style="font-size:1rem;">'+met.emoji+'</span>'
+      +'<div style="flex:1;"><div style="font-size:0.79rem;font-weight:600;">'+met.nom+'</div>'
+      +'<div style="height:6px;background:var(--surface2);border-radius:4px;"><div style="height:6px;background:var(--primary);border-radius:4px;width:'+pct+'%;"></div></div></div>'
+      +'<span style="font-size:0.72rem;color:var(--text3);flex-shrink:0;">'+sc+' pts</span></div>':'';
+  }).join('');
+  var safeEmail = email.replace(/'/g,'');
+  var m = document.createElement('div');
+  m.className='modal-overlay open'; m.id='modal-stagiaire-detail';
+  m.innerHTML='<div class="modal" style="max-width:520px;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">&#128203; '+s.prenom+' '+s.nom+'</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-stagiaire-detail\').remove()">&#10005;</button></div>'
+    +'<div class="modal-body">'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:0.75rem;">'
+    +'<div class="stat-card"><div class="stat-value">'+metiers.length+'</div><div class="stat-label">M&eacute;tiers</div></div>'
+    +'<div class="stat-card"><div class="stat-value">'+badges.length+'</div><div class="stat-label">Badges</div></div>'
+    +'<div class="stat-card"><div class="stat-value">'+(s.stats&&s.stats.games||0)+'</div><div class="stat-label">Jeux</div></div>'
+    +'<div class="stat-card"><div class="stat-value">'+atts.length+'</div><div class="stat-label">Attestations</div></div>'
+    +'</div>'
+    +'<div style="font-size:0.75rem;color:var(--text3);margin-bottom:0.75rem;">&#128231; '+s.email+'&nbsp;&middot;&nbsp;Inscrit le '+(s.createdAt?new Date(s.createdAt).toLocaleDateString('fr-FR'):'—')+(s.groupe?'&nbsp;&middot;&nbsp;Groupe: '+s.groupe:'')+'</div>'
+    +(badges.length?'<div class="section-title" style="font-size:0.78rem;margin-bottom:4px;">&#127885; Badges</div><div style="margin-bottom:0.75rem;">'+badgeHtml+'</div>':'')
+    +(metiers.length?'<div class="section-title" style="font-size:0.78rem;margin-bottom:4px;">&#128200; Progression</div><div style="margin-bottom:0.75rem;">'+progressHtml+'</div>':'')
+    +'<div class="section-title" style="font-size:0.78rem;margin-bottom:4px;">&#128220; Attestations</div>'
+    +'<div>'+attHtml+'</div>'
+    +'</div>'
+    +'<div class="modal-footer">'
+    +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-stagiaire-detail\').remove()">Fermer</button>'
+    +'<button class="btn btn-primary" onclick="printRapportStagiaire(\''+safeEmail+'\')">&#128424; Rapport PDF</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
 }
 function confirmDelete(email){
-  document.getElementById('confirm-delete-btn').onclick = () => {
-    users = users.filter(u => u.email !== email);
+  var s = users.find(function(u){ return u.email===email; });
+  if(!s) return;
+  var body = document.querySelector('#modal-confirm-delete .modal-body');
+  if(body){
+    body.innerHTML = '<p style="font-size:0.88rem;color:var(--text2);margin-bottom:0.75rem;">Vous allez supprimer le compte de :</p>'
+      +'<div style="background:var(--surface2);border-radius:10px;padding:0.85rem;text-align:center;margin-bottom:0.75rem;">'
+      +'<div style="font-size:1.1rem;font-weight:700;">'+s.prenom+' '+s.nom+'</div>'
+      +'<div style="font-size:0.78rem;color:var(--text3);margin-top:4px;">'+s.email+'</div>'
+      +'<div style="font-size:0.75rem;color:var(--text3);margin-top:4px;">'
+      +(s.stats&&s.stats.metiersExplored||[]).length+' m&eacute;tiers &middot; '
+      +(s.attestations||[]).length+' attestations &middot; '
+      +(s.stats&&s.stats.badges||[]).length+' badges'
+      +'</div></div>'
+      +'<p style="font-size:0.85rem;color:var(--text2);">Cette action est <strong>irr&eacute;versible</strong>. Toutes les donn&eacute;es seront supprim&eacute;es d&eacute;finitivement.</p>'
+      +'<div class="alert alert-danger" style="margin-top:0.75rem;"><span>&#9940;</span><span>&Ecirc;tes-vous certain(e) de vouloir supprimer ?</span></div>';
+  }
+  document.getElementById('confirm-delete-btn').onclick = function(){
+    users = users.filter(function(u){ return u.email!==email; });
     save('users', users);
     closeModal('modal-confirm-delete');
     renderStagiairesList();
@@ -3702,15 +3805,77 @@ function deleteGroupe(i){
   if(confirm('Supprimer ce groupe ? Les stagiaires ne seront pas supprimés.')){ groups.splice(i,1); save('groups',groups); renderGroupesList(); }
 }
 function renderAdminMetiers(){
-  const div = document.getElementById('admin-metiers-list');
-  const all = [...METIERS, ...customMetiers];
-  div.innerHTML = all.map(m => `
-    <div class="editable-list-item">
-      <span style="font-size:1.4rem">${m.emoji}</span>
-      <div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">${m.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${m.cat==='porteur-lh'?'📍 Le Havre':m.cat==='porteur-agglo'?'🌐 Agglo':m.cat==='nonporteur'?'ℹ️ Non porteur':'—'} · ${(m.formations||[]).length} formations</div></div>
-      ${customMetiers.includes(m)?`<div class="item-actions"><button class="btn btn-sm btn-danger" onclick="deleteCustomMetier('${m.id}')">🗑</button></div>`:'<span class="badge badge-gray">Natif</span>'}
-    </div>
-  `).join('');
+  var div = document.getElementById('admin-metiers-list');
+  var all = [...METIERS, ...customMetiers];
+  div.innerHTML = all.map(function(m){
+    var isCustom = customMetiers.some(function(cm){ return cm.id===m.id; });
+    var catLabel = m.cat==='porteur-lh'?'&#128205; Le Havre':m.cat==='porteur-agglo'?'&#127760; Agglo':m.cat==='nonporteur'?'&#8505;&#65039; Non porteur':'—';
+    return '<div class="editable-list-item">'
+      +'<span style="font-size:1.4rem;flex-shrink:0;">'+m.emoji+'</span>'
+      +'<div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:0.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+m.nom+'</div>'
+      +'<div style="font-size:0.74rem;color:var(--text3);">'+catLabel+' &middot; '+(m.formations||[]).length+' formations</div></div>'
+      +'<div class="item-actions">'
+      +'<button class="btn btn-sm btn-outline" onclick="openEditMetier(\''+m.id+'\')" title="Modifier">&#9999;&#65039;</button>'
+      +(isCustom?'<button class="btn btn-sm btn-danger" onclick="deleteCustomMetier(\''+m.id+'\')" title="Supprimer">&#128465;</button>':'<span class="badge badge-gray" style="font-size:0.65rem;">Natif</span>')
+      +'</div></div>';
+  }).join('');
+}
+
+function openEditMetier(id){
+  var all = [...METIERS,...customMetiers];
+  var m = all.find(function(x){ return x.id===id; });
+  if(!m) return;
+  var isCustom = customMetiers.some(function(cm){ return cm.id===id; });
+  var old = document.getElementById('modal-edit-metier-dyn');
+  if(old) old.remove();
+  var modal = document.createElement('div');
+  modal.className='modal-overlay open'; modal.id='modal-edit-metier-dyn';
+  modal.innerHTML='<div class="modal">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">&#9999;&#65039; Modifier : '+m.nom+'</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-edit-metier-dyn\').remove()">&#10005;</button></div>'
+    +'<div class="modal-body">'
+    +(isCustom?'':'<div class="alert alert-info" style="margin-bottom:1rem;"><span>&#8505;</span><span>Ce m&eacute;tier natif: les modifications sont sauvegard&eacute;es en local (vid&eacute;o, description, niveau).</span></div>')
+    +'<div class="form-group"><label>Nom du m&eacute;tier</label><input type="text" id="em-nom" value="'+m.nom.replace(/"/g,'&quot;')+'"></div>'
+    +'<div class="form-group"><label>Emoji</label><input type="text" id="em-emoji" value="'+m.emoji+'" style="max-width:80px;"></div>'
+    +'<div class="form-group"><label>Description</label><textarea id="em-desc" rows="3" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);">'+m.desc.replace(/</g,'&lt;')+'</textarea></div>'
+    +'<div class="form-group"><label>URL vid&eacute;o YouTube</label><input type="url" id="em-video" value="'+(m.video||'')+'" placeholder="https://www.youtube.com/watch?v=..."></div>'
+    +'<div class="form-group"><label>Niveau fran&ccedil;ais requis</label>'
+    +'<select id="em-niveau"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select></div>'
+    +'<div class="form-group"><label>Cat&eacute;gorie</label>'
+    +'<select id="em-cat"><option value="porteur-lh">&#128205; Porteur Le Havre</option><option value="porteur-agglo">&#127760; Porteur Agglo</option><option value="nonporteur">&#8505; Non porteur</option></select></div>'
+    +'</div>'
+    +'<div class="modal-footer">'
+    +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-edit-metier-dyn\').remove()">Annuler</button>'
+    +'<button class="btn btn-primary" onclick="saveEditMetierDyn(\''+id+'\','+isCustom+')">Enregistrer</button>'
+    +'</div></div>';
+  document.body.appendChild(modal);
+  document.getElementById('em-niveau').value = m.niveauFr||'A2';
+  document.getElementById('em-cat').value = m.cat||'porteur-lh';
+}
+
+function saveEditMetierDyn(id, isCustom){
+  var updates = {
+    nom: document.getElementById('em-nom').value.trim(),
+    emoji: document.getElementById('em-emoji').value||'💼',
+    desc: document.getElementById('em-desc').value,
+    video: document.getElementById('em-video').value,
+    niveauFr: document.getElementById('em-niveau').value,
+    cat: document.getElementById('em-cat').value
+  };
+  if(!updates.nom){ alert('Le nom est obligatoire.'); return; }
+  if(isCustom){
+    var idx = customMetiers.findIndex(function(m){ return m.id===id; });
+    if(idx>=0){ Object.assign(customMetiers[idx], updates); save('custom_metiers', customMetiers); }
+  } else {
+    var overrides = JSON.parse(localStorage.getItem('metier_overrides')||'{}');
+    overrides[id] = updates;
+    localStorage.setItem('metier_overrides', JSON.stringify(overrides));
+    var nat = METIERS.find(function(x){ return x.id===id; });
+    if(nat) Object.assign(nat, updates);
+  }
+  document.getElementById('modal-edit-metier-dyn').remove();
+  renderAdminMetiers();
+  renderMetiers();
 }
 function addMetierAdmin(){
   const nom = document.getElementById('new-metier-nom').value.trim();
@@ -3741,22 +3906,97 @@ function deleteCustomMetier(id){
   if(confirm('Supprimer ce métier ?')){ customMetiers = customMetiers.filter(m => m.id !== id); save('custom_metiers',customMetiers); renderAdminMetiers(); }
 }
 function renderAdminFormations(){
-  const div = document.getElementById('admin-formations-list');
-  const allForms = FORMATIONS_CUSTOM;
-  if(!allForms.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);margin-bottom:0.75rem;">Aucune formation ajoutée manuellement. Cliquez sur "+ Ajouter".</p>'; }
-  else {
-    div.innerHTML = allForms.map((f,i) => `
-      <div class="editable-list-item">
-        <span style="font-size:1.3rem">🎓</span>
-        <div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;">${f.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${f.centre} · ${f.ville} · Màj ${f.updated||'—'}</div></div>
-        <div class="item-actions">
-          <button class="btn btn-sm btn-danger" onclick="deleteFormation(${i})">🗑</button>
-        </div>
-      </div>
-    `).join('');
+  var div = document.getElementById('admin-formations-list');
+  var allForms = FORMATIONS_CUSTOM;
+  var html = '';
+  if(!allForms.length){
+    html += '<p style="font-size:0.83rem;color:var(--text3);margin-bottom:0.75rem;">Aucune formation ajout&eacute;e manuellement.</p>';
+  } else {
+    html += '<div class="section-title" style="font-size:0.78rem;margin-bottom:0.4rem;">Formations ajout&eacute;es</div>';
+    html += allForms.map(function(f,i){
+      return '<div class="editable-list-item">'
+        +'<span style="font-size:1.3rem;flex-shrink:0;">&#127891;</span>'
+        +'<div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:0.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.nom+'</div>'
+        +'<div style="font-size:0.74rem;color:var(--text3);">'+f.centre+' &middot; '+f.ville+' &middot; M&agrave;j '+(f.updated||'—')+'</div></div>'
+        +'<div class="item-actions">'
+        +'<button class="btn btn-sm btn-outline" onclick="openEditFormation('+i+')" title="Modifier">&#9999;&#65039;</button>'
+        +'<button class="btn btn-sm btn-danger" onclick="deleteFormation('+i+')" title="Supprimer">&#128465;</button>'
+        +'</div></div>';
+    }).join('');
   }
-  // Also show all native formations with edit hint
-  div.innerHTML += `<div class="alert alert-info" style="margin-top:0.75rem;"><span>✏️</span><span>Les formations natives peuvent être complétées en ajoutant de nouvelles entrées ci-dessus.</span></div>`;
+  // Native formations per métier
+  html += '<div class="section-title" style="margin-top:1rem;font-size:0.78rem;margin-bottom:0.4rem;">Formations natives (par m&eacute;tier)</div>';
+  var allM = [...METIERS,...customMetiers];
+  allM.forEach(function(m){
+    if(!m.formations||!m.formations.length) return;
+    html += '<div style="font-size:0.78rem;font-weight:700;color:var(--primary);margin:6px 0 3px;">'+m.emoji+' '+m.nom+'</div>';
+    m.formations.forEach(function(f,fi){
+      html += '<div class="editable-list-item" style="margin-bottom:4px;">'
+        +'<span style="font-size:1rem;flex-shrink:0;">&#127891;</span>'
+        +'<div style="flex:1;min-width:0;"><div style="font-size:0.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.nom+'</div>'
+        +'<div style="font-size:0.72rem;color:var(--text3);">'+f.centre+' &middot; '+(f.updated||'—')+'</div></div>'
+        +'<div class="item-actions">'
+        +'<button class="btn btn-sm btn-outline" onclick="openEditNativeFormation(\''+m.id+'\','+fi+')" title="Modifier">&#9999;&#65039;</button>'
+        +'</div></div>';
+    });
+  });
+  div.innerHTML = html;
+}
+
+function openEditFormation(idx){
+  var f = FORMATIONS_CUSTOM[idx];
+  if(!f) return;
+  _openEditFormationModal(f, function(updates){
+    Object.assign(FORMATIONS_CUSTOM[idx], updates);
+    save('formations_custom', FORMATIONS_CUSTOM);
+  });
+}
+
+function openEditNativeFormation(metierId, formIdx){
+  var m = [...METIERS,...customMetiers].find(function(x){ return x.id===metierId; });
+  if(!m||!m.formations[formIdx]) return;
+  _openEditFormationModal(m.formations[formIdx], function(updates){
+    Object.assign(m.formations[formIdx], updates);
+    if(customMetiers.some(function(cm){ return cm.id===metierId; })) save('custom_metiers', customMetiers);
+  });
+}
+
+function _openEditFormationModal(f, onSave){
+  var old = document.getElementById('modal-edit-form-dyn');
+  if(old) old.remove();
+  var modal = document.createElement('div');
+  modal.className='modal-overlay open'; modal.id='modal-edit-form-dyn';
+  modal.innerHTML='<div class="modal">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">&#9999;&#65039; Modifier la formation</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-edit-form-dyn\').remove()">&#10005;</button></div>'
+    +'<div class="modal-body">'
+    +'<div class="form-group"><label>Nom de la formation *</label><input type="text" id="ef-nom" value="'+f.nom.replace(/"/g,'&quot;')+'"></div>'
+    +'<div class="form-group"><label>Centre de formation *</label><input type="text" id="ef-centre" value="'+f.centre.replace(/"/g,'&quot;')+'"></div>'
+    +'<div class="form-group"><label>Ville</label><input type="text" id="ef-ville" value="'+(f.ville||'')+'"></div>'
+    +'<div class="form-group"><label>Dur&eacute;e</label><input type="text" id="ef-duree" value="'+(f.duree||'')+'" placeholder="ex: 6 mois"></div>'
+    +'<div class="form-group"><label>Financement</label><input type="text" id="ef-financement" value="'+(f.financement||'')+'" placeholder="CPF, France Travail..."></div>'
+    +'<div class="form-group"><label>Lien site web</label><input type="url" id="ef-lien" value="'+(f.lien||'')+'" placeholder="https://..."></div>'
+    +'<div class="form-group"><label>Date de mise &agrave; jour</label><input type="text" id="ef-date" value="'+(f.updated||'')+'" placeholder="2025-03"></div>'
+    +'</div>'
+    +'<div class="modal-footer">'
+    +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-edit-form-dyn\').remove()">Annuler</button>'
+    +'<button class="btn btn-primary" onclick="(function(){'
+    +'var nom=document.getElementById(\'ef-nom\').value.trim();'
+    +'var centre=document.getElementById(\'ef-centre\').value.trim();'
+    +'if(!nom||!centre){alert(\'Nom et centre sont obligatoires.\');return;}'
+    +'_editFormSave({nom:nom,centre:centre,ville:document.getElementById(\'ef-ville\').value,'
+    +'duree:document.getElementById(\'ef-duree\').value,'
+    +'financement:document.getElementById(\'ef-financement\').value,'
+    +'lien:document.getElementById(\'ef-lien\').value,'
+    +'updated:document.getElementById(\'ef-date\').value});'
+    +'})()">Enregistrer</button>'
+    +'</div></div>';
+  window._editFormSave = function(updates){
+    onSave(updates);
+    document.getElementById('modal-edit-form-dyn').remove();
+    renderAdminFormations();
+  };
+  document.body.appendChild(modal);
 }
 function addFormationAdmin(){
   const nom = document.getElementById('new-form-nom').value.trim();
@@ -3792,6 +4032,287 @@ function updateRapportStats(){
   document.getElementById('r-metiers-explores').textContent = stagiaires.reduce((a,s)=>a+(s.stats?.metiersExplored||[]).length,0);
   document.getElementById('r-attestations').textContent = stagiaires.reduce((a,s)=>a+(s.attestations||[]).length,0);
 }
+function openRapportModal(){
+  var stSel = document.getElementById('rapport-stagiaire-sel');
+  var grSel = document.getElementById('rapport-groupe-sel');
+  var stagList = users.filter(function(u){return u.profile==='stagiaire';});
+  if(stSel) stSel.innerHTML = '<option value="">-- Sélectionner --</option>'
+    + stagList.map(function(u){return '<option value="'+u.email+'">'+u.prenom+' '+u.nom+'</option>';}).join('');
+  if(grSel) grSel.innerHTML = '<option value="">-- Sélectionner --</option>'
+    + groups.map(function(g){return '<option value="'+g.nom+'">'+g.nom+'</option>';}).join('');
+  showModal('modal-rapport');
+  setTimeout(renderRapportGlobal, 100);
+}
+
+function switchRapportTab(tab, btn){
+  ['global','stagiaire','groupe'].forEach(function(t){
+    var el=document.getElementById('rapport-'+t);
+    if(el) el.style.display=(t===tab)?'block':'none';
+  });
+  document.querySelectorAll('[id^="rtab-"]').forEach(function(b){b.className='btn btn-sm btn-ghost';});
+  if(btn) btn.className='btn btn-sm btn-primary';
+  if(tab==='global') renderRapportGlobal();
+}
+
+function renderRapportGlobal(){
+  var stagList = users.filter(function(u){return u.profile==='stagiaire';});
+  var week=new Date(); week.setDate(week.getDate()-7);
+  var el=document.getElementById('rg-stagiaires'); if(el) el.textContent=stagList.length;
+  el=document.getElementById('rg-actifs'); if(el) el.textContent=stagList.filter(function(s){return s.navHistory&&s.navHistory.some(function(h){return new Date(h.time)>week;});}).length;
+  el=document.getElementById('rg-explorations'); if(el) el.textContent=stagList.reduce(function(a,s){return a+(s.stats&&s.stats.metiersExplored||[]).length;},0);
+  el=document.getElementById('rg-attestations'); if(el) el.textContent=stagList.reduce(function(a,s){return a+(s.attestations||[]).length;},0);
+  setTimeout(function(){drawMetiersChart(); drawProgressionChart();}, 80);
+}
+
+function drawMetiersChart(){
+  var canvas=document.getElementById('chart-metiers'); if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var allM=[...METIERS,...customMetiers];
+  var counts={};
+  users.filter(function(u){return u.profile==='stagiaire';}).forEach(function(s){
+    (s.stats&&s.stats.metiersExplored||[]).forEach(function(mid){counts[mid]=(counts[mid]||0)+1;});
+  });
+  var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1];}).slice(0,8);
+  canvas.width=canvas.parentElement.clientWidth||380; canvas.height=180;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!sorted.length){ctx.font='13px sans-serif';ctx.fillStyle='#888';ctx.fillText('Aucune donnée encore.',10,50);return;}
+  var labels=sorted.map(function(e){var m=allM.find(function(x){return x.id===e[0];});return m?m.emoji+' '+m.nom.slice(0,11):'?';});
+  var values=sorted.map(function(e){return e[1];});
+  var maxV=Math.max.apply(null,values)||1;
+  var gap=(canvas.width-40)/labels.length;
+  var barW=Math.max(16,gap*0.65);
+  labels.forEach(function(label,i){
+    var h=Math.round((values[i]/maxV)*(canvas.height-50));
+    var x=20+i*gap;
+    ctx.fillStyle='#1a5fa0'; ctx.fillRect(x,canvas.height-30-h,barW,h);
+    ctx.fillStyle='#555'; ctx.font='10px sans-serif'; ctx.fillText(values[i],x+2,canvas.height-32-h-2);
+    ctx.save(); ctx.translate(x+barW/2,canvas.height-5); ctx.rotate(-Math.PI/5); ctx.fillText(label,0,0); ctx.restore();
+  });
+}
+
+function drawProgressionChart(){
+  var canvas=document.getElementById('chart-progression'); if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var stagList=users.filter(function(u){return u.profile==='stagiaire';});
+  canvas.width=canvas.parentElement.clientWidth||380; canvas.height=150;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!stagList.length){ctx.font='13px sans-serif';ctx.fillStyle='#888';ctx.fillText('Aucun stagiaire inscrit.',10,50);return;}
+  var colors=['#0a3d6b','#f4a020','#1a8a4a'];
+  var lbs=['Métiers','Badges','Attest.'];
+  var W=canvas.width,H=canvas.height,pad=35;
+  var maxVal=0;
+  stagList.forEach(function(s){
+    maxVal=Math.max(maxVal,(s.stats&&s.stats.metiersExplored||[]).length,(s.stats&&s.stats.badges||[]).length,(s.attestations||[]).length);
+  });
+  if(!maxVal) maxVal=1;
+  var groupW=(W-pad*2)/Math.max(stagList.length,1);
+  var barW=Math.max(8,groupW/4.5);
+  stagList.forEach(function(s,si){
+    var vals=[(s.stats&&s.stats.metiersExplored||[]).length,(s.stats&&s.stats.badges||[]).length,(s.attestations||[]).length];
+    var gx=pad+si*groupW;
+    vals.forEach(function(v,ci){
+      var h=Math.round((v/maxVal)*(H-50));
+      ctx.fillStyle=colors[ci]; ctx.fillRect(gx+ci*(barW+1),H-30-h,barW,h);
+      if(v>0){ctx.fillStyle='#555';ctx.font='8px sans-serif';ctx.fillText(v,gx+ci*(barW+1),H-32-h);}
+    });
+    ctx.fillStyle='#555'; ctx.font='8px sans-serif';
+    ctx.fillText((s.prenom||'?').slice(0,5),gx+barW,H-5);
+  });
+  colors.forEach(function(c,i){
+    ctx.fillStyle=c; ctx.fillRect(W-100,8+i*14,9,9);
+    ctx.fillStyle='#555'; ctx.font='9px sans-serif'; ctx.fillText(lbs[i],W-88,17+i*14);
+  });
+}
+
+function renderRapportStagiaire(){
+  var email=document.getElementById('rapport-stagiaire-sel').value;
+  var div=document.getElementById('rapport-stagiaire-content');
+  var chartArea=document.getElementById('rapport-stagiaire-chart-area');
+  var actDiv=document.getElementById('rapport-stagiaire-actions');
+  if(!email||!div){if(div)div.innerHTML='';if(chartArea)chartArea.style.display='none';return;}
+  var s=users.find(function(u){return u.email===email;});
+  if(!s){div.innerHTML='';if(chartArea)chartArea.style.display='none';return;}
+  var allM=[...METIERS,...customMetiers];
+  var metiers=(s.stats&&s.stats.metiersExplored)||[];
+  var badges=(s.stats&&s.stats.badges)||[];
+  var atts=s.attestations||[];
+  var scores=(s.stats&&s.stats.scores)||{};
+  var html='<div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.5rem;">';
+  html+='<div style="font-weight:700;font-size:0.88rem;">'+s.prenom+' '+s.nom+'</div>';
+  html+='<div style="font-size:0.73rem;color:var(--text3);margin-bottom:0.6rem;">'+s.email+(s.groupe?' &middot; '+s.groupe:'')+'</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:0.75rem;">';
+  html+='<div class="stat-card"><div class="stat-value">'+metiers.length+'</div><div class="stat-label">M&eacute;tiers</div></div>';
+  html+='<div class="stat-card"><div class="stat-value">'+badges.length+'</div><div class="stat-label">Badges</div></div>';
+  html+='<div class="stat-card"><div class="stat-value">'+(s.stats&&s.stats.games||0)+'</div><div class="stat-label">Jeux</div></div>';
+  html+='<div class="stat-card"><div class="stat-value">'+atts.length+'</div><div class="stat-label">Attestations</div></div>';
+  html+='</div>';
+  if(atts.length){
+    html+='<div style="font-size:0.78rem;font-weight:700;margin-bottom:5px;">&#128220; Attestations</div>';
+    atts.forEach(function(a){
+      var safeN=(s.prenom+' '+s.nom).replace(/'/g,'');
+      var safeM=a.metier.replace(/'/g,'');
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);">'
+        +'<span style="font-size:0.79rem;">&#127885; '+a.metier+' ('+a.date+')</span>'
+        +'<button class="btn btn-sm btn-primary" onclick="printAttestationForStagiaire(\''+safeN+'\',\''+safeM+'\',\''+a.date+'\')">&#128424;</button>'
+        +'</div>';
+    });
+  } else {
+    html+='<span style="font-size:0.77rem;color:var(--text3);">Pas encore d&#39;attestation.</span>';
+  }
+  html+='</div>';
+  div.innerHTML=html;
+  if(chartArea) chartArea.style.display=metiers.length?'block':'none';
+  if(actDiv){
+    var safeE=email.replace(/'/g,'');
+    actDiv.innerHTML='<button class="btn btn-sm btn-primary" onclick="printRapportStagiaire(\''+safeE+'\')">&#128424; Rapport PDF</button>';
+    if(atts.length) actDiv.innerHTML+=' <button class="btn btn-sm btn-outline" onclick="printAllAttestationsOf(\''+safeE+'\')">&#128220; Toutes attestations</button>';
+  }
+  if(metiers.length){
+    setTimeout(function(){
+      var canvas=document.getElementById('chart-stagiaire-individual');
+      if(!canvas)return;
+      var ctx=canvas.getContext('2d');
+      canvas.width=canvas.parentElement.clientWidth||340; canvas.height=160;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      var data=metiers.map(function(mid){
+        var m=allM.find(function(x){return x.id===mid;});
+        return {nom:m?m.emoji+' '+m.nom.slice(0,10):'?',score:scores[mid]||0,badge:badges.includes(mid)};
+      });
+      var maxS=Math.max.apply(null,data.map(function(d){return d.score;}))||60;
+      var gap=(canvas.width-40)/Math.max(data.length,1);
+      var barW=Math.max(14,gap*0.65);
+      data.forEach(function(d,i){
+        var h=Math.round((d.score/Math.max(maxS,1))*(canvas.height-50));
+        var x=20+i*gap;
+        ctx.fillStyle=d.badge?'#1a8a4a':'#1a5fa0';
+        ctx.fillRect(x,canvas.height-30-h,barW,h);
+        ctx.fillStyle='#555'; ctx.font='9px sans-serif';
+        if(h>0) ctx.fillText(d.score,x+1,canvas.height-32-h);
+        ctx.save(); ctx.translate(x+barW/2,canvas.height-5); ctx.rotate(-Math.PI/5);
+        ctx.fillText(d.nom,0,0); ctx.restore();
+      });
+      ctx.fillStyle='#1a8a4a';ctx.fillRect(canvas.width-100,5,9,9);
+      ctx.fillStyle='#555';ctx.font='9px sans-serif';ctx.fillText('Badge',canvas.width-88,14);
+      ctx.fillStyle='#1a5fa0';ctx.fillRect(canvas.width-100,18,9,9);
+      ctx.fillText('En cours',canvas.width-88,27);
+    },80);
+  }
+}
+
+function printAllAttestationsOf(email){
+  var s=users.find(function(u){return u.email===email;});
+  if(!s||!s.attestations||!s.attestations.length){alert('Aucune attestation pour ce stagiaire.');return;}
+  s.attestations.forEach(function(a){printAttestationForStagiaire(s.prenom+' '+s.nom,a.metier,a.date);});
+}
+
+function renderRapportGroupe(){
+  var grpNom=document.getElementById('rapport-groupe-sel').value;
+  var div=document.getElementById('rapport-groupe-content');
+  var chartArea=document.getElementById('rapport-groupe-chart-area');
+  if(!grpNom||!div){if(div)div.innerHTML='';if(chartArea)chartArea.style.display='none';return;}
+  var members=users.filter(function(u){return u.profile==='stagiaire'&&u.groupe===grpNom;});
+  if(chartArea) chartArea.style.display=members.length?'block':'none';
+  var totalM=members.reduce(function(a,s){return a+(s.stats&&s.stats.metiersExplored||[]).length;},0);
+  var totalA=members.reduce(function(a,s){return a+(s.attestations||[]).length;},0);
+  var html='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:0.75rem;">';
+  html+='<div class="stat-card"><div class="stat-value">'+members.length+'</div><div class="stat-label">Stagiaires</div></div>';
+  html+='<div class="stat-card"><div class="stat-value">'+totalM+'</div><div class="stat-label">Explorations</div></div>';
+  html+='<div class="stat-card"><div class="stat-value">'+totalA+'</div><div class="stat-label">Attestations</div></div>';
+  html+='</div>';
+  if(!members.length){
+    html+='<p style="font-size:0.82rem;color:var(--text3);">Aucun stagiaire assign&eacute; &agrave; ce groupe.</p>';
+  } else {
+    members.forEach(function(s){
+      var m=(s.stats&&s.stats.metiersExplored||[]).length;
+      var b=(s.stats&&s.stats.badges||[]).length;
+      var a=(s.attestations||[]).length;
+      var pct=METIERS.length?Math.round(m/METIERS.length*100):0;
+      var safeE=s.email.replace(/'/g,'');
+      html+='<div class="formation-card" style="margin-bottom:6px;">'
+        +'<div class="formation-card-header">'
+        +'<div style="width:30px;height:30px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);font-size:0.8rem;flex-shrink:0;">'+((s.prenom||'?')[0]).toUpperCase()+'</div>'
+        +'<div style="flex:1;margin:0 8px;">'
+        +'<div style="font-size:0.85rem;font-weight:600;">'+s.prenom+' '+s.nom+'</div>'
+        +'<div style="height:5px;background:var(--surface2);border-radius:4px;margin:3px 0;"><div style="height:5px;background:var(--primary);border-radius:4px;width:'+pct+'%;"></div></div>'
+        +'<div style="font-size:0.72rem;color:var(--text3);">'+m+' m&eacute;tiers &middot; '+b+' badges &middot; '+a+' attestations</div>'
+        +'</div>'
+        +'<div style="display:flex;flex-direction:column;gap:4px;">'
+        +'<button class="btn btn-sm btn-outline" onclick="printRapportStagiaire(\''+safeE+'\')">&#128424;</button>'
+        +(a?'<button class="btn btn-sm btn-primary" onclick="printAllAttestationsOf(\''+safeE+'\')">&#128220;</button>':'')
+        +'</div></div></div>';
+    });
+    html+='<button class="btn btn-primary btn-full" style="margin-top:0.75rem;" onclick="printRapportGroupe(\''+grpNom.replace(/'/g,'')+'\')">&#128424; Imprimer rapport du groupe</button>';
+  }
+  div.innerHTML=html;
+  if(members.length){
+    setTimeout(function(){
+      var canvas=document.getElementById('chart-groupe-compare');
+      if(!canvas)return;
+      var ctx=canvas.getContext('2d');
+      canvas.width=canvas.parentElement.clientWidth||340; canvas.height=170;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      var colors=['#0a3d6b','#f4a020','#1a8a4a'];
+      var lbs=['M\u00e9tiers','Badges','Attest.'];
+      var allVals=members.map(function(s){
+        return [(s.stats&&s.stats.metiersExplored||[]).length,(s.stats&&s.stats.badges||[]).length,(s.attestations||[]).length];
+      });
+      var maxVal=0;
+      allVals.forEach(function(v){v.forEach(function(n){if(n>maxVal)maxVal=n;});});
+      if(!maxVal)maxVal=1;
+      var groupW=(canvas.width-40)/Math.max(members.length,1);
+      var barW=Math.max(8,groupW/4.5);
+      allVals.forEach(function(vals,si){
+        var gx=20+si*groupW;
+        vals.forEach(function(v,ci){
+          var h=Math.round((v/maxVal)*(canvas.height-50));
+          ctx.fillStyle=colors[ci];
+          ctx.fillRect(gx+ci*(barW+1),canvas.height-30-h,barW,h);
+          if(v>0){ctx.fillStyle='#555';ctx.font='9px sans-serif';ctx.fillText(v,gx+ci*(barW+1),canvas.height-32-h);}
+        });
+        ctx.fillStyle='#555';ctx.font='9px sans-serif';
+        ctx.fillText((members[si].prenom||'?').slice(0,6),gx+barW,canvas.height-5);
+      });
+      colors.forEach(function(c,i){
+        ctx.fillStyle=c;ctx.fillRect(canvas.width-110,8+i*14,9,9);
+        ctx.fillStyle='#555';ctx.font='9px sans-serif';ctx.fillText(lbs[i],canvas.width-98,17+i*14);
+      });
+    },80);
+  }
+}
+
+function printRapportGroupe(grpNom){
+  var members=users.filter(function(u){return u.profile==='stagiaire'&&u.groupe===grpNom;});
+  if(!members.length){alert('Aucun stagiaire dans ce groupe.');return;}
+  var rows=members.map(function(s){
+    var m=(s.stats&&s.stats.metiersExplored||[]).length;
+    var b=(s.stats&&s.stats.badges||[]).length;
+    var a=(s.attestations||[]).length;
+    return '<tr><td>'+s.prenom+' '+s.nom+'</td><td>'+s.email+'</td><td>'+m+'</td><td>'+b+'</td><td>'+a+'</td></tr>';
+  }).join('');
+  var win=window.open('','_blank','width=750,height=900');
+  win.document.write('<!DOCTYPE html><html><head><title>Rapport groupe '+grpNom+'</title>'
+    +'<style>body{font-family:Arial;padding:20px;max-width:700px;margin:auto;}h1{color:#0a3d6b;}'
+    +'table{width:100%;border-collapse:collapse;margin-top:1rem;}'
+    +'th{background:#0a3d6b;color:#fff;padding:8px;text-align:left;}td{padding:7px;border-bottom:1px solid #eee;}'
+    +'@media print{button{display:none!important;}}</style></head><body>'
+    +'<h1>&#9875; Cap Avenir &ndash; Groupe : '+grpNom+'</h1>'
+    +'<p style="color:#666;font-size:0.85rem;">G&eacute;n&eacute;r&eacute; le '+new Date().toLocaleDateString('fr-FR')+'</p>'
+    +'<table><thead><tr><th>Stagiaire</th><th>Email</th><th>M&eacute;tiers</th><th>Badges</th><th>Attestations</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody></table>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function updateRapportStats(){
+  var stagList=users.filter(function(u){return u.profile==='stagiaire';});
+  var el=document.getElementById('r-total-stagiaires');if(el)el.textContent=stagList.length;
+  el=document.getElementById('r-actifs');
+  if(el){var week=new Date();week.setDate(week.getDate()-7);el.textContent=stagList.filter(function(s){return s.navHistory&&s.navHistory.some(function(h){return new Date(h.time)>week;});}).length;}
+  el=document.getElementById('r-metiers-explores');if(el)el.textContent=stagList.reduce(function(a,s){return a+(s.stats&&s.stats.metiersExplored||[]).length;},0);
+  el=document.getElementById('r-attestations');if(el)el.textContent=stagList.reduce(function(a,s){return a+(s.attestations||[]).length;},0);
+}
+
 function generateRapportPDF(){
   alert('Fonctionnalité d\'export PDF en cours de finalisation. Contactez votre équipe technique pour l\'activer.');
   closeModal('modal-rapport');
@@ -3978,7 +4499,7 @@ function openVideoModal(){
   ].map(l => '<option value="'+l.val+'">'+l.txt+'</option>').join('');
 
   function buildEmbed(lang){
-    return 'https://www.youtube.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref='+lang+'&hl='+lang+'&autoplay=1';
+    return 'https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref='+lang+'&hl='+lang+'&autoplay=1';
   }
 
   modal.innerHTML = '<div class="modal" style="max-width:520px;">'
@@ -3992,9 +4513,13 @@ function openVideoModal(){
     +'<div style="display:flex;align-items:center;gap:8px;">'
     +'<span style="font-size:0.78rem;color:var(--text3);flex-shrink:0;">&#127462; Sous-titres :</span>'
     +'<select id="video-lang-sel" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:0.8rem;background:var(--surface);color:var(--text);" '
-    +'onchange="document.getElementById(\'video-iframe\').src=\'https://www.youtube.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=\'+this.value+\'&hl=\'+this.value">'
+    +'onchange="document.getElementById(\'video-iframe\').src=\'https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=\'+this.value+\'&hl=\'+this.value">'
     +langOptions+'</select></div>'
-    +'<div style="font-size:0.72rem;color:var(--text3);text-align:center;">&#128204; Les sous-titres auto sont disponibles dans de nombreuses langues via YouTube</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:6px;">'
+    +'<a href="https://www.youtube.com/watch?v='+vid+'" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" style="flex:1;text-align:center;">&#128250; Ouvrir YouTube</a>'
+    +'<a href="https://www.onisep.fr/recherche?query='+encodeURIComponent(currentMetier.nom)+'" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline" style="flex:1;text-align:center;">&#127891; ONISEP</a>'
+    +'</div>'
+    +'<div style="font-size:0.72rem;color:var(--text3);text-align:center;">&#128204; Si la vidéo ne charge pas, utilisez le lien YouTube direct</div>'
     +'</div></div>';
   document.body.appendChild(modal);
 }
