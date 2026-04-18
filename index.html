@@ -621,6 +621,27 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
 
       <button type="submit" class="btn btn-primary btn-full btn-lg">Créer mon compte →</button>
+
+      <!-- Question secrète pour récupération mot de passe -->
+      <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.75rem;border:1px dashed var(--border);">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;">🔐 Récupération de mot de passe (recommandé)</div>
+        <div class="form-group" style="margin-bottom:0.5rem;">
+          <label style="font-size:0.8rem;">Question secrète</label>
+          <select id="reg-question" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);font-size:0.85rem;">
+            <option value="">-- Choisir une question --</option>
+            <option value="Quel est le prénom de votre mère ?">Quel est le prénom de votre mère ?</option>
+            <option value="Quel est le nom de votre animal de compagnie ?">Quel est le nom de votre animal de compagnie ?</option>
+            <option value="Dans quelle ville êtes-vous né(e) ?">Dans quelle ville êtes-vous né(e) ?</option>
+            <option value="Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?">Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?</option>
+            <option value="Quel est votre plat préféré ?">Quel est votre plat préféré ?</option>
+            <option value="Quel est le nom de votre école primaire ?">Quel est le nom de votre école primaire ?</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="font-size:0.8rem;">Votre réponse</label>
+          <input type="text" id="reg-answer" placeholder="Votre réponse secrète" autocomplete="off" style="font-size:0.85rem;">
+        </div>
+      </div>
     </form>
 
     <p style="text-align:center;margin-top:1rem;font-size:0.83rem;color:var(--text3);">
@@ -657,6 +678,9 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
       <div class="error-msg" id="err-login" style="display:none;margin-bottom:1rem;"></div>
       <button type="submit" class="btn btn-primary btn-full btn-lg">Connexion →</button>
+      <div style="text-align:center;margin-top:0.75rem;">
+        <span style="font-size:0.82rem;color:var(--primary);cursor:pointer;font-weight:600;" onclick="showForgotPassword()">🔐 Mot de passe oublié ?</span>
+      </div>
     </form>
     <p style="text-align:center;margin-top:1rem;font-size:0.83rem;color:var(--text3);">
       Pas encore de compte ? <span style="color:var(--primary);cursor:pointer;font-weight:600;" onclick="showPage('page-register')">S'inscrire</span>
@@ -959,6 +983,15 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     </div>
 
     <div id="rec-metiers-dash" style="margin-bottom:1rem;"></div>
+
+    <!-- Sécurité compte -->
+    <div class="card" style="margin-bottom:1rem;" id="security-card">
+      <div class="card-title">🔐 Sécurité de mon compte</div>
+      <div id="security-status"></div>
+      <button class="btn btn-outline btn-full btn-sm" style="margin-top:0.75rem;" onclick="showSecurityModal()">
+        ⚙️ Gérer ma question secrète
+      </button>
+    </div>
 
     <button class="btn btn-ghost btn-full" onclick="logout()">Se déconnecter</button>
   </div>
@@ -1541,6 +1574,108 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
 <!-- ===== MODALS ===== -->
 
+<!-- Modal Mot de passe oublié -->
+<div class="modal-overlay" id="modal-forgot-pwd">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <h3 style="font-family:var(--font);">🔐 Mot de passe oublié</h3>
+      <button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-forgot-pwd')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Étape 1 : email -->
+      <div id="forgot-step-1">
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Entrez votre adresse mail pour retrouver votre compte.</p>
+        <div class="form-group">
+          <label>Adresse mail</label>
+          <input type="email" id="forgot-email" placeholder="exemple@mail.fr" autocomplete="email">
+        </div>
+        <div class="error-msg" id="err-forgot-email" style="display:none;">Aucun compte trouvé avec cette adresse.</div>
+        <div class="error-msg" id="err-forgot-noquestion" style="display:none;">Ce compte n'a pas de question secrète configurée. Contactez votre référente.</div>
+        <button class="btn btn-primary btn-full" onclick="forgotStep1()">Continuer →</button>
+      </div>
+      <!-- Étape 2 : question secrète -->
+      <div id="forgot-step-2" style="display:none;">
+        <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-bottom:1rem;">
+          <div style="font-size:0.78rem;color:var(--text3);margin-bottom:4px;">Question de sécurité :</div>
+          <div style="font-size:0.88rem;font-weight:600;" id="forgot-question-text"></div>
+        </div>
+        <div class="form-group">
+          <label>Votre réponse</label>
+          <input type="text" id="forgot-answer" placeholder="Votre réponse secrète" autocomplete="off">
+        </div>
+        <div class="error-msg" id="err-forgot-answer" style="display:none;">Réponse incorrecte. Réessayez.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" onclick="forgotBack()">← Retour</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="forgotStep2()">Vérifier →</button>
+        </div>
+      </div>
+      <!-- Étape 3 : afficher/changer mot de passe -->
+      <div id="forgot-step-3" style="display:none;">
+        <div class="alert alert-success" style="margin-bottom:1rem;">
+          <span>✅</span><span>Identité vérifiée ! Choisissez un nouveau mot de passe.</span>
+        </div>
+        <div class="form-group">
+          <label>Nouveau mot de passe</label>
+          <div class="input-group">
+            <input type="password" id="forgot-new-pwd" placeholder="Minimum 8 caractères">
+            <button type="button" class="eye-btn" onclick="togglePwd('forgot-new-pwd','eye-forgot')">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirmer le nouveau mot de passe</label>
+          <div class="input-group">
+            <input type="password" id="forgot-new-pwd2" placeholder="Retapez le mot de passe">
+            <button type="button" class="eye-btn" onclick="togglePwd('forgot-new-pwd2','eye-forgot2')">👁</button>
+          </div>
+        </div>
+        <div class="error-msg" id="err-forgot-newpwd" style="display:none;"></div>
+        <button class="btn btn-primary btn-full" onclick="forgotStep3()">💾 Enregistrer le nouveau mot de passe</button>
+      </div>
+      <!-- Étape 4 : succès -->
+      <div id="forgot-step-4" style="display:none;text-align:center;padding:1rem 0;">
+        <div style="font-size:3rem;margin-bottom:0.75rem;">✅</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem;">Mot de passe modifié !</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.</p>
+        <button class="btn btn-primary btn-full" onclick="closeModal('modal-forgot-pwd');showPage('page-login')">Se connecter →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Sécurité - Question secrète -->
+<div class="modal-overlay" id="modal-security">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <h3 style="font-family:var(--font);">🔐 Question secrète</h3>
+      <button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-security')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1rem;">Cette question vous permettra de récupérer votre mot de passe si vous l'oubliez.</p>
+      <div class="form-group">
+        <label>Question secrète</label>
+        <select id="security-question" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);font-size:0.85rem;">
+          <option value="">-- Choisir une question --</option>
+          <option value="Quel est le prénom de votre mère ?">Quel est le prénom de votre mère ?</option>
+          <option value="Quel est le nom de votre animal de compagnie ?">Quel est le nom de votre animal de compagnie ?</option>
+          <option value="Dans quelle ville êtes-vous né(e) ?">Dans quelle ville êtes-vous né(e) ?</option>
+          <option value="Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?">Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?</option>
+          <option value="Quel est votre plat préféré ?">Quel est votre plat préféré ?</option>
+          <option value="Quel est le nom de votre école primaire ?">Quel est le nom de votre école primaire ?</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Votre réponse secrète</label>
+        <input type="text" id="security-answer" placeholder="Votre réponse" autocomplete="off">
+      </div>
+      <div class="error-msg" id="err-security" style="display:none;">Veuillez choisir une question et entrer une réponse.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-security')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveSecurityQuestion()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Help -->
 <div class="modal-overlay" id="modal-help">
   <div class="modal" style="max-width:360px;">
@@ -1924,7 +2059,7 @@ const METIERS = [
   {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
    desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
    conditions:'• Travail en extérieur et en intérieur\n• Horaires décalés (nuit, week-end)\n• Port de charges\n• Équipements de sécurité obligatoires',
-   video:'https://www.youtube.com/watch?v=OEBFHHBOd1s',
+   video:'https://www.youtube.com/watch?v=WhiYSzpfbMg',
    videoLabel:'Agent portuaire – métiers du port du Havre',
    tags:['Extérieur','Équipe','Physique'],
    niveauFr:'A2',
@@ -1971,7 +2106,7 @@ const METIERS = [
   {id:'soudeur',nom:'Soudeur / Soudeuse',emoji:'🔥',cat:'porteur-lh',couleur:'#c0392b',
    desc:'Le soudeur assemble des pièces métalliques par soudage. À Gonfreville-l\'Orcher et dans la zone industrielle havraise, de nombreuses entreprises de chaudronnerie recrutent des soudeurs qualifiés.',
    conditions:'• En atelier ou sur chantier\n• Travail debout, positions contraignantes\n• Chaleur et fumées (protection obligatoire)\n• Travail à la lumière artificielle',
-   video:'https://www.youtube.com/watch?v=aMMfGFpSBVE',
+   video:'https://www.youtube.com/watch?v=FIUaYfbTlFo',
    videoLabel:'Démonstration soudure à l\'arc MIG MAG – industrie',
    tags:['Industrie','Manuel','Qualifié'],
    niveauFr:'A2',
@@ -2476,14 +2611,107 @@ function handleRegister(e){
     showErr('err-email'); document.getElementById('err-email').textContent = 'Cette adresse mail est déjà utilisée.'; return;
   }
 
-  const user = { nom, prenom, email, pwd, profile: selectedProfile, createdAt: new Date().toISOString(), navHistory:[], stats:{metiersExplored:[],scores:{},badges:[],games:0} };
+  const user = {
+    nom, prenom, email, pwd,
+    profile: selectedProfile,
+    createdAt: new Date().toISOString(),
+    navHistory: [],
+    stats: {metiersExplored:[], scores:{}, badges:[], games:0},
+    secretQuestion: (document.getElementById('reg-question')||{}).value || '',
+    secretAnswer: (document.getElementById('reg-answer')||{}).value.trim().toLowerCase() || ''
+  };
   users.push(user);
   save('users', users);
   currentUser = user;
   save('currentUser', user);
   postLogin();
 }
-function showErr(id){ const el = document.getElementById(id); if(el){ el.style.display = 'block'; } }
+function showErr(id){ var el = document.getElementById(id); if(el){ el.style.display = 'block'; } }
+
+// ==================== MOT DE PASSE OUBLIÉ ====================
+var _forgotUser = null;
+
+function showForgotPassword(){
+  // Reset all steps
+  ['forgot-step-1','forgot-step-2','forgot-step-3','forgot-step-4'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.style.display = (id==='forgot-step-1')?'block':'none';
+  });
+  ['err-forgot-email','err-forgot-noquestion','err-forgot-answer','err-forgot-newpwd'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.style.display='none';
+  });
+  var ef = document.getElementById('forgot-email'); if(ef) ef.value='';
+  var fa = document.getElementById('forgot-answer'); if(fa) fa.value='';
+  var fp = document.getElementById('forgot-new-pwd'); if(fp) fp.value='';
+  var fp2 = document.getElementById('forgot-new-pwd2'); if(fp2) fp2.value='';
+  _forgotUser = null;
+  showModal('modal-forgot-pwd');
+}
+
+function forgotStep1(){
+  var email = (document.getElementById('forgot-email').value||'').trim().toLowerCase();
+  document.getElementById('err-forgot-email').style.display='none';
+  document.getElementById('err-forgot-noquestion').style.display='none';
+  if(!email){ document.getElementById('err-forgot-email').style.display='block'; return; }
+  var user = users.find(function(u){ return u.email===email; });
+  if(!user){ document.getElementById('err-forgot-email').style.display='block'; return; }
+  if(!user.secretQuestion){
+    document.getElementById('err-forgot-noquestion').style.display='block'; return;
+  }
+  _forgotUser = user;
+  document.getElementById('forgot-question-text').textContent = user.secretQuestion;
+  document.getElementById('forgot-step-1').style.display='none';
+  document.getElementById('forgot-step-2').style.display='block';
+}
+
+function forgotBack(){
+  document.getElementById('forgot-step-2').style.display='none';
+  document.getElementById('forgot-step-1').style.display='block';
+  document.getElementById('err-forgot-email').style.display='none';
+  document.getElementById('err-forgot-noquestion').style.display='none';
+}
+
+function forgotStep2(){
+  var answer = (document.getElementById('forgot-answer').value||'').trim().toLowerCase();
+  var errEl = document.getElementById('err-forgot-answer');
+  errEl.style.display='none';
+  if(!_forgotUser){ forgotBack(); return; }
+  if(!answer || answer !== (_forgotUser.secretAnswer||'').toLowerCase()){
+    errEl.style.display='block'; return;
+  }
+  document.getElementById('forgot-step-2').style.display='none';
+  document.getElementById('forgot-step-3').style.display='block';
+}
+
+function forgotStep3(){
+  var pwd = document.getElementById('forgot-new-pwd').value;
+  var pwd2 = document.getElementById('forgot-new-pwd2').value;
+  var errEl = document.getElementById('err-forgot-newpwd');
+  errEl.style.display='none';
+  if(pwd.length < 8){
+    errEl.textContent='Le mot de passe doit faire au moins 8 caractères.';
+    errEl.style.display='block'; return;
+  }
+  if(pwd !== pwd2){
+    errEl.textContent='Les mots de passe ne correspondent pas.';
+    errEl.style.display='block'; return;
+  }
+  if(!_forgotUser) return;
+  // Update password in users array
+  var idx = users.findIndex(function(u){ return u.email===_forgotUser.email; });
+  if(idx>=0){
+    users[idx].pwd = pwd;
+    save('users', users);
+    // Update currentUser if it's the same person
+    if(currentUser && currentUser.email===_forgotUser.email){
+      currentUser.pwd = pwd;
+      saveCurrentUser();
+    }
+  }
+  document.getElementById('forgot-step-3').style.display='none';
+  document.getElementById('forgot-step-4').style.display='block';
+  _forgotUser = null;
+}
 function handleLogin(e){
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -3398,9 +3626,46 @@ function renderDashboard(){
         </div>` : '';
       }).join('');
   }
+  // Security status
+  var secDiv = document.getElementById('security-status');
+  if(secDiv){
+    if(currentUser.secretQuestion){
+      secDiv.innerHTML = '<div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--success);">&#10003; Question secr&egrave;te configur&eacute;e &mdash; vous pouvez r&eacute;cup&eacute;rer votre mot de passe.</div>';
+    } else {
+      secDiv.innerHTML = '<div style="display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--danger);">&#9888; Pas encore de question secr&egrave;te. Si vous oubliez votre mot de passe, vous ne pourrez pas le r&eacute;cup&eacute;rer.</div>';
+    }
+  }
 }
 
-// ==================== ENTREPRISES ====================
+function showSecurityModal(){
+  var sq = document.getElementById('security-question');
+  var sa = document.getElementById('security-answer');
+  var err = document.getElementById('err-security');
+  if(sq && currentUser && currentUser.secretQuestion) sq.value = currentUser.secretQuestion;
+  if(sa) sa.value = '';
+  if(err) err.style.display='none';
+  showModal('modal-security');
+}
+
+function saveSecurityQuestion(){
+  var q = document.getElementById('security-question').value;
+  var a = (document.getElementById('security-answer').value||'').trim();
+  var err = document.getElementById('err-security');
+  err.style.display='none';
+  if(!q || !a){ err.style.display='block'; return; }
+  if(!currentUser) return;
+  currentUser.secretQuestion = q;
+  currentUser.secretAnswer = a.toLowerCase();
+  saveCurrentUser();
+  // Update in users array too
+  var idx = users.findIndex(function(u){ return u.email===currentUser.email; });
+  if(idx>=0){ users[idx].secretQuestion=q; users[idx].secretAnswer=a.toLowerCase(); save('users',users); }
+  closeModal('modal-security');
+  renderDashboard();
+  // Show confirmation
+  var btn = document.querySelector('#security-card button');
+  if(btn){ btn.textContent='✅ Question enregistrée !'; setTimeout(function(){ btn.textContent='⚙️ Modifier ma question secrète'; },2500); }
+}
 const QUESTIONS_ENTRETIEN = [
   {cat:'presentation',q:'«\u00a0Parlez-moi de vous.\u00a0»',conseil:'Pr\u00e9sentez votre parcours en 2\u20133 minutes : d\'o\u00f9 venez-vous professionnellement, ce que vous avez fait, et pourquoi vous \u00eates l\u00e0 aujourd\'hui. Restez positif et concis.'},
   {cat:'presentation',q:'«\u00a0Comment d\u00e9cririez-vous votre parcours professionnel\u00a0?\u00a0»',conseil:'R\u00e9sumez vos exp\u00e9riences les plus importantes en lien avec le poste vis\u00e9. Mettez en avant les comp\u00e9tences acquises.'},
@@ -3743,6 +4008,12 @@ function showStagiaireDetail(email){
     +(metiers.length?'<div class="section-title" style="font-size:0.78rem;margin-bottom:4px;">&#128200; Progression</div><div style="margin-bottom:0.75rem;">'+progressHtml+'</div>':'')
     +'<div class="section-title" style="font-size:0.78rem;margin-bottom:4px;">&#128220; Attestations</div>'
     +'<div>'+attHtml+'</div>'
+    +'<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);">'
+    +'<div style="font-size:0.75rem;font-weight:700;color:var(--text3);margin-bottom:4px;">&#128272; R&eacute;cup&eacute;ration mot de passe</div>'
+    +(s.secretQuestion
+      ?'<div style="font-size:0.78rem;color:var(--success);">&#10003; Question configur&eacute;e : <em>'+s.secretQuestion+'</em></div>'
+      :'<div style="font-size:0.78rem;color:var(--danger);">&#9888; Pas de question secr&egrave;te configur&eacute;e.<br><span style="color:var(--text3);">Invitez ce(tte) stagiaire &agrave; se r&eacute;inscrire ou &agrave; mettre &agrave; jour son profil.</span></div>')
+    +'</div>'
     +'</div>'
     +'<div class="modal-footer">'
     +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-stagiaire-detail\').remove()">Fermer</button>'
@@ -4464,63 +4735,114 @@ async function searchGlossaire(){
 // (glossaire init déclenché depuis showPage principal)
 
 // ==================== VIDEO SOUS-TITRES ====================
+var METIERSCOPE_URLS = {
+  'agent-portuaire': 'https://candidat.francetravail.fr/metierscope/fiche-metier/N3203',
+  'cariste': 'https://candidat.francetravail.fr/metierscope/fiche-metier/N1104',
+  'soudeur': 'https://candidat.francetravail.fr/metierscope/fiche-metier/H2913',
+  'technicien-maintenance': 'https://candidat.francetravail.fr/metierscope/fiche-metier/I1304',
+  'aide-soignant': 'https://candidat.francetravail.fr/metierscope/fiche-metier/J1501',
+  'conducteur-spl': 'https://candidat.francetravail.fr/metierscope/fiche-metier/N4101',
+  'electricien': 'https://candidat.francetravail.fr/metierscope/fiche-metier/F1602',
+  'agent-logistique': 'https://candidat.francetravail.fr/metierscope/fiche-metier/N1301',
+  'infirmier': 'https://candidat.francetravail.fr/metierscope/fiche-metier/J1502',
+  'dev-web': 'https://candidat.francetravail.fr/metierscope/fiche-metier/M1805',
+  'maçon': 'https://candidat.francetravail.fr/metierscope/fiche-metier/F1703',
+  'secretaire': 'https://candidat.francetravail.fr/metierscope/fiche-metier/M1604',
+  'operateur-chimie': 'https://candidat.francetravail.fr/metierscope/fiche-metier/H2301',
+  'agent-securite': 'https://candidat.francetravail.fr/metierscope/fiche-metier/K2503',
+  'plombier': 'https://candidat.francetravail.fr/metierscope/fiche-metier/F1610',
+  'aide-domicile': 'https://candidat.francetravail.fr/metierscope/fiche-metier/K1304',
+  'conducteur-engins': 'https://candidat.francetravail.fr/metierscope/fiche-metier/F1302',
+};
+
 function openVideoModal(){
   if(!currentMetier) return;
-  const url = currentMetier.video;
-  let vid = '';
-  if(url && url.includes('youtube.com/watch?v=')){
-    vid = url.split('v=')[1].split('&')[0];
-  } else if(url && url.includes('youtu.be/')){
-    vid = url.split('youtu.be/')[1];
-  }
-  if(!vid){ alert('Vid\u00e9o non disponible. Votre r\u00e9f\u00e9rente peut en ajouter une.'); return; }
+  var metierNom = currentMetier.nom;
+  var metierLabel = (currentMetier.videoLabel||metierNom).replace(/'/g,'&#39;');
+  var url = currentMetier.video||'';
+  var vid = '';
+  if(url.includes('youtube.com/watch?v=')) vid = url.split('v=')[1].split('&')[0];
+  else if(url.includes('youtu.be/')) vid = url.split('youtu.be/')[1].split('?')[0];
 
-  const modal = document.createElement('div');
+  var old = document.getElementById('modal-video-temp');
+  if(old) old.remove();
+
+  var modal = document.createElement('div');
   modal.className = 'modal-overlay open';
   modal.id = 'modal-video-temp';
-  const label = (currentMetier.videoLabel||currentMetier.nom).replace(/'/g,'&#39;');
 
-  // Language selector for subtitles
-  const langOptions = [
-    {val:'fr',txt:'🇫🇷 Français'},
-    {val:'en',txt:'🇬🇧 English'},
-    {val:'ar',txt:'🇸🇦 Arabe'},
-    {val:'es',txt:'🇪🇸 Español'},
-    {val:'pt',txt:'🇵🇹 Português'},
-    {val:'ro',txt:'🇷🇴 Română'},
-    {val:'ru',txt:'🇷🇺 Русский'},
-    {val:'tr',txt:'🇹🇷 Türkçe'},
-    {val:'pl',txt:'🇵🇱 Polski'},
-    {val:'de',txt:'🇩🇪 Deutsch'},
-    {val:'zh-Hans',txt:'🇨🇳 中文'},
-    {val:'uk',txt:'🇺🇦 Українська'},
-    {val:'hi',txt:'🇮🇳 हिन्दी'},
-    {val:'vi',txt:'🇻🇳 Tiếng Việt'},
-  ].map(l => '<option value="'+l.val+'">'+l.txt+'</option>').join('');
+  // MétierScope URL
+  var scopeUrl = METIERSCOPE_URLS[currentMetier.id] || ('https://candidat.francetravail.fr/metierscope/recherche?motCle='+encodeURIComponent(metierNom));
+  // ONISEP URL
+  var onisepUrl = 'https://www.onisep.fr/recherche?query='+encodeURIComponent(metierNom);
+  // YouTube search URL
+  var ytSearchUrl = 'https://www.youtube.com/results?search_query=m%C3%A9tier+'+encodeURIComponent(metierNom)+'&sp=EgIQAQ%3D%3D';
 
-  function buildEmbed(lang){
-    return 'https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref='+lang+'&hl='+lang+'&autoplay=1';
+  var langOptions = [
+    {val:'fr',txt:'&#127467;&#127479; Français'},
+    {val:'en',txt:'&#127468;&#127463; English'},
+    {val:'ar',txt:'&#127480;&#127462; Arabe'},
+    {val:'es',txt:'&#127466;&#127480; Español'},
+    {val:'pt',txt:'&#127477;&#127481; Português'},
+    {val:'ro',txt:'&#127479;&#127476; Română'},
+    {val:'ru',txt:'&#127479;&#127482; Русский'},
+    {val:'tr',txt:'&#127481;&#127479; Türkçe'},
+    {val:'de',txt:'&#127465;&#127466; Deutsch'},
+    {val:'uk',txt:'&#127482;&#127462; Українська'},
+    {val:'zh-Hans',txt:'&#127464;&#127475; 中文'},
+    {val:'hi',txt:'&#127470;&#127475; हिन्दी'},
+    {val:'vi',txt:'&#127483;&#127475; Tiếng Việt'},
+  ].map(function(l){return '<option value="'+l.val+'">'+l.txt+'</option>';}).join('');
+
+  var videoSection = '';
+  if(vid){
+    videoSection = '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;border-radius:0;">'
+      +'<iframe id="video-iframe" src="https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=fr&hl=fr&rel=0" '
+      +'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen allow="autoplay"></iframe>'
+      +'</div>'
+      +'<div style="padding:0.6rem 1rem;background:var(--surface2);display:flex;align-items:center;gap:8px;">'
+      +'<span style="font-size:0.76rem;color:var(--text3);flex-shrink:0;">&#127462; Sous-titres :</span>'
+      +'<select id="video-lang-sel" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:4px 8px;font-size:0.78rem;background:var(--surface);color:var(--text);" '
+      +'onchange="var f=document.getElementById(\'video-iframe\');f.src=\'https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=\'+this.value+\'&hl=\'+this.value+\'&rel=0\'">'
+      +langOptions+'</select>'
+      +'</div>';
+  } else {
+    videoSection = '<div style="padding:1.5rem;text-align:center;background:var(--surface2);">'
+      +'<div style="font-size:2rem;margin-bottom:0.5rem;">&#127902;</div>'
+      +'<div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;">Vid&eacute;o disponible sur les sites officiels</div>'
+      +'<div style="font-size:0.78rem;color:var(--text3);">Utilisez les boutons ci-dessous pour d&eacute;couvrir ce m&eacute;tier en vid&eacute;o.</div>'
+      +'</div>';
   }
 
   modal.innerHTML = '<div class="modal" style="max-width:520px;">'
-    +'<div class="modal-header"><h3 style="font-family:var(--font);font-size:0.95rem;">&#127902; '+label+'</h3>'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);font-size:0.92rem;">&#127902; '+metierLabel+'</h3>'
     +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="document.getElementById(\'modal-video-temp\').remove()">&#10005;</button></div>'
     +'<div class="modal-body" style="padding:0;">'
-    +'<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">'
-    +'<iframe id="video-iframe" src="'+buildEmbed('fr')+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen allow="autoplay"></iframe>'
-    +'</div></div>'
-    +'<div class="modal-footer" style="flex-direction:column;gap:8px;align-items:stretch;">'
-    +'<div style="display:flex;align-items:center;gap:8px;">'
-    +'<span style="font-size:0.78rem;color:var(--text3);flex-shrink:0;">&#127462; Sous-titres :</span>'
-    +'<select id="video-lang-sel" style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:0.8rem;background:var(--surface);color:var(--text);" '
-    +'onchange="document.getElementById(\'video-iframe\').src=\'https://www.youtube-nocookie.com/embed/'+vid+'?cc_load_policy=1&cc_lang_pref=\'+this.value+\'&hl=\'+this.value">'
-    +langOptions+'</select></div>'
-    +'<div style="display:flex;gap:8px;margin-bottom:6px;">'
-    +'<a href="https://www.youtube.com/watch?v='+vid+'" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost" style="flex:1;text-align:center;">&#128250; Ouvrir YouTube</a>'
-    +'<a href="https://www.onisep.fr/recherche?query='+encodeURIComponent(currentMetier.nom)+'" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline" style="flex:1;text-align:center;">&#127891; ONISEP</a>'
+    +videoSection
+    +'<div style="padding:0.85rem;">'
+    +'<div style="font-size:0.77rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.04em;">&#128279; Sources officielles</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
+    +'<a href="'+scopeUrl+'" target="_blank" rel="noopener noreferrer" '
+    +'style="display:flex;flex-direction:column;align-items:center;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:0.7rem 0.5rem;text-decoration:none;gap:4px;">'
+    +'<span style="font-size:1.5rem;">&#127979;</span>'
+    +'<span style="font-size:0.72rem;font-weight:700;color:var(--primary);">M&eacute;tierScope</span>'
+    +'<span style="font-size:0.65rem;color:var(--text3);text-align:center;">France Travail&#8599;</span>'
+    +'</a>'
+    +'<a href="'+onisepUrl+'" target="_blank" rel="noopener noreferrer" '
+    +'style="display:flex;flex-direction:column;align-items:center;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;padding:0.7rem 0.5rem;text-decoration:none;gap:4px;">'
+    +'<span style="font-size:1.5rem;">&#127891;</span>'
+    +'<span style="font-size:0.72rem;font-weight:700;color:#e65100;">ONISEP</span>'
+    +'<span style="font-size:0.65rem;color:var(--text3);text-align:center;">Vid&eacute;os & fiches&#8599;</span>'
+    +'</a>'
     +'</div>'
-    +'<div style="font-size:0.72rem;color:var(--text3);text-align:center;">&#128204; Si la vidéo ne charge pas, utilisez le lien YouTube direct</div>'
-    +'</div></div>';
+    +(vid?'<a href="https://www.youtube.com/watch?v='+vid+'" target="_blank" rel="noopener noreferrer" '
+    +'style="display:flex;align-items:center;gap:8px;background:#ff0000;color:#fff;border-radius:8px;padding:0.55rem 1rem;text-decoration:none;justify-content:center;font-size:0.82rem;font-weight:600;">'
+    +'<span>&#9654;</span> Ouvrir sur YouTube</a>'
+    :'<a href="'+ytSearchUrl+'" target="_blank" rel="noopener noreferrer" '
+    +'style="display:flex;align-items:center;gap:8px;background:#ff0000;color:#fff;border-radius:8px;padding:0.55rem 1rem;text-decoration:none;justify-content:center;font-size:0.82rem;font-weight:600;">'
+    +'<span>&#9654;</span> Rechercher sur YouTube</a>')
+    +'</div></div></div>';
+
   document.body.appendChild(modal);
 }
 function goToDashboard(){
