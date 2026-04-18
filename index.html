@@ -1590,8 +1590,45 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
           <input type="email" id="forgot-email" placeholder="exemple@mail.fr" autocomplete="email">
         </div>
         <div class="error-msg" id="err-forgot-email" style="display:none;">Aucun compte trouvé avec cette adresse.</div>
-        <div class="error-msg" id="err-forgot-noquestion" style="display:none;">Ce compte n'a pas de question secrète configurée. Contactez votre référente.</div>
+        <div class="error-msg" id="err-forgot-noquestion" style="display:none;">Aucun compte trouvé avec cette adresse.</div>
         <button class="btn btn-primary btn-full" onclick="forgotStep1()">Continuer →</button>
+      </div>
+
+      <!-- Étape 1b : pas de question secrète - définir maintenant -->
+      <div id="forgot-step-1b" style="display:none;">
+        <div class="alert alert-warning" style="margin-bottom:1rem;">
+          <span>⚠️</span><span style="font-size:0.83rem;">Ce compte n'a pas encore de question secrète. Vous pouvez en créer une maintenant pour récupérer votre mot de passe.</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Pour confirmer votre identité, entrez votre mot de passe actuel :</p>
+        <div class="form-group">
+          <label>Mot de passe actuel</label>
+          <div class="input-group">
+            <input type="password" id="forgot-current-pwd" placeholder="Votre mot de passe actuel">
+            <button type="button" class="eye-btn" onclick="togglePwd('forgot-current-pwd','eye-cpwd')">👁</button>
+          </div>
+        </div>
+        <div class="error-msg" id="err-forgot-cpwd" style="display:none;">Mot de passe incorrect.</div>
+        <div class="form-group">
+          <label>Choisir une question secrète</label>
+          <select id="forgot-set-question" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);font-size:0.85rem;">
+            <option value="">-- Choisir --</option>
+            <option value="Quel est le prénom de votre mère ?">Quel est le prénom de votre mère ?</option>
+            <option value="Quel est le nom de votre animal de compagnie ?">Quel est le nom de votre animal de compagnie ?</option>
+            <option value="Dans quelle ville êtes-vous né(e) ?">Dans quelle ville êtes-vous né(e) ?</option>
+            <option value="Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?">Quel est le prénom de votre meilleur(e) ami(e) d'enfance ?</option>
+            <option value="Quel est votre plat préféré ?">Quel est votre plat préféré ?</option>
+            <option value="Quel est le nom de votre école primaire ?">Quel est le nom de votre école primaire ?</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Votre réponse secrète</label>
+          <input type="text" id="forgot-set-answer" placeholder="Votre réponse" autocomplete="off">
+        </div>
+        <div class="error-msg" id="err-forgot-1b" style="display:none;"></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" onclick="forgotBack1b()">← Retour</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="forgotStep1b()">Enregistrer et continuer →</button>
+        </div>
       </div>
       <!-- Étape 2 : question secrète -->
       <div id="forgot-step-2" style="display:none;">
@@ -2059,7 +2096,7 @@ const METIERS = [
   {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
    desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
    conditions:'• Travail en extérieur et en intérieur\n• Horaires décalés (nuit, week-end)\n• Port de charges\n• Équipements de sécurité obligatoires',
-   video:'https://www.youtube.com/watch?v=WhiYSzpfbMg',
+   video:'https://www.youtube.com/watch?v=mVyQGoTAEyA',
    videoLabel:'Agent portuaire – métiers du port du Havre',
    tags:['Extérieur','Équipe','Physique'],
    niveauFr:'A2',
@@ -2083,7 +2120,7 @@ const METIERS = [
   {id:'cariste',nom:'Cariste',emoji:'🏗',cat:'porteur-lh',couleur:'#e67e22',
    desc:'Le cariste conduit des chariots élévateurs pour déplacer des marchandises dans des entrepôts ou sur des quais. Au Havre, de nombreuses entreprises logistiques recrutent des caristes.',
    conditions:'• En entrepôt ou sur quai\n• Debout et assis alternativement\n• CACES obligatoire\n• Manutention de charges',
-   video:'https://www.youtube.com/watch?v=YxHQ1kBMUXk',
+   video:'https://www.youtube.com/watch?v=X1mNq9g2UmI',
    videoLabel:'Le métier de cariste – entrepôt logistique',
    tags:['Entrepôt','CACES','Recrutement élevé'],
    niveauFr:'A1',
@@ -2106,7 +2143,7 @@ const METIERS = [
   {id:'soudeur',nom:'Soudeur / Soudeuse',emoji:'🔥',cat:'porteur-lh',couleur:'#c0392b',
    desc:'Le soudeur assemble des pièces métalliques par soudage. À Gonfreville-l\'Orcher et dans la zone industrielle havraise, de nombreuses entreprises de chaudronnerie recrutent des soudeurs qualifiés.',
    conditions:'• En atelier ou sur chantier\n• Travail debout, positions contraignantes\n• Chaleur et fumées (protection obligatoire)\n• Travail à la lumière artificielle',
-   video:'https://www.youtube.com/watch?v=FIUaYfbTlFo',
+   video:'https://www.youtube.com/watch?v=gQOeDDv0vbE',
    videoLabel:'Démonstration soudure à l\'arc MIG MAG – industrie',
    tags:['Industrie','Manuel','Qualifié'],
    niveauFr:'A2',
@@ -2128,7 +2165,7 @@ const METIERS = [
   {id:'technicien-maintenance',nom:'Technicien de maintenance',emoji:'⚙️',cat:'porteur-lh',couleur:'#1a5fa0',
    desc:'Le technicien de maintenance répare et entretient les machines et équipements industriels. Dans les usines et raffineries de la zone havraise, ce métier est très recherché.',
    conditions:'• En atelier, usine ou sur site industriel\n• Horaires en 3×8 possibles\n• Lecture de plans techniques\n• Travail en hauteur possible',
-   video:'https://www.youtube.com/watch?v=eRxPQFbIV7g',
+   video:'https://www.youtube.com/watch?v=w8HiMNMJhBo',
    videoLabel:'Technicien de maintenance industrielle – présentation du métier',
    tags:['Industrie','Qualifié','CDI facile'],
    niveauFr:'B1',
@@ -2150,7 +2187,7 @@ const METIERS = [
   {id:'aide-soignant',nom:'Aide-soignant(e)',emoji:'💝',cat:'porteur-lh',couleur:'#e91e8c',
    desc:'L\'aide-soignant(e) aide les infirmiers et prend soin des malades et des personnes âgées dans les hôpitaux, cliniques et maisons de retraite du Havre. C\'est un métier du cœur, en forte demande.',
    conditions:'• En hôpital, clinique, EHPAD ou à domicile\n• Horaires décalés (nuit, week-end, jours fériés)\n• Travail en équipe soignante\n• Manutention des patients (formation gestes/postures)',
-   video:'https://www.youtube.com/watch?v=pVTlYEr3Ldo',
+   video:'https://www.youtube.com/watch?v=EqDh-ddXftU',
    videoLabel:'Une journée d\'une aide-soignante en EHPAD',
    tags:['Santé','Relationnel','CDI'],
    niveauFr:'B1',
@@ -2171,7 +2208,7 @@ const METIERS = [
   {id:'conducteur-spl',nom:'Conducteur SPL',emoji:'🚛',cat:'porteur-lh',couleur:'#2c3e50',
    desc:'Le conducteur SPL conduit des camions semi-remorques pour livrer des marchandises. Au Havre, le port génère énormément de trafic routier et les conducteurs SPL sont très demandés.',
    conditions:'• Travail en cabine, debout pour charger/décharger\n• Longues distances ou trajets régionaux\n• Permis C+E obligatoire (anciennement EC)\n• Travail de nuit possible',
-   video:'https://www.youtube.com/watch?v=K8hx5UsmAqM',
+   video:'https://www.youtube.com/watch?v=b8creGTmRcU',
    videoLabel:'Conducteur SPL – une journée dans un camion semi-remorque',
    tags:['Transport','Autonomie','Permis requis'],
    niveauFr:'A2',
@@ -2193,7 +2230,7 @@ const METIERS = [
   {id:'electricien',nom:'Électricien(ne)',emoji:'⚡',cat:'porteur-lh',couleur:'#f39c12',
    desc:'L\'électricien installe, répare et entretient les installations électriques dans les maisons, les bâtiments et les usines. Dans l\'agglomération havraise en pleine croissance, ce métier est en forte demande.',
    conditions:'• Sur chantier, en logement ou en industrie\n• Travail en hauteur possible\n• Habilitations électriques obligatoires\n• Travail en équipe sur les grands chantiers',
-   video:'https://www.youtube.com/watch?v=nANhpLxTQXs',
+   video:'https://www.youtube.com/watch?v=e3exdmdV5ps',
    videoLabel:'Le métier d\'électricien bâtiment – installation et travaux',
    tags:['BTP','Qualifié','Chantier'],
    niveauFr:'A2',
@@ -2216,7 +2253,7 @@ const METIERS = [
   {id:'agent-logistique',nom:'Agent logistique',emoji:'📦',cat:'porteur-lh',couleur:'#8e44ad',
    desc:'L\'agent logistique gère les stocks, prépare les commandes et organise les expéditions dans un entrepôt. La zone logistique havraise est l\'une des plus importantes de France.',
    conditions:'• En entrepôt (chaud en été, froid en hiver)\n• Travail debout, marche fréquente\n• Utilisation de scanners et d\'outils numériques\n• Horaires en 2x8 ou 3x8',
-   video:'https://www.youtube.com/watch?v=h_pPeGMjcO8',
+   video:'https://www.youtube.com/watch?v=xzI6TaEP00I',
    videoLabel:'Agent logistique – préparation de commandes en entrepôt',
    tags:['Logistique','Entrepôt','Polyvalent'],
    niveauFr:'A2',
@@ -2240,7 +2277,7 @@ const METIERS = [
   {id:'infirmier',nom:'Infirmier(ère)',emoji:'🏥',cat:'porteur-agglo',couleur:'#e91e8c',
    desc:'L\'infirmier(ère) soigne les malades, administre des médicaments et surveille l\'état de santé des patients. Très forte demande dans l\'ensemble de l\'agglomération havraise.',
    conditions:'• Hôpital, clinique, domicile, EHPAD\n• Travail debout, rythme intense\n• 12h de travail par poste possibles\n• Nuits, week-ends et jours fériés',
-   video:'https://www.youtube.com/watch?v=f8amXvC5cks',
+   video:'https://www.youtube.com/watch?v=66AdrSG85mk',
    videoLabel:'Le métier d\'infirmier(ère) – présentation et formation',
    tags:['Santé','Diplôme d\'État','Forte demande'],
    niveauFr:'B2',
@@ -2261,7 +2298,7 @@ const METIERS = [
   {id:'dev-web',nom:'Développeur web',emoji:'💻',cat:'porteur-agglo',couleur:'#2ecc71',
    desc:'Le développeur web crée des sites internet et des applications en ligne. Le numérique est un secteur en pleine croissance, avec l\'école 42 implantée au Havre.',
    conditions:'• En bureau ou en télétravail\n• Travail assis devant ordinateur\n• Créativité et logique nécessaires\n• Missions en freelance possibles',
-   video:'https://www.youtube.com/watch?v=WJx2s_4e0fI',
+   video:'https://www.youtube.com/watch?v=--hnzO3tMQo',
    videoLabel:'Développeur web – présentation du métier et formations',
    tags:['Numérique','Télétravail','Avenir'],
    niveauFr:'B1',
@@ -2285,7 +2322,7 @@ const METIERS = [
   {id:'maçon',nom:'Maçon(ne)',emoji:'🏗',cat:'porteur-agglo',couleur:'#7f8c8d',
    desc:'Le maçon construit et rénove des bâtiments. Dans l\'agglomération havraise et notamment à Montivilliers, Harfleur et Gonfreville, de nombreux chantiers recrutent des maçons qualifiés.',
    conditions:'• En extérieur et en intérieur selon les chantiers\n• Travail physique et en équipe\n• Horaires de journée en général\n• Conduite de minibus de chantier',
-   video:'https://www.youtube.com/watch?v=yABvPGhEbXM',
+   video:'https://www.youtube.com/watch?v=x-EJtcZEv8U',
    videoLabel:'Le métier de maçon – construction et rénovation',
    tags:['BTP','Extérieur','Chantier'],
    niveauFr:'A2',
@@ -2632,18 +2669,16 @@ function showErr(id){ var el = document.getElementById(id); if(el){ el.style.dis
 var _forgotUser = null;
 
 function showForgotPassword(){
-  // Reset all steps
-  ['forgot-step-1','forgot-step-2','forgot-step-3','forgot-step-4'].forEach(function(id){
+  var allSteps = ['forgot-step-1','forgot-step-1b','forgot-step-2','forgot-step-3','forgot-step-4'];
+  allSteps.forEach(function(id){
     var el = document.getElementById(id);
-    if(el) el.style.display = (id==='forgot-step-1')?'block':'none';
+    if(el) el.style.display = (id==='forgot-step-1') ? 'block' : 'none';
   });
-  ['err-forgot-email','err-forgot-noquestion','err-forgot-answer','err-forgot-newpwd'].forEach(function(id){
-    var el = document.getElementById(id); if(el) el.style.display='none';
+  var errIds = ['err-forgot-email','err-forgot-noquestion','err-forgot-answer','err-forgot-newpwd','err-forgot-cpwd','err-forgot-1b'];
+  errIds.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['forgot-email','forgot-answer','forgot-new-pwd','forgot-new-pwd2','forgot-current-pwd','forgot-set-answer'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
   });
-  var ef = document.getElementById('forgot-email'); if(ef) ef.value='';
-  var fa = document.getElementById('forgot-answer'); if(fa) fa.value='';
-  var fp = document.getElementById('forgot-new-pwd'); if(fp) fp.value='';
-  var fp2 = document.getElementById('forgot-new-pwd2'); if(fp2) fp2.value='';
   _forgotUser = null;
   showModal('modal-forgot-pwd');
 }
@@ -2651,24 +2686,61 @@ function showForgotPassword(){
 function forgotStep1(){
   var email = (document.getElementById('forgot-email').value||'').trim().toLowerCase();
   document.getElementById('err-forgot-email').style.display='none';
-  document.getElementById('err-forgot-noquestion').style.display='none';
   if(!email){ document.getElementById('err-forgot-email').style.display='block'; return; }
   var user = users.find(function(u){ return u.email===email; });
   if(!user){ document.getElementById('err-forgot-email').style.display='block'; return; }
-  if(!user.secretQuestion){
-    document.getElementById('err-forgot-noquestion').style.display='block'; return;
-  }
   _forgotUser = user;
-  document.getElementById('forgot-question-text').textContent = user.secretQuestion;
-  document.getElementById('forgot-step-1').style.display='none';
-  document.getElementById('forgot-step-2').style.display='block';
+  if(user.secretQuestion){
+    // Has secret question → go to step 2
+    document.getElementById('forgot-question-text').textContent = user.secretQuestion;
+    document.getElementById('forgot-step-1').style.display='none';
+    document.getElementById('forgot-step-2').style.display='block';
+  } else {
+    // No secret question → offer to set one using current password
+    document.getElementById('forgot-step-1').style.display='none';
+    document.getElementById('forgot-step-1b').style.display='block';
+  }
 }
 
 function forgotBack(){
   document.getElementById('forgot-step-2').style.display='none';
   document.getElementById('forgot-step-1').style.display='block';
   document.getElementById('err-forgot-email').style.display='none';
-  document.getElementById('err-forgot-noquestion').style.display='none';
+}
+
+function forgotBack1b(){
+  document.getElementById('forgot-step-1b').style.display='none';
+  document.getElementById('forgot-step-1').style.display='block';
+  _forgotUser = null;
+}
+
+function forgotStep1b(){
+  // Verify current password, save secret question, then go to step 3
+  var currentPwd = document.getElementById('forgot-current-pwd').value;
+  var question = document.getElementById('forgot-set-question').value;
+  var answer = (document.getElementById('forgot-set-answer').value||'').trim();
+  var errCpwd = document.getElementById('err-forgot-cpwd');
+  var err1b = document.getElementById('err-forgot-1b');
+  errCpwd.style.display='none'; err1b.style.display='none';
+  if(!_forgotUser) return;
+  if(!currentPwd || currentPwd !== _forgotUser.pwd){
+    errCpwd.style.display='block'; return;
+  }
+  if(!question || !answer){
+    err1b.textContent = 'Veuillez choisir une question et entrer une réponse.';
+    err1b.style.display='block'; return;
+  }
+  // Save the secret question immediately
+  var idx = users.findIndex(function(u){ return u.email===_forgotUser.email; });
+  if(idx>=0){
+    users[idx].secretQuestion = question;
+    users[idx].secretAnswer = answer.toLowerCase();
+    save('users', users);
+    _forgotUser = users[idx];
+  }
+  // Now proceed to step 3 (change password)
+  document.getElementById('forgot-step-1b').style.display='none';
+  document.getElementById('forgot-step-3').style.display='block';
 }
 
 function forgotStep2(){
@@ -2697,15 +2769,12 @@ function forgotStep3(){
     errEl.style.display='block'; return;
   }
   if(!_forgotUser) return;
-  // Update password in users array
   var idx = users.findIndex(function(u){ return u.email===_forgotUser.email; });
   if(idx>=0){
     users[idx].pwd = pwd;
     save('users', users);
-    // Update currentUser if it's the same person
     if(currentUser && currentUser.email===_forgotUser.email){
-      currentUser.pwd = pwd;
-      saveCurrentUser();
+      currentUser.pwd = pwd; saveCurrentUser();
     }
   }
   document.getElementById('forgot-step-3').style.display='none';
@@ -4017,9 +4086,20 @@ function showStagiaireDetail(email){
     +'</div>'
     +'<div class="modal-footer">'
     +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-stagiaire-detail\').remove()">Fermer</button>'
+    +'<button class="btn btn-outline" onclick="referenteResetPwd(\''+safeEmail+'\')" title="Réinitialiser mot de passe">🔑 Réinit. MDP</button>'
     +'<button class="btn btn-primary" onclick="printRapportStagiaire(\''+safeEmail+'\')">&#128424; Rapport PDF</button>'
     +'</div></div>';
   document.body.appendChild(m);
+}
+function referenteResetPwd(email){
+  var s = users.find(function(u){ return u.email===email; });
+  if(!s) return;
+  var newPwd = prompt('Nouveau mot de passe pour ' + s.prenom + ' ' + s.nom + ' :\n(8 caractères minimum)');
+  if(!newPwd) return;
+  if(newPwd.length < 8){ alert('Le mot de passe doit faire au moins 8 caractères.'); return; }
+  var idx = users.findIndex(function(u){ return u.email===email; });
+  if(idx>=0){ users[idx].pwd = newPwd; save('users', users); }
+  alert('✅ Mot de passe de ' + s.prenom + ' ' + s.nom + ' réinitialisé !\n\nNouveau mot de passe : ' + newPwd + '\n\nTransmettez-le au stagiaire en privé.');
 }
 function confirmDelete(email){
   var s = users.find(function(u){ return u.email===email; });
