@@ -259,9 +259,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .handicap-item .h-text{font-size:0.8rem;font-weight:600;color:var(--text);}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border-radius:16px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;align-items:flex-start;}
+.modal{background:var(--surface);border-radius:16px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);margin:auto;}
 .modal-header{padding:1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .modal-body{padding:1.25rem;}
 .modal-footer{padding:1rem 1.25rem;border-top:1.5px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
@@ -4665,8 +4665,145 @@ function updateRapportStats(){
 }
 
 function generateRapportPDF(){
-  alert('Fonctionnalité d\'export PDF en cours de finalisation. Contactez votre équipe technique pour l\'activer.');
-  closeModal('modal-rapport');
+  var stagList = users.filter(function(u){ return u.profile==='stagiaire'; });
+  var allM = [...METIERS,...customMetiers];
+  var totalM = stagList.reduce(function(a,s){ return a+(s.stats&&s.stats.metiersExplored||[]).length; }, 0);
+  var totalA = stagList.reduce(function(a,s){ return a+(s.attestations||[]).length; }, 0);
+  var rows = stagList.map(function(s){
+    var m=(s.stats&&s.stats.metiersExplored||[]).length;
+    var b=(s.stats&&s.stats.badges||[]).length;
+    var a=(s.attestations||[]).length;
+    return '<tr><td>'+s.prenom+' '+s.nom+'</td><td>'+s.email+'</td><td>'+(s.groupe||'—')+'</td>'
+      +'<td style="text-align:center;">'+m+'</td><td style="text-align:center;">'+b+'</td><td style="text-align:center;">'+a+'</td></tr>';
+  }).join('');
+  var win = window.open('','_blank','width=800,height=900');
+  if(!win){ alert('Veuillez autoriser les popups pour imprimer.'); return; }
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport Global Cap Avenir</title>'
+    +'<style>'
+    +'body{font-family:Arial,sans-serif;padding:30px;max-width:740px;margin:auto;color:#222;}'
+    +'h1{color:#0a3d6b;font-size:1.4rem;margin-bottom:4px;}'
+    +'h2{color:#333;font-size:1rem;margin:1.5rem 0 0.5rem;border-bottom:1px solid #ddd;padding-bottom:4px;}'
+    +'.meta{color:#777;font-size:0.82rem;margin-bottom:1.5rem;}'
+    +'.stats{display:flex;gap:16px;margin-bottom:1.5rem;}'
+    +'.stat{border:1px solid #ddd;border-radius:8px;padding:12px 20px;text-align:center;min-width:100px;}'
+    +'.stat-val{font-size:1.8rem;font-weight:700;color:#0a3d6b;}'
+    +'.stat-lab{font-size:0.75rem;color:#666;}'
+    +'table{width:100%;border-collapse:collapse;font-size:0.85rem;}'
+    +'th{background:#0a3d6b;color:#fff;padding:8px 10px;text-align:left;}'
+    +'td{padding:7px 10px;border-bottom:1px solid #eee;}'
+    +'tr:hover td{background:#f5f9ff;}'
+    +'.footer{margin-top:2rem;font-size:0.72rem;color:#999;text-align:center;border-top:1px solid #eee;padding-top:10px;}'
+    +'@media print{button{display:none!important;} body{padding:15px;}}'
+    +'</style></head><body>'
+    +'<h1>⚓ Cap Avenir – Le Havre</h1>'
+    +'<div class="meta">Rapport global · Généré le '+new Date().toLocaleDateString('fr-FR')+' à '+new Date().toLocaleTimeString('fr-FR')+'</div>'
+    +'<div class="stats">'
+    +'<div class="stat"><div class="stat-val">'+stagList.length+'</div><div class="stat-lab">Stagiaires</div></div>'
+    +'<div class="stat"><div class="stat-val">'+totalM+'</div><div class="stat-lab">Explorations</div></div>'
+    +'<div class="stat"><div class="stat-val">'+totalA+'</div><div class="stat-lab">Attestations</div></div>'
+    +'</div>'
+    +'<h2>👥 Liste des stagiaires</h2>'
+    +'<table><thead><tr><th>Nom</th><th>Email</th><th>Groupe</th><th>Métiers</th><th>Badges</th><th>Attests.</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody></table>'
+    +'<div class="footer">Cap Avenir Le Havre · Document pédagogique non officiel</div>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function printRapportStagiaire(email){
+  var s = users.find(function(u){ return u.email===email; });
+  if(!s) return;
+  var allM = [...METIERS,...customMetiers];
+  var metiers = (s.stats&&s.stats.metiersExplored)||[];
+  var badges = (s.stats&&s.stats.badges)||[];
+  var atts = s.attestations||[];
+  var scores = (s.stats&&s.stats.scores)||{};
+  var win = window.open('','_blank','width=700,height=900');
+  if(!win){ alert('Veuillez autoriser les popups pour imprimer.'); return; }
+  var metierRows = metiers.map(function(mid){
+    var m=allM.find(function(x){return x.id===mid;});
+    var sc=scores[mid]||0;
+    var hasBadge=badges.includes(mid);
+    return m?'<tr><td>'+m.emoji+' '+m.nom+'</td><td style="text-align:center;">'+sc+' pts</td>'
+      +'<td style="text-align:center;">'+(hasBadge?'✅ Oui':'—')+'</td></tr>':'';
+  }).join('');
+  var attRows = atts.map(function(a){
+    return '<tr><td>'+a.metier+'</td><td>'+a.date+'</td></tr>';
+  }).join('');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport '+s.prenom+' '+s.nom+'</title>'
+    +'<style>'
+    +'body{font-family:Arial,sans-serif;padding:30px;max-width:650px;margin:auto;color:#222;}'
+    +'h1{color:#0a3d6b;font-size:1.3rem;} h2{color:#333;font-size:0.95rem;margin:1.2rem 0 0.4rem;border-bottom:1px solid #ddd;padding-bottom:3px;}'
+    +'.meta{color:#777;font-size:0.82rem;margin-bottom:1rem;}'
+    +'.stats{display:flex;gap:12px;margin-bottom:1rem;flex-wrap:wrap;}'
+    +'.stat{border:1px solid #ddd;border-radius:8px;padding:10px 16px;text-align:center;}'
+    +'.stat-val{font-size:1.5rem;font-weight:700;color:#0a3d6b;} .stat-lab{font-size:0.72rem;color:#666;}'
+    +'table{width:100%;border-collapse:collapse;font-size:0.83rem;margin-top:0.5rem;}'
+    +'th{background:#0a3d6b;color:#fff;padding:7px 10px;text-align:left;}'
+    +'td{padding:6px 10px;border-bottom:1px solid #eee;}'
+    +'.footer{margin-top:2rem;font-size:0.7rem;color:#999;text-align:center;border-top:1px solid #eee;padding-top:8px;}'
+    +'@media print{button{display:none!important;}}'
+    +'</style></head><body>'
+    +'<h1>⚓ Cap Avenir – Rapport individuel</h1>'
+    +'<div class="meta">'+s.prenom+' '+s.nom+' &nbsp;·&nbsp; '+s.email+(s.groupe?' &nbsp;·&nbsp; Groupe : '+s.groupe:'')+'</div>'
+    +'<div class="meta">Inscrit le '+(s.createdAt?new Date(s.createdAt).toLocaleDateString('fr-FR'):'—')+' &nbsp;·&nbsp; Généré le '+new Date().toLocaleDateString('fr-FR')+'</div>'
+    +'<div class="stats">'
+    +'<div class="stat"><div class="stat-val">'+metiers.length+'</div><div class="stat-lab">Métiers</div></div>'
+    +'<div class="stat"><div class="stat-val">'+badges.length+'</div><div class="stat-lab">Badges</div></div>'
+    +'<div class="stat"><div class="stat-val">'+(s.stats&&s.stats.games||0)+'</div><div class="stat-lab">Jeux</div></div>'
+    +'<div class="stat"><div class="stat-val">'+atts.length+'</div><div class="stat-lab">Attestations</div></div>'
+    +'</div>'
+    +(metiers.length?'<h2>📈 Métiers explorés</h2>'
+      +'<table><thead><tr><th>Métier</th><th>Score</th><th>Badge</th></tr></thead><tbody>'+metierRows+'</tbody></table>':'')
+    +(atts.length?'<h2>📜 Attestations</h2>'
+      +'<table><thead><tr><th>Métier</th><th>Date</th></tr></thead><tbody>'+attRows+'</tbody></table>':'')
+    +'<div class="footer">Cap Avenir Le Havre · Document pédagogique non officiel</div>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function printAttestationForStagiaire(nom, metier, date){
+  var win = window.open('','_blank','width=600,height=700');
+  if(!win){ alert('Veuillez autoriser les popups pour imprimer.'); return; }
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Attestation '+nom+'</title>'
+    +'<style>'
+    +'body{font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f5f5;}'
+    +'.box{border:3px double #0a3d6b;padding:50px 40px;border-radius:12px;text-align:center;max-width:480px;width:90%;background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.1);}'
+    +'.logo{font-size:3rem;margin-bottom:1rem;}'
+    +'h1{color:#0a3d6b;font-size:1.2rem;margin:0 0 0.5rem;}'
+    +'.subtitle{color:#777;font-size:0.85rem;margin-bottom:1.5rem;}'
+    +'.name{font-size:1.5rem;font-weight:700;color:#0a3d6b;margin:1rem 0;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:0.75rem 0;}'
+    +'.metier-badge{background:#e8f2fc;border-radius:8px;padding:10px 24px;display:inline-block;font-weight:700;font-size:1rem;color:#0a3d6b;margin:0.75rem 0;}'
+    +'.date{color:#555;font-size:0.88rem;margin-top:1rem;}'
+    +'.footer{font-size:0.7rem;color:#aaa;margin-top:1.5rem;font-style:italic;}'
+    +'@media print{body{background:#fff;} button{display:none!important;}}'
+    +'</style></head><body>'
+    +'<div class="box">'
+    +'<div class="logo">⚓</div>'
+    +'<h1>Cap Avenir – Le Havre</h1>'
+    +'<div class="subtitle">Attestation de découverte métier</div>'
+    +'<div class="name">'+nom+'</div>'
+    +'<p style="font-size:0.85rem;color:#555;margin:0.5rem 0;">a découvert et validé le métier de</p>'
+    +'<div class="metier-badge">'+metier+'</div>'
+    +'<div class="date">Le <strong>'+date+'</strong></div>'
+    +'<p style="font-size:0.75rem;color:#888;margin-top:0.5rem;">Score ≥ 60 % au quiz de découverte</p>'
+    +'<div class="footer">Document non officiel · Usage pédagogique uniquement</div>'
+    +'</div>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>');
+  win.document.close();
+}
+
+function printAllAttestations(){
+  var stagList = users.filter(function(u){ return u.profile==='stagiaire'&&u.attestations&&u.attestations.length; });
+  if(!stagList.length){ alert('Aucune attestation à imprimer.'); return; }
+  stagList.forEach(function(s){
+    (s.attestations||[]).forEach(function(a){
+      printAttestationForStagiaire(s.prenom+' '+s.nom, a.metier, a.date);
+    });
+  });
 }
 
 // ==================== GLOSSAIRE MULTILINGUE ====================
