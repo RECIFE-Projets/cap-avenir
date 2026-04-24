@@ -2071,7 +2071,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div class="modal-header"><h3 style="font-family:var(--font);">➕ Créer un groupe</h3><button class="btn-icon" style="color:var(--text2);background:var(--surface2);" onclick="closeModal('modal-add-groupe')">✕</button></div>
     <div class="modal-body">
       <div class="form-group"><label>Nom du groupe *</label><input type="text" id="new-groupe-nom" placeholder="Ex: Groupe A – Avril 2025"></div>
-      <div class="form-group"><label>Dispositif</label><input type="text" id="new-groupe-dispositif" placeholder="Ex: RÉCIFE, RSA, etc."></div>
+      <div class="form-group"><label>Code de classe <span style="font-size:0.75rem;color:var(--text3);">(optionnel — les stagiaires l'utilisent à l'inscription)</span></label><input type="text" id="new-groupe-code" placeholder="Ex: GRP2025A" autocomplete="off" style="text-transform:uppercase;"></div>
+            <div class="form-group"><label>Dispositif</label><input type="text" id="new-groupe-dispositif" placeholder="Ex: RÉCIFE, RSA, etc."></div>
       <div class="form-group"><label>Date de création</label><input type="text" id="new-groupe-date" value="" placeholder="JJ/MM/AAAA"></div>
     </div>
     <div class="modal-footer">
@@ -2542,7 +2543,7 @@ const METIERS = [
 ];
 
 // FORMATIONS BASE (modifiable par référente)
-let FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom') || '[]');
+let FORMATIONS_CUSTOM; try{ FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom')||'[]'); if(!Array.isArray(FORMATIONS_CUSTOM)) FORMATIONS_CUSTOM=[]; } catch(e){ FORMATIONS_CUSTOM=[]; }
 
 // ENTREPRISES enrichies
 const ENTREPRISES = [
@@ -2598,6 +2599,14 @@ const ENTREPRISES = [
 let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 let users = JSON.parse(localStorage.getItem('users') || '[]');
 let groups = JSON.parse(localStorage.getItem('groups') || '[]');
+if(!groups.length && !localStorage.getItem('groups_initialized')){
+  groups = [
+    {nom:'Groupe A', dispositif:'FLE A1-A2', date:new Date().toLocaleDateString('fr-FR'), code:'GRPA'},
+    {nom:'Groupe B', dispositif:'FLE B1-B2', date:new Date().toLocaleDateString('fr-FR'), code:'GRPB'},
+  ];
+  localStorage.setItem('groups', JSON.stringify(groups));
+  localStorage.setItem('groups_initialized','1');
+}
 let testResults = JSON.parse(localStorage.getItem('testResults_' + (currentUser?.email||'')) || 'null');
 let selectedProfile = '';
 let currentMetier = null;
@@ -2618,7 +2627,7 @@ function showPage(id){
   pushNavHistory(id);
   document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
   const pg = document.getElementById(id);
-  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; document.body.style.overflow=''; }
+  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; } document.body.style.overflow='';
   updateFab(id);
   trackNavigation(id);
   // Init pages on first show
@@ -2652,10 +2661,11 @@ function trackNavigation(pageId){
 }
 function saveCurrentUser(){
   if(!currentUser) return;
+  if(currentUser._isDemo) return; // Never save demo data
   save('currentUser', currentUser);
   let idx = users.findIndex(u => u.email === currentUser.email);
   if(idx >= 0) users[idx] = currentUser;
-  save('users', users);
+  if(!currentUser||!currentUser._isDemo) save('users', users);
 }
 function showModal(id){
   document.getElementById(id).classList.add('open');
@@ -2854,7 +2864,10 @@ function handleLogin(e){
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim().toLowerCase();
   const pwd = document.getElementById('login-pwd').value;
-  const user = users.find(u => u.email === email && u.pwd === pwd);
+  // Accept both plain-text (old accounts) and hashed passwords
+  var user = users.find(function(u){
+    return u.email===email && (u.pwd===pwd || u.pwd===hashPwdSimple(pwd));
+  });
   const errEl = document.getElementById('err-login');
   if(!user){ errEl.textContent = 'Email ou mot de passe incorrect.'; errEl.style.display = 'block'; return; }
   currentUser = user;
@@ -2863,19 +2876,33 @@ function handleLogin(e){
 }
 function postLogin(){
   if(!currentUser.stats) currentUser.stats = {metiersExplored:[],scores:{},badges:[],games:0};
-  saveCurrentUser();
+  if(!currentUser._isDemo){
+    saveCurrentUser();
+    startIdleWatch();
+    setTimeout(checkPCType, 2000);
+  }
   if(currentUser.profile === 'referente') goToReferente();
   else {
     testResults = load('testResults_'+currentUser.email, null);
-    if(!testResults) showPage('page-test');
+    if(!testResults && !currentUser._isDemo) showPage('page-test');
     else goToDashboard();
   }
 }
 function logout(){
+  stopIdleWatch();
+  if(localStorage.getItem('shared_pc')==='true'){
+    localStorage.removeItem('current_user');
+    localStorage.removeItem('currentUser');
+  } else {
+    save('currentUser', null);
+    localStorage.removeItem('current_user');
+  }
   currentUser = null;
-  save('currentUser', null);
-  showPage('page-landing');
+  document.body.style.overflow='';
+  showToast('A bientot !');
+  setTimeout(function(){ showPage('page-landing'); }, 800);
 }
+function autoLogout(){ logout(); }
 
 // ==================== TEST ORIENTATION ====================
 function selectRQTH(val){
@@ -2923,9 +2950,10 @@ function generateResults(){
   var all = [...METIERS, ...customMetiers];
   var niveaux = {A1:1,A2:2,'A2+':2,B1:3,B2:4,C1:5,C2:6};
   var userN = niveaux[selectedNiveauFr||'A1']||1;
+  var _handicaps = (typeof selectedHandicap !== 'undefined' ? selectedHandicap : []);
   var scored = all.map(function(m){
     var score = 0;
-    var hasIncompat = selectedHandicap.some(function(h){ return m.incompatible && m.incompatible.includes(h); });
+    var hasIncompat = _handicaps.some(function(h){ return m.incompatible && m.incompatible.includes(h); });
     if(hasIncompat) return {m:m, score:-100};
     if(selectedInterests.includes(m.secteur)) score += 30;
     if(m.competences) m.competences.forEach(function(c){ if(selectedPrefs.includes(c)||selectedSkills.includes(c)) score += 10; });
@@ -3480,6 +3508,38 @@ const GAMES_DATA = {
   }
 };
 
+function getGameData(metierObj){
+  if(!metierObj) return null;
+  if(GAMES_DATA[metierObj.id]) return GAMES_DATA[metierObj.id];
+  // Generic fallback for custom métiers or missing entries
+  var nom = metierObj.nom||'ce métier';
+  var competences = (metierObj.competences||[]).slice(0,4);
+  return {
+    qcm:[
+      {q:'Quel niveau de français est recommandé pour ce métier ?',choices:['A1','A2/B1','B2','C2'],rep:1,expl:'Le niveau recommandé dépend des tâches de communication du poste.'},
+      {q:'Ce métier nécessite-t-il du travail en équipe ?',choices:['Jamais','Parfois','Souvent','Toujours'],rep:2,expl:'La plupart des métiers impliquent une collaboration régulière.'},
+      {q:'Quelle qualité est essentielle pour exercer ce métier ?',choices:['La rapidité','La rigueur et le sérieux','La force physique uniquement','La créativité uniquement'],rep:1,expl:'La rigueur est une qualité fondamentale dans le monde professionnel.'},
+      {q:'Comment trouver une formation pour ce m\u00e9tier ?',choices:['Ce n\u2019est pas possible','Via France Travail, l\u2019ONISEP ou le GRETA','Uniquement par cooptation','En autodidacte seulement'],rep:1,expl:'De nombreux organismes proposent des formations adapt\u00e9es.'},
+      {q:'Qu\'est-ce que le CPF ?',choices:['Un diplôme','Le Compte Personnel de Formation, pour financer une formation','Une aide au logement','Une carte de transport'],rep:1,expl:'Le CPF accumule des droits à la formation tout au long de la carrière.'}
+    ],
+    vraifaux:[
+      {q:'Une période d\'immersion (stage) aide à découvrir ce métier.',rep:true,expl:'Le stage ou la PMSMP permet de confirmer un projet professionnel.'},
+      {q:'Les EPI (équipements de protection) sont toujours importants au travail.',rep:true,expl:'La sécurité au travail est une priorité dans tous les secteurs.'},
+      {q:'Il est impossible de changer de métier en cours de carrière.',rep:false,expl:'La reconversion professionnelle est possible à tout âge avec les bons dispositifs.'},
+      {q:'Le GRETA peut financer une formation pour adultes.',rep:true,expl:'Le GRETA propose des formations pour adultes en reconversion ou perfectionnement.'},
+      {q:'La lettre de motivation est inutile pour postuler.',rep:false,expl:'Une bonne lettre de motivation peut faire la différence lors d\'un recrutement.'},
+      {q:'Un entretien d\'embauche se prépare à l\'avance.',rep:true,expl:'Se préparer (connaître l\'entreprise, ses points forts) améliore les chances de succès.'}
+    ],
+    associations:['CV','Lettre de motivation','SMIC','CDI','Formation','Stage'],
+    situations:[
+      {title:'Premier jour',desc:'C\'est votre premier jour dans ce métier. Votre responsable vous explique les règles. Que faites-vous ?',choices:['Vous ignorez les consignes','Vous écoutez attentivement et posez des questions si vous ne comprenez pas','Vous commencez à travailler sans écouter','Vous partez car c\'est trop long'],rep:1,expl:'Écouter et poser des questions est essentiel pour bien démarrer.'},
+      {title:'Erreur commise',desc:'Vous faites une erreur dans votre travail. Que faites-vous ?',choices:['Vous cachez l\'erreur','Vous en informez votre responsable et proposez de corriger','Vous blâmez un collègue','Vous rentrez chez vous'],rep:1,expl:'Reconnaître ses erreurs et vouloir les corriger est professionnel.'},
+      {title:'Collègue en difficulté',desc:'Un collègue a du mal à finir sa tâche. Que faites-vous ?',choices:['Vous ne dites rien','Vous proposez votre aide si vous avez le temps','Vous profitez pour partir plus tôt','Vous vous moquez de lui'],rep:1,expl:'L\'entraide et la solidarité sont des valeurs professionnelles importantes.'}
+    ],
+    journee:['8h - Prise de poste','9h - Travail en équipe','10h - Tâches principales','12h - Pause déjeuner','13h30 - Suite des activités','15h - Réunion ou formation','16h30 - Rangement et bilan','17h - Fin de journée']
+  };
+}
+
 // Données par défaut pour les métiers sans données spécifiques
 function getGameData(metierID) {
   if(GAMES_DATA[metierID]) return GAMES_DATA[metierID];
@@ -3876,6 +3936,8 @@ function endQCM(){
     <p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">${gotBadge?'Félicitations ! Vous obtenez le badge '+currentMetier.nom+' !':'Continuez à pratiquer pour obtenir le badge !'}</p>
   </div>`;
   if(gotBadge && currentUser){
+    if(!currentUser.stats.scores) currentUser.stats.scores={};
+    if(score>(currentUser.stats.scores[currentMetier.id]||0)) currentUser.stats.scores[currentMetier.id]=score;
     if(!currentUser.stats.badges.includes(currentMetier.id)){
       currentUser.stats.badges.push(currentMetier.id);
     }
@@ -4309,6 +4371,7 @@ function toggleQuestion(el){
 // ==================== RÉFÉRENTE ====================
 function goToReferente(){ showPage('page-dashboard-referente'); }
 function renderReferenteDashboard(){
+  initLogoPreview();
   renderStagiairesList();
   renderGroupesList();
   renderAdminMetiers();
@@ -4491,7 +4554,7 @@ function renderGroupesList(){
 function addGroupe(){
   const nom = document.getElementById('new-groupe-nom').value.trim();
   if(!nom) return;
-  groups.push({nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value});
+  var grpCode=(document.getElementById('new-groupe-code')||{}).value||''; groups.push({nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value, code:grpCode.toUpperCase()});
   save('groups', groups);
   closeModal('modal-add-groupe');
   renderGroupesList();
@@ -4580,6 +4643,8 @@ function addMetierAdmin(){
   const nom = document.getElementById('new-metier-nom').value.trim();
   if(!nom) return;
   const id = 'custom-' + Date.now();
+  var _existingIds=[...METIERS,...customMetiers].map(function(m){return m.id;});
+  if(_existingIds.includes(newId)){alert('Identifiant existant. Modifiez le nom du metier.'); return;}
   customMetiers.push({
     id, nom,
     emoji: document.getElementById('new-metier-emoji').value || '💼',
@@ -4732,6 +4797,7 @@ function openRapportModal(){
   if(grSel) grSel.innerHTML = '<option value="">-- Sélectionner --</option>'
     + groups.map(function(g){return '<option value="'+g.nom+'">'+g.nom+'</option>';}).join('');
   showModal('modal-rapport');
+  switchRapportTab('global', document.getElementById('rtab-global'));
   setTimeout(renderRapportGlobal, 100);
 }
 
@@ -4932,7 +4998,8 @@ function renderRapportGroupe(){
         +(a?'<button class="btn btn-sm btn-primary" onclick="printAllAttestationsOf(\''+safeE+'\')">&#128220;</button>':'')
         +'</div></div></div>';
     });
-    html+='<button class="btn btn-primary btn-full" style="margin-top:0.75rem;" onclick="printRapportGroupe(\''+grpNom.replace(/'/g,'')+'\')">&#128424; Imprimer rapport du groupe</button>';
+    var _safeGrp = encodeURIComponent(grpNom);
+    html+='<button class="btn btn-primary btn-full" style="margin-top:0.75rem;" onclick="printRapportGroupe(decodeURIComponent(\''+_safeGrp+'\'))">&#128424; Imprimer rapport du groupe</button>';
   }
   div.innerHTML=html;
   if(members.length){
@@ -5066,8 +5133,12 @@ function printRapportStagiaire(email){
   var badges = (s.stats&&s.stats.badges)||[];
   var atts = s.attestations||[];
   var scores = (s.stats&&s.stats.scores)||{};
-  var win = window.open('','_blank','width=700,height=900');
-  if(!win){ alert('Veuillez autoriser les popups pour imprimer.'); return; }
+  // Try window.open first, use inline modal fallback if blocked
+  var win = null;
+  try { win = window.open('','_blank','width=700,height=900'); } catch(e){}
+  if(!win||win.closed||typeof win.closed==='undefined'){
+    showToast('Popups bloqués — impression directe lancée.'); window.print(); return;
+  }
   var metierRows = metiers.map(function(mid){
     var m=allM.find(function(x){return x.id===mid;});
     var sc=scores[mid]||0;
@@ -5121,7 +5192,7 @@ function printAttestationInModal(nom, metier, date){
     +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" id="att-modal-close-btn">&#10005;</button></div>'
     +'<div class="modal-body" id="attestation-print-body" style="text-align:center;padding:1.5rem;">'
     +(logo?'<img src="'+logo+'" style="max-height:50px;max-width:150px;margin-bottom:1rem;"><br>':'<div style="font-size:3rem;margin-bottom:0.5rem;">⚓</div>')
-    +'<div style="font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem;">Cap Avenir – Le Havre</div>'
+    +'<div style="font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem;">Cap Avenir &ndash; Le Havre</div>'
     +'<div style="font-size:0.82rem;color:var(--text3);margin-bottom:1.5rem;">Attestation de découverte métier</div>'
     +'<div style="font-size:1.3rem;font-weight:700;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0.75rem 0;margin:0.75rem 0;">'+nom+'</div>'
     +'<div style="font-size:0.85rem;color:var(--text2);margin-bottom:0.5rem;">a découvert et validé le métier de</div>'
@@ -5131,7 +5202,7 @@ function printAttestationInModal(nom, metier, date){
     +'</div>'
     +'<div class="modal-footer">'
     +'<button class="btn btn-ghost" id="att-modal-fermer-btn">Fermer</button>'
-    +'<button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer</button>'
+    +'<button class="btn btn-primary" onclick="try{window.print();}catch(e){showToast(\'Ctrl+P pour imprimer\');}">&#128424; Imprimer</button>'
     +'</div></div>';
   document.body.appendChild(m);
   var closeAtt = function(){ var mo=document.getElementById('modal-attestation-print'); if(mo) mo.remove(); document.body.style.overflow=''; };
@@ -5231,7 +5302,7 @@ let glossaireSearchTimeout = null;
 
 
 function showPage_profil(){
-  if(!currentUser) return;
+  if(!currentUser){ showPage('page-login'); return; }
   var p=document.getElementById('profil-prenom'); if(p) p.value=currentUser.prenom||'';
   var n=document.getElementById('profil-nom'); if(n) n.value=currentUser.nom||'';
   var e=document.getElementById('profil-email'); if(e) e.value=currentUser.email||'';
@@ -5517,12 +5588,36 @@ function hashPwdSimple(pwd){
 function exportMyData(){
   if(!currentUser){ showToast('Connectez-vous pour exporter.'); return; }
   var snapshot = {v:3, at:new Date().toISOString(), user:JSON.parse(JSON.stringify(currentUser))};
-  var blob = new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'});
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='cap-avenir-'+(currentUser.prenom||'data')+'-'+new Date().toISOString().slice(0,10)+'.json';
-  a.click(); URL.revokeObjectURL(a.href);
-  showToast('✅ Fichier téléchargé ! Gardez-le pour retrouver vos données sur un autre ordinateur.');
+  var dataStr = JSON.stringify(snapshot, null, 2);
+  // Try download first, fallback to copy modal
+  try {
+    var blob = new Blob([dataStr],{type:'application/json'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='cap-avenir-'+(currentUser.prenom||'data')+'-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    showToast('✅ Fichier téléchargé ! Gardez-le sur clé USB ou envoyez-vous par email.');
+  } catch(e) {
+    // Fallback: show data in modal for manual copy
+    showExportCopyModal(dataStr);
+  }
+}
+function showExportCopyModal(dataStr){
+  var old=document.getElementById('modal-export-copy'); if(old) old.remove();
+  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-export-copy';
+  m.innerHTML='<div class="modal"><div class="modal-header"><h3 style="font-family:var(--font);">💾 Copier vos données</h3>'
+    +'<button class="btn-icon" id="exp-copy-close" style="color:var(--text2);background:var(--surface2);">&#10005;</button></div>'
+    +'<div class="modal-body"><p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Le téléchargement est bloqué sur cet appareil. Copiez ce texte et collez-le dans un email ou un document :</p>'
+    +'<textarea id="export-copy-area" style="width:100%;height:150px;font-size:0.7rem;font-family:monospace;border:1.5px solid var(--border);border-radius:8px;padding:8px;background:var(--surface2);color:var(--text);" readonly>'+dataStr+'</textarea>'
+    +'</div><div class="modal-footer">'
+    +'<button class="btn btn-primary btn-full" onclick="var ta=document.getElementById('export-copy-area');ta.select();document.execCommand('copy');showToast('✅ Données copiées ! Collez-les dans un email.');">📋 Tout copier</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
+  var closeExpCopy = function(){ var mo=document.getElementById('modal-export-copy'); if(mo) mo.remove(); document.body.style.overflow=''; };
+  var closeBtn = document.getElementById('exp-copy-close');
+  if(closeBtn) closeBtn.onclick = closeExpCopy;
+  setTimeout(function(){ var ta=document.getElementById('export-copy-area'); if(ta) ta.select(); },100);
 }
 
 function importMyData(){
@@ -5533,7 +5628,16 @@ function importMyData(){
     reader.onload=function(ev){
       try{
         var d=JSON.parse(ev.target.result);
-        if(!d.user||!d.user.email) throw new Error('invalid');
+        if(!d.user||!d.user.email||typeof d.user.email!=='string') throw new Error('invalid');
+        if(!d.user.prenom||!d.user.nom) throw new Error('missing name fields');
+        if(!['stagiaire','referente'].includes(d.user.profile)) throw new Error('invalid profile');
+        // Security: verify the imported profile matches current context
+        if(currentUser && d.user.profile !== currentUser.profile){
+          if(!confirm('Ce fichier appartient à un compte "'+d.user.profile+'". Importer quand même ?')) return;
+        }
+        // Basic schema validation
+        if(!d.user.stats) d.user.stats = {metiersExplored:[],scores:{},badges:[],games:0};
+        if(!d.user.attestations) d.user.attestations = [];
         var idx=users.findIndex(function(u){return u.email===d.user.email;});
         if(idx>=0){ users[idx]=d.user; } else { users.push(d.user); }
         save('users',users);
@@ -5587,7 +5691,10 @@ function stopIdleWatch(){ clearInterval(_idleTimer); _idleSecs=0; }
 // Warn before leaving on shared PC
 window.addEventListener('beforeunload',function(e){
   if(currentUser && localStorage.getItem('shared_pc')==='true'){
-    e.preventDefault(); e.returnValue='Exportez vos données avant de partir !'; return e.returnValue;
+    // Only warn on desktop; mobile browsers ignore this anyway
+    if(!/Mobi|Android/i.test(navigator.userAgent)){
+      e.preventDefault(); e.returnValue='Exportez vos données avant de partir !'; return e.returnValue;
+    }
   }
 });
 
@@ -5625,12 +5732,14 @@ function pushNavHistory(id){ if(navStack[navStack.length-1]!==id) navStack.push(
 
 function startDemo(){
   var demoUser={
-    email:'demo@cap-avenir.fr', prenom:'Camila', nom:'Exemple', pwd:'demo1234',
-    profile:'stagiaire', createdAt:new Date().toISOString(),
-    groupe:'Démo', secretQuestion:'', secretAnswer:'',
+    email:'demo@cap-avenir.fr', prenom:'Camila (Démo)', nom:'Exemple', pwd:'demo1234',
+    profile:'stagiaire', _isDemo:true,
+    createdAt:new Date().toISOString(), groupe:'Démo',
+    secretQuestion:'', secretAnswer:'',
     stats:{metiersExplored:['agent-portuaire','cariste','infirmier'],badges:['cariste'],games:7,scores:{'agent-portuaire':45,'cariste':72,'infirmier':55}},
     attestations:[{metier:'Cariste',date:new Date().toLocaleDateString('fr-FR')}],
-    navHistory:[], testResults:{top:[{id:'cariste',score:85},{id:'agent-logistique',score:72},{id:'conducteur-spl',score:68}]}
+    navHistory:[],
+    testResults:{recommended:['cariste','agent-logistique','conducteur-spl'],date:new Date().toISOString()}
   };
   currentUser=demoUser;
   showToast('👀 Mode démonstration — aucune donnée ne sera sauvegardée.');
@@ -5651,6 +5760,46 @@ window.onerror=function(msg,src,line,col,err){
   console.error('JS Error:',msg,src,line);
   return false;
 };
+
+// Computed métiers cache
+var _allMetiersCache = null;
+function getAllMetiers(){ return [...METIERS,...customMetiers]; }
+
+
+function uploadLogo(){
+  var input = document.getElementById('logo-upload');
+  if(!input || !input.files[0]) return;
+  var file = input.files[0];
+  if(file.size > 300000){
+    alert('Image trop grande (max 300KB). Compressez votre logo avant de l'importer.');
+    input.value = ''; return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      localStorage.setItem('attestation_logo', e.target.result);
+      showLogoPreview(e.target.result);
+      showToast('Logo enregistre !');
+    } catch(qe){
+      alert('Espace insuffisant. Utilisez une image plus petite (max 100KB recommande).');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+function clearLogo(){
+  localStorage.removeItem('attestation_logo');
+  var p = document.getElementById('logo-preview'); if(p) p.innerHTML = '';
+  var i = document.getElementById('logo-upload'); if(i) i.value = '';
+  showToast('Logo supprime.');
+}
+function showLogoPreview(src){
+  var p = document.getElementById('logo-preview');
+  if(p) p.innerHTML = '<img src="'+src+'" style="max-height:40px;max-width:120px;border-radius:6px;border:1px solid var(--border);">';
+}
+function initLogoPreview(){
+  var existing = localStorage.getItem('attestation_logo');
+  if(existing) showLogoPreview(existing);
+}
 
 // Auto-login if session exists
 if(currentUser){ postLogin(); }
