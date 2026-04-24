@@ -623,6 +623,10 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <button type="submit" class="btn btn-primary btn-full btn-lg">Créer mon compte →</button>
 
       <!-- Question secrète pour récupération mot de passe -->
+      <div class="form-group">
+        <label>Code de classe (optionnel)</label>
+        <input type="text" id="reg-group-code" placeholder="Demandez ce code à votre référente" autocomplete="off">
+      </div>
       <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.75rem;border:1px dashed var(--border);">
         <div style="font-size:0.78rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;">🔐 Récupération de mot de passe (recommandé)</div>
         <div class="form-group" style="margin-bottom:0.5rem;">
@@ -982,8 +986,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
     </div>
 
+    <div id="test-cta-dash"></div>
     <div id="rec-metiers-dash" style="margin-bottom:1rem;"></div>
 
+    
+    <div class="card" style="margin-bottom:0.5rem;cursor:pointer;" onclick="showPage('page-profil')">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="font-size:1.5rem;">👤</div>
+        <div><div style="font-weight:700;font-size:0.88rem;">Mon profil</div><div style="font-size:0.75rem;color:var(--text3);">Modifier mes informations</div></div>
+        <span style="margin-left:auto;color:var(--text3);">›</span>
+      </div>
+    </div>
     <!-- Sécurité compte -->
     <div class="card" style="margin-bottom:1rem;" id="security-card">
       <div class="card-title">🔐 Sécurité de mon compte</div>
@@ -1385,6 +1398,43 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   </div>
 </div>
 
+
+<!-- ===== PAGE PROFIL ===== -->
+<div id="page-profil" class="page">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="logo-badge">⚓</div>Mon profil</div>
+    <button class="btn-icon" onclick="goBack()">←</button>
+  </div>
+  <div class="scroll-content">
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="section-title" style="margin-bottom:0.75rem;">✏️ Modifier mes informations</div>
+      <div class="form-group"><label>Prénom</label><input type="text" id="profil-prenom" placeholder="Votre prénom"></div>
+      <div class="form-group"><label>Nom</label><input type="text" id="profil-nom" placeholder="Votre nom"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="profil-email" placeholder="Votre email" disabled style="opacity:0.6;"></div>
+      <button class="btn btn-primary btn-full" onclick="saveProfilInfo()">💾 Enregistrer</button>
+    </div>
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="section-title" style="margin-bottom:0.75rem;">🔑 Changer le mot de passe</div>
+      <div class="form-group"><label>Mot de passe actuel</label><div class="input-group"><input type="password" id="profil-pwd-old" placeholder="Actuel"><button type="button" class="eye-btn" onclick="togglePwd('profil-pwd-old','')">👁</button></div></div>
+      <div class="form-group"><label>Nouveau mot de passe</label><div class="input-group"><input type="password" id="profil-pwd-new" placeholder="Nouveau (8 car. min.)"><button type="button" class="eye-btn" onclick="togglePwd('profil-pwd-new','')">👁</button></div></div>
+      <div class="error-msg" id="err-profil-pwd" style="display:none;"></div>
+      <button class="btn btn-primary btn-full" onclick="saveProfilPwd()">🔑 Changer le mot de passe</button>
+    </div>
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="section-title" style="margin-bottom:0.75rem;">💾 Mes données</div>
+      <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Exportez vos données pour les retrouver sur un autre ordinateur (PC de salle, ordinateur personnel…)</p>
+      <button class="btn btn-primary btn-full" onclick="exportMyData()">💾 Exporter mes données</button>
+      <button class="btn btn-outline btn-full" style="margin-top:8px;" onclick="importMyData()">📂 Importer mes données</button>
+    </div>
+  </div>
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">🏠</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">🗺️</span><span class="nav-label">Métiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">🚀</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">🏆</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
+
 <!-- ===== PAGE GLOSSAIRE MULTILINGUE ===== -->
 <div id="page-glossaire" class="page">
   <div class="topbar">
@@ -1563,6 +1613,15 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div class="stat-card"><div class="stat-value" id="r-actifs">0</div><div class="stat-label">Actifs (7j)</div></div>
         <div class="stat-card"><div class="stat-value" id="r-metiers-explores">0</div><div class="stat-label">Explorations</div></div>
         <div class="stat-card"><div class="stat-value" id="r-attestations">0</div><div class="stat-label">Attestations</div></div>
+      </div>
+      
+      <div class="form-group" style="margin-top:0.75rem;">
+        <label>🖼️ Logo sur les attestations (optionnel)</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="file" id="logo-upload" accept="image/*" onchange="uploadLogo()" style="flex:1;font-size:0.8rem;">
+          <button class="btn btn-sm btn-ghost" onclick="clearLogo()" title="Supprimer le logo">✕</button>
+        </div>
+        <div id="logo-preview" style="margin-top:6px;"></div>
       </div>
       <button class="btn btn-primary btn-full" onclick="openRapportModal()">📊 Rapports & Graphiques</button>
       <button class="btn btn-outline btn-full" style="margin-top:8px;" onclick="printAllAttestations()">🖨️ Toutes les attestations</button>
@@ -1965,6 +2024,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div style="margin-top:0.75rem;display:flex;gap:8px;">
           <button class="btn btn-primary btn-sm" onclick="generateRapportPDF()">🖨️ Imprimer rapport global</button>
           <button class="btn btn-outline btn-sm" onclick="printAllAttestations()">📜 Toutes les attestations</button>
+          <button class="btn btn-outline btn-sm" onclick="exportReferenteCSV()">📥 Export CSV</button>
         </div>
       </div>
 
@@ -2555,9 +2615,10 @@ let customMetiers = JSON.parse(localStorage.getItem('custom_metiers') || '[]');
 function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
 function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) || def; }catch(e){ return def; } }
 function showPage(id){
+  pushNavHistory(id);
   document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
   const pg = document.getElementById(id);
-  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; }
+  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; document.body.style.overflow=''; }
   updateFab(id);
   trackNavigation(id);
   // Init pages on first show
@@ -2568,6 +2629,7 @@ function showPage(id){
   if(id === 'page-attestations') renderAttestations();
   if(id === 'page-dashboard-referente') renderReferenteDashboard();
   if(id === 'page-glossaire') showPage_glossaire();
+  if(id === 'page-profil') showPage_profil();
 }
 function updateFab(pageId){
   var fab = document.getElementById('help-fab');
@@ -2601,7 +2663,7 @@ function showModal(id){
     renderQuestionsEntretien('tous');
   }
 }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModal(id){ var el=document.getElementById(id); if(el) el.classList.remove('open'); var anyOpen=document.querySelectorAll('.modal-overlay.open').length; if(!anyOpen) document.body.style.overflow=''; }
 function togglePwd(inputId, btnId){
   const inp = document.getElementById(inputId);
   inp.type = inp.type === 'password' ? 'text' : 'password';
@@ -2648,10 +2710,17 @@ function handleRegister(e){
     showErr('err-email'); document.getElementById('err-email').textContent = 'Cette adresse mail est déjà utilisée.'; return;
   }
 
+  var regGroupCode = (document.getElementById('reg-group-code')||{}).value||'';
+  var autoGroupe = '';
+  if(regGroupCode){
+    var matchedGroup = groups.find(function(g){ return g.code && g.code.toLowerCase()===regGroupCode.toLowerCase(); });
+    if(matchedGroup) autoGroupe = matchedGroup.nom;
+  }
   const user = {
     nom, prenom, email, pwd,
     profile: selectedProfile,
     createdAt: new Date().toISOString(),
+    groupe: autoGroupe,
     navHistory: [],
     stats: {metiersExplored:[], scores:{}, badges:[], games:0},
     secretQuestion: (document.getElementById('reg-question')||{}).value || '',
@@ -2851,98 +2920,82 @@ function nextTestSection(n){
   if(n === 6) generateResults();
 }
 function generateResults(){
-  // Score each metier
-  const all = [...METIERS, ...customMetiers];
-  const scored = all.map(m => {
-    let score = 0;
-    // check incompatibilities
-    const hasIncompat = selectedHandicap.some(h => m.incompatible && m.incompatible.includes(h));
-    if(hasIncompat) return {m, score: -100};
-    // interests match
+  var all = [...METIERS, ...customMetiers];
+  var niveaux = {A1:1,A2:2,'A2+':2,B1:3,B2:4,C1:5,C2:6};
+  var userN = niveaux[selectedNiveauFr||'A1']||1;
+  var scored = all.map(function(m){
+    var score = 0;
+    var hasIncompat = selectedHandicap.some(function(h){ return m.incompatible && m.incompatible.includes(h); });
+    if(hasIncompat) return {m:m, score:-100};
     if(selectedInterests.includes(m.secteur)) score += 30;
-    // prefs match
-    if(m.competences) m.competences.forEach(c => { if(selectedPrefs.includes(c)||selectedSkills.includes(c)) score += 10; });
-    // niveau
-    const niveaux = {A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
-    const userN = niveaux[selectedNiveauFr||'A1']||1;
-    const metierN = niveaux[m.niveauFr||'A2']||2;
+    if(m.competences) m.competences.forEach(function(c){ if(selectedPrefs.includes(c)||selectedSkills.includes(c)) score += 10; });
+    var metierN = niveaux[m.niveauFr||'A2']||2;
     if(userN >= metierN) score += 20;
     else score += Math.max(0, 20 - (metierN-userN)*8);
-    return {m, score};
+    if(m.tags) m.tags.forEach(function(t){ if(selectedInterests.includes(t)||selectedPrefs.includes(t)) score += 5; });
+    return {m:m, score:score};
+  }).filter(function(s){ return s.score > -50; })
+    .sort(function(a,b){ return b.score-a.score; })
+    .slice(0,3);
+
+  if(!scored.length){ showPage('page-metiers'); return; }
+
+  var resultsDiv = document.getElementById('test-results');
+  if(!resultsDiv) return;
+
+  var html = '<div style="text-align:center;margin-bottom:1rem;">'
+    +'<div style="font-size:2rem;">&#127919;</div>'
+    +'<div style="font-size:1rem;font-weight:700;color:var(--primary);">Vos m&eacute;tiers recommand&eacute;s</div>'
+    +'<div style="font-size:0.8rem;color:var(--text3);">Bas&eacute; sur vos pr&eacute;f&eacute;rences</div>'
+    +'</div>';
+
+  scored.forEach(function(s, i){
+    var m = s.m;
+    var colors = ['#0a3d6b','#f4a020','#1a8a4a'];
+    var labels = ['1er choix','2&egrave;me','3&egrave;me'];
+    var safeId = m.id.replace(/'/g,'');
+    html += '<div class="card" style="margin-bottom:0.75rem;border-left:4px solid '+colors[i]+';cursor:pointer;" onclick="openMetier(\''+safeId+'\')">'
+      +'<div style="display:flex;align-items:center;gap:12px;">'
+      +'<span style="font-size:2rem;">'+m.emoji+'</span>'
+      +'<div style="flex:1;">'
+      +'<div style="font-weight:700;font-size:0.92rem;">'+m.nom+'</div>'
+      +'<div style="font-size:0.75rem;color:var(--text3);margin-top:2px;">'+m.desc.slice(0,80)+'...</div>'
+      +'<div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">'
+      +(m.tags||[]).slice(0,3).map(function(t){ return '<span class="badge badge-blue" style="font-size:0.68rem;">'+t+'</span>'; }).join('')
+      +'</div></div>'
+      +'<div style="text-align:center;min-width:50px;">'
+      +'<div style="font-size:0.65rem;color:'+colors[i]+';font-weight:700;">'+labels[i]+'</div>'
+      +'<div style="font-size:1rem;font-weight:700;color:'+colors[i]+';">'+Math.max(0,s.score)+'</div>'
+      +'</div></div></div>';
   });
-  scored.sort((a,b) => b.score - a.score);
-  const top3 = scored.filter(s => s.score > 0).slice(0,3);
-  testResults = { niveau: selectedNiveauFr, handicap: selectedHandicap, prefs: selectedPrefs, interests: selectedInterests, skills: selectedSkills, recommended: top3.map(s => s.m.id), date: new Date().toISOString() };
-  save('testResults_'+currentUser.email, testResults);
-  
-  // Display results
-  const recDiv = document.getElementById('recommended-metiers');
-  recDiv.innerHTML = '';
-  top3.forEach((s,i) => {
-    const colors = ['#f4a020','#7f8c8d','#cd7f32'];
-    recDiv.innerHTML += `<div class="card" style="padding:0.85rem;cursor:pointer;display:flex;align-items:center;gap:10px;border-left:4px solid ${colors[i]}" onclick="openMetier('${s.m.id}')">
-      <span style="font-size:1.8rem">${s.m.emoji}</span>
-      <div><div style="font-weight:700;font-family:var(--font);font-size:0.9rem;">${['🥇','🥈','🥉'][i]} ${s.m.nom}</div>
-      <div style="font-size:0.75rem;color:var(--text3);">${s.m.cat==='porteur-lh'?'📍 Le Havre':s.m.cat==='porteur-agglo'?'🌐 Agglo havraise':'ℹ️'}</div></div>
-    </div>`;
-  });
-  
-  document.getElementById('strengths-section').innerHTML = (function(){
-    // Points forts
-    const skillLabels = {
-      conduire:'Permis de conduire B',chariot:'Chariot élévateur (CACES)',
-      ordi:'Bureautique / Ordinateur',accueil:'Accueil & relation client',
-      cuisine:'Cuisine et alimentation',bricolage:'Bricolage & mécanique',
-      soin:'Soin aux personnes',langues:'Langues étrangères'
+
+  html += '<div style="display:flex;gap:8px;margin-top:0.5rem;flex-wrap:wrap;">'
+    +'<button class="btn btn-primary" style="flex:1;" onclick="showPage(\'page-metiers\')">D&eacute;couvrir tous les m&eacute;tiers</button>'
+    +'<button class="btn btn-outline" style="flex:1;" onclick="confirmRestartTest()">Refaire le test</button>'
+    +'</div>';
+
+  resultsDiv.innerHTML = html;
+
+  // Save results
+  if(currentUser){
+    currentUser.testResults = {
+      recommended: scored.map(function(s){return s.m.id;}),
+      date: new Date().toISOString(),
+      niveauFr: selectedNiveauFr
     };
-    const prefLabels = {
-      manuel:'Travail manuel',bureau:'Travail en bureau',exterieur:'Travail en extérieur',
-      equipe:'Travail en équipe',seul:'Autonomie / Travail seul',
-      contact:'Contact client',technique:'Technique & précision',creatif:'Créativité'
-    };
-    const strengths = selectedSkills.map(s => skillLabels[s]||s).filter(Boolean);
-    const prefs = selectedPrefs.map(p => prefLabels[p]||p).filter(Boolean);
+    saveCurrentUser();
+    var idx = users.findIndex(function(u){return u.email===currentUser.email;});
+    if(idx>=0){ users[idx].testResults = currentUser.testResults; save('users',users); }
+  }
 
-    // Compétences à développer (ce qui n'a pas été sélectionné mais utile)
-    const allUsefulSkills = ['conduire','ordi','langues','soin','bricolage','accueil'];
-    const todev = allUsefulSkills.filter(s => !selectedSkills.includes(s)).slice(0,3).map(s => skillLabels[s]);
-
-    // RQTH info
-    const hasRQTH = selectedHandicap.includes('rqth');
-    const hasHandicap = selectedHandicap.filter(h => h!=='rqth').length > 0;
-
-    let html = '';
-    if(strengths.length > 0){
-      html += '<div class="alert alert-success" style="margin-top:0.5rem;"><span>⭐</span>'
-        +'<div><strong>Vos points forts :</strong><br>'
-        + strengths.map(s => '<span style="display:inline-block;background:rgba(26,138,74,0.15);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">✅ '+s+'</span>').join('')
-        + '</div></div>';
-    } else {
-      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>💡</span><span>Vos points forts seront identifiés au fil des jeux et quiz !</span></div>';
-    }
-    if(prefs.length > 0){
-      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>🎯</span>'
-        +'<div><strong>Vos préférences de travail :</strong><br>'
-        + prefs.map(p => '<span style="display:inline-block;background:rgba(10,61,107,0.1);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">'+p+'</span>').join('')
-        + '</div></div>';
-    }
-    if(todev.length > 0){
-      html += '<div class="alert alert-warning" style="margin-top:0.5rem;"><span>🚀</span>'
-        +'<div><strong>Compétences utiles à développer :</strong><br>'
-        + todev.map(s => '<span style="display:inline-block;background:rgba(230,126,34,0.1);border-radius:6px;padding:2px 8px;margin:2px;font-size:0.78rem;">📈 '+s+'</span>').join('')
-        + '<br><span style="font-size:0.75rem;color:var(--text3);">Les formations de votre région peuvent vous y aider !</span>'
-        + '</div></div>';
-    }
-    if(hasRQTH){
-      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>♿</span>'
-        +'<div><strong>RQTH :</strong> Vous bénéficiez d\'aides spécifiques à l\'emploi. Pensez à en parler à Cap Emploi 76 pour un accompagnement renforcé.</div></div>';
-    } else if(hasHandicap){
-      html += '<div class="alert alert-info" style="margin-top:0.5rem;"><span>♿</span>'
-        +'<div><strong>Conseil :</strong> Votre conseillère peut vous aider à obtenir la RQTH, qui ouvre des droits à des aménagements de poste et des aides à l\'emploi.</div></div>';
-    }
-    return html;
-  })();
+  showPage('page-test');
+  var step6 = document.getElementById('test-step-6');
+  if(step6){
+    document.querySelectorAll('.test-step-panel').forEach(function(p){p.style.display='none';});
+    step6.style.display='block';
+  }
 }
+
 function goToMetiers(){ showPage('page-metiers'); renderMetiers(); }
 
 // ==================== MÉTIERS ====================
@@ -3183,6 +3236,247 @@ const GAMES_DATA = {
       {ctx:'Lors de votre ronde de nuit, un patient sonne en urgence. Il dit avoir une douleur thoracique intense.',q:'Que faites-vous en priorité ?',opts:['Lui donner un antalglique et revenir plus tard','Évaluer rapidement les constantes et appeler le médecin immédiatement','Attendre le lendemain matin','L\'rassurer et revenir dans 1h'],rep:1,expl:'Une douleur thoracique intense peut être un infarctus. Évaluation rapide et appel médical immédiat sont essentiels.'}
     ],
     journee:['6h45 - Transmissions avec l\'équipe de nuit','7h - Tour de service : constantes et observations','8h - Préparation et administration des médicaments','9h - Soins infirmiers (pansements, perfusions)','11h - Visites médicales avec le médecin','12h30 - Pause repas','13h - Soins de l\'après-midi et surveillance','15h - Éducation thérapeutique des patients','17h - Transmissions à l\'équipe de soir']
+  }
+,
+  'technicien-maintenance': {
+    qcm: [
+      {q:"Quel outil utilise principalement un technicien de maintenance ?",choices:["Marteau","Multimètre","Pinceau","Calculatrice"],rep:1,expl:"Le multimètre mesure tension, courant et résistance électrique."},
+      {q:"Que signifie GMAO ?",choices:["Gestion des Machines À Outils","Gestion de Maintenance Assistée par Ordinateur","Guide de Maintenance des Ateliers Ouverts","Grand Manuel d'Assistance Opérationnelle"],rep:1,expl:"La GMAO est un logiciel de suivi des interventions de maintenance."},
+      {q:"Quelle formation est la plus adaptée pour devenir technicien de maintenance ?",choices:["CAP Carrelage","BTS Maintenance des Systèmes","BAC Littéraire","BEP Coiffure"],rep:1,expl:"Le BTS Maintenance des Systèmes est la voie principale."},
+      {q:"Qu'est-ce que la maintenance préventive ?",choices:["Réparer après la panne","Intervenir avant que la panne survienne","Commander des pièces de rechange","Former les opérateurs"],rep:1,expl:"La maintenance préventive anticipe les pannes par des vérifications régulières."},
+      {q:"Quel niveau de français est recommandé pour lire les notices techniques ?",choices:["A1","A2","B1","C2"],rep:2,expl:"Les notices techniques nécessitent un niveau B1 minimum pour être bien comprises."}
+    ],
+    vraifaux: [
+      {q:"Un technicien de maintenance travaille uniquement en atelier.",rep:false,expl:"Il intervient aussi sur le terrain, chez les clients ou en production."},
+      {q:"La sécurité est prioritaire avant toute intervention.",rep:true,expl:"Les procédures de sécurité (consignation) sont obligatoires."},
+      {q:"Le BTS MS se prépare en 2 ans après le bac.",rep:true,expl:"Le BTS Maintenance des Systèmes dure 2 ans en lycée ou alternance."},
+      {q:"Un technicien de maintenance ne peut pas évoluer dans sa carrière.",rep:false,expl:"Il peut devenir chef d'équipe, responsable maintenance ou ingénieur."},
+      {q:"Les habilitations électriques sont obligatoires pour travailler sur les équipements.",rep:true,expl:"Sans habilitation, il est interdit d'intervenir sur les installations électriques."},
+      {q:"La maintenance corrective consiste à intervenir avant la panne.",rep:false,expl:"La maintenance corrective répare après la panne. C'est la préventive qui anticipe."}
+    ],
+    associations: ["Multimètre","Clé dynamométrique","Oscilloscope","Capteur de vibrations","Graisseur","Schéma électrique"],
+    situations: [
+      {title:"Panne urgente",desc:"Une machine s'arrête en pleine production. Vous êtes appelé en urgence. Que faites-vous en premier ?",choices:["Commencer à démonter immédiatement","Sécuriser la machine et identifier la cause","Appeler le constructeur","Attendre le lendemain"],rep:1,expl:"La sécurisation est toujours la première étape."},
+      {title:"Notice en anglais",desc:"La notice de la machine est en anglais. Comment vous organisez-vous ?",choices:["Vous abandonnez","Vous utilisez un traducteur et demandez de l'aide","Vous réparez au hasard","Vous attendez que quelqu'un d'autre intervienne"],rep:1,expl:"Utiliser les ressources disponibles est essentiel."},
+      {title:"Pièce manquante",desc:"Il manque une pièce pour finir la réparation. Que faites-vous ?",choices:["Vous improvisez avec n'importe quoi","Vous commandez la pièce et informez votre responsable","Vous rendez la machine sans la réparer","Vous inventez une pièce"],rep:1,expl:"La communication et le bon suivi des pièces est indispensable."}
+    ],
+    journee: ['7h - Prise de poste et lecture du cahier de consignes','8h - Tournée préventive des équipements','10h - Intervention corrective sur un convoyeur','12h - Pause déjeuner','13h - Mise à jour de la GMAO','14h - Formation sécurité','16h - Commande de pièces de rechange','17h - Transmission des consignes à l\'équipe de nuit']
+  },
+  'infirmier': {
+    qcm: [
+      {q:"Quel diplôme faut-il pour devenir infirmier en France ?",choices:["CAP Soin","Bac Pro Santé","Diplôme d'État d'Infirmier (DEI)","BTS Biologie"],rep:2,expl:"Le DEI se prépare en 3 ans dans un IFSI (Institut de Formation en Soins Infirmiers)."},
+      {q:"Que signifie le terme 'triage' aux urgences ?",choices:["Nettoyer les locaux","Évaluer la gravité des patients pour prioriser les soins","Distribuer les médicaments","Faire les transmissions"],rep:1,expl:"Le triage permet de soigner en priorité les cas les plus graves."},
+      {q:"L'infirmier peut-il prescrire des médicaments ?",choices:["Oui, tous les médicaments","Non, jamais","Oui, dans certaines situations précises","Seulement les vitamines"],rep:2,expl:"L'infirmier peut prescrire certains actes et médicaments dans un cadre défini."},
+      {q:"Combien dure la formation d'infirmier ?",choices:["1 an","2 ans","3 ans","5 ans"],rep:2,expl:"Le cursus infirmier dure 3 ans, avec des stages en milieu hospitalier."},
+      {q:"Qu'est-ce qu'une feuille de soins infirmiers ?",choices:["Une facture","Un document traçant les actes réalisés","Un menu de la cafétéria","Un planning de congés"],rep:1,expl:"La feuille de soins trace chaque acte réalisé, heure par heure."}
+    ],
+    vraifaux: [
+      {q:"L'infirmier travaille uniquement à l'hôpital.",rep:false,expl:"Il peut aussi travailler en clinique, en EHPAD, à domicile, en entreprise."},
+      {q:"Le secret médical s'applique aux infirmiers.",rep:true,expl:"Tous les professionnels de santé sont soumis au secret médical."},
+      {q:"La formation d'infirmier peut se faire en alternance.",rep:true,expl:"Depuis 2021, l'apprentissage est possible dans certains IFSI."},
+      {q:"Un infirmier ne peut jamais travailler la nuit.",rep:false,expl:"Les infirmiers travaillent en horaires décalés, incluant les nuits et week-ends."},
+      {q:"L'hygiène des mains est fondamentale pour prévenir les infections.",rep:true,expl:"Le lavage des mains est la mesure n°1 de prévention des infections nosocomiales."},
+      {q:"L'infirmier peut agir sans prescription médicale dans les urgences vitales.",rep:true,expl:"En cas d'urgence vitale, l'infirmier peut initier des actes de secours."}
+    ],
+    associations: ["Stéthoscope","Tensiomètre","Cathéter","Seringue","Pansement","Saturomètre"],
+    situations: [
+      {title:"Patient agité",desc:"Un patient refuse de prendre son traitement et s'énerve. Comment réagissez-vous ?",choices:["Vous vous énervez aussi","Vous restez calme, l'écoutez et expliquez l'importance du traitement","Vous appelez la sécurité immédiatement","Vous quittez la chambre"],rep:1,expl:"La communication bienveillante est essentielle en soins infirmiers."},
+      {title:"Erreur de médicament",desc:"Vous réalisez que vous avez donné un mauvais médicament. Que faites-vous ?",choices:["Vous ne dites rien","Vous informez immédiatement le médecin et rédigez un rapport d'incident","Vous attendez de voir","Vous recommencez avec le bon médicament sans rien dire"],rep:1,expl:"La traçabilité et la transparence sont obligatoires."},
+      {title:"Famille inquiète",desc:"La famille d'un patient vous pose beaucoup de questions sur son état. Que faites-vous ?",choices:["Vous répondez à tout sans filtrer","Vous expliquez ce que vous pouvez, orientez vers le médecin, respectez le secret médical","Vous refusez de parler","Vous inventez des réponses rassurantes"],rep:1,expl:"L'infirmier respecte le secret médical tout en accompagnant les familles."}
+    ],
+    journee: ['7h - Relève et lecture des transmissions','8h - Tournée des soins du matin','10h - Préparation et administration des traitements','12h - Transmissions aux médecins','13h - Pause déjeuner','14h - Soins de l\'après-midi et pansements','16h - Appels et coordinataion avec les services','17h30 - Transmissions à l\'équipe de nuit']
+  },
+  'dev-web': {
+    qcm: [
+      {q:"Quel langage est utilisé pour créer la structure d'une page web ?",choices:["CSS","JavaScript","HTML","Python"],rep:2,expl:"HTML (HyperText Markup Language) structure le contenu d'une page web."},
+      {q:"À quoi sert CSS ?",choices:["Créer des bases de données","Mettre en forme et styliser les pages web","Programmer des algorithmes","Gérer les serveurs"],rep:1,expl:"CSS (Cascading Style Sheets) gère l'apparence visuelle des pages."},
+      {q:"Qu'est-ce qu'un framework front-end ?",choices:["Un type de serveur","Un ensemble d'outils pour faciliter le développement web","Un langage de programmation","Un logiciel de messagerie"],rep:1,expl:"React, Vue, Angular sont des frameworks qui accélèrent le développement."},
+      {q:"Quel outil utilise principalement un développeur web au quotidien ?",choices:["Calculatrice","Éditeur de code (VS Code, Sublime Text)","Tableur","Logiciel de dessin"],rep:1,expl:"Les éditeurs de code comme VS Code sont l'outil principal du développeur."},
+      {q:"Que signifie 'responsive design' ?",choices:["Un site qui se charge vite","Un site qui s'adapte à tous les écrans","Un site avec beaucoup d'images","Un site sécurisé"],rep:1,expl:"Le responsive design permet l'affichage optimal sur mobile, tablette et desktop."}
+    ],
+    vraifaux: [
+      {q:"Un développeur web travaille toujours seul.",rep:false,expl:"Il travaille souvent en équipe avec des designers, chefs de projet, autres développeurs."},
+      {q:"Il faut un diplôme d'ingénieur pour travailler comme développeur web.",rep:false,expl:"Un BTS, BUT, Bachelor ou même une formation intensive peut suffire."},
+      {q:"Le développeur front-end s'occupe de ce que l'utilisateur voit.",rep:true,expl:"Le front-end gère l'interface visible : boutons, menus, animations."},
+      {q:"JavaScript peut s'exécuter côté serveur.",rep:true,expl:"Avec Node.js, JavaScript fonctionne aussi côté serveur (back-end)."},
+      {q:"Les tests font partie du travail d'un développeur web.",rep:true,expl:"Tester son code (unitaires, fonctionnels) est essentiel pour éviter les bugs."},
+      {q:"Un développeur web ne doit pas connaître les besoins des utilisateurs.",rep:false,expl:"Comprendre les besoins utilisateurs est fondamental pour créer des interfaces efficaces."}
+    ],
+    associations: ["HTML","CSS","JavaScript","Git","Base de données","API"],
+    situations: [
+      {title:"Bug en production",desc:"Un client signale que son site ne s'affiche plus. Que faites-vous ?",choices:["Vous attendez que ça se règle seul","Vous identifiez l'erreur, corrigez et déployez rapidement","Vous dites que ce n'est pas votre faute","Vous refaites tout le site"],rep:1,expl:"La réactivité et la méthode sont clés en production."},
+      {title:"Délai impossible",desc:"Votre chef demande une fonctionnalité complexe pour demain. Comment réagissez-vous ?",choices:["Vous acceptez sans rien dire","Vous expliquez le temps nécessaire et proposez une version simplifiée pour demain","Vous faites n'importe quoi rapidement","Vous refusez catégoriquement"],rep:1,expl:"La communication honnête sur les délais est professionnelle."},
+      {title:"Code incompréhensible",desc:"Vous héritez d'un vieux code mal documenté. Que faites-vous ?",choices:["Vous le supprimez","Vous le lisez, documentez et refactorisez progressivement","Vous faites semblant de comprendre","Vous demandez à tout recommencer"],rep:1,expl:"La refactorisation progressive avec documentation est la bonne pratique."}
+    ],
+    journee: ['9h - Stand-up meeting avec l\'équipe','9h30 - Développement de nouvelles fonctionnalités','11h - Code review avec un collègue','12h - Déjeuner','13h - Correction de bugs signalés','15h - Réunion avec le client','16h - Tests et déploiement','17h30 - Documentation du code produit']
+  },
+  'maçon': {
+    qcm: [
+      {q:"Quel matériau un maçon utilise-t-il principalement ?",choices:["Bois","Béton et parpaings","Aluminium","Tissu"],rep:1,expl:"Le maçon travaille principalement avec le béton, les briques, les parpaings et le mortier."},
+      {q:"Quel diplôme prépare au métier de maçon ?",choices:["BTS Informatique","CAP Maçonnerie","Bac Pro Coiffure","Licence de Droit"],rep:1,expl:"Le CAP Maçonnerie est le premier diplôme pour exercer ce métier."},
+      {q:"Qu'est-ce qu'un coffrage ?",choices:["Un outil de mesure","Un moule pour couler le béton","Un type de brique","Une protection individuelle"],rep:1,expl:"Le coffrage est le moule qui donne sa forme au béton avant qu'il durcisse."},
+      {q:"Quel EPI est obligatoire sur un chantier ?",choices:["Casque seul","Casque, chaussures de sécurité, gilet haute visibilité","Gants uniquement","Aucun EPI obligatoire"],rep:1,expl:"Les EPI sur chantier incluent casque, chaussures de sécurité, et gilet obligatoirement."},
+      {q:"Que signifie 'DTU' dans la construction ?",choices:["Document Technique Unifié","Délai de Travaux Urgent","Devis de Travaux Unique","Direction des Travaux Urbains"],rep:0,expl:"Les DTU définissent les règles de mise en œuvre pour chaque corps de métier."}
+    ],
+    vraifaux: [
+      {q:"Un maçon ne peut pas travailler par temps de pluie.",rep:false,expl:"Il peut travailler sous légère pluie avec les protections adaptées, mais le gel arrête les travaux."},
+      {q:"La lecture de plans est indispensable pour un maçon.",rep:true,expl:"Lire les plans d'architecte permet de réaliser les ouvrages correctement."},
+      {q:"Le maçon peut évoluer vers le métier de chef de chantier.",rep:true,expl:"Avec de l'expérience et des formations complémentaires, il peut encadrer une équipe."},
+      {q:"Un maçon travaille toujours en intérieur.",rep:false,expl:"Le maçon travaille principalement en extérieur, sur les façades, fondations et gros œuvre."},
+      {q:"Les normes parasismiques concernent le travail du maçon.",rep:true,expl:"Dans certaines zones, des règles parasismiques s'imposent à la construction."},
+      {q:"Il existe des reconversions possibles vers le métier de maçon.",rep:true,expl:"De nombreux adultes en reconversion accèdent au CAP Maçonnerie en 1 an."}
+    ],
+    associations: ["Truelle","Niveau à bulle","Fil à plomb","Taloche","Bétonnière","Équerre de maçon"],
+    situations: [
+      {title:"Défaut de planéité",desc:"Vous constatez qu'un mur n'est pas droit. Que faites-vous ?",choices:["Vous continuez quand même","Vous arrêtez, vérifiez avec le niveau et corrigez avant de continuer","Vous masquez le défaut","Vous dites que c'est normal"],rep:1,expl:"Corriger tôt évite des problèmes structurels coûteux."},
+      {title:"Mauvais temps",desc:"Il fait -2°C et le client veut quand même que vous couliez le béton. Que faites-vous ?",choices:["Vous coulez quand même","Vous expliquez que le gel empêche le béton de prendre et reportez","Vous chauffez le béton avec une lampe","Vous démissionnez"],rep:1,expl:"Couler du béton par gel compromet la solidité de l'ouvrage."},
+      {title:"Manque de matériaux",desc:"Il manque des parpaings pour finir la journée. Comment gérez-vous ?",choices:["Vous arrêtez et rentrez chez vous","Vous prévenez votre chef, commandez en urgence et adaptez le planning","Vous utilisez des matériaux de récupération","Vous improvisez"],rep:1,expl:"La gestion des approvisionnements fait partie du professionnalisme."}
+    ],
+    journee: ['7h - Réunion de chantier et lecture des plans','8h - Préparation du mortier et des matériaux','9h - Montage des murs et vérification des niveaux','12h - Pause déjeuner','13h - Coffrages et coulage du béton','15h - Contrôle qualité et corrections','17h - Nettoyage du poste et rangement des outils','17h30 - Fin de chantier']
+  },
+  'plombier': {
+    qcm: [
+      {q:"Quel type de tuyaux utilise principalement un plombier aujourd'hui ?",choices:["Plomb uniquement","Cuivre, PER, multicouche","Bois","Verre"],rep:1,expl:"Les tuyaux en cuivre, PER (polyéthylène réticulé) et multicouche sont les plus utilisés."},
+      {q:"Que signifie 'débit' en plomberie ?",choices:["La pression de l'eau","La quantité d'eau qui passe par unité de temps","La température de l'eau","La couleur de l'eau"],rep:1,expl:"Le débit est mesuré en litres par heure ou par minute."},
+      {q:"Quelle certification est nécessaire pour manipuler les fluides frigorigènes ?",choices:["CACES","Attestation de capacité fluides frigorigènes","Habilitation électrique","AIPR"],rep:1,expl:"La manipulation des fluides frigorigènes nécessite une attestation réglementée."},
+      {q:"Qu'est-ce qu'un siphon en plomberie ?",choices:["Un outil de mesure","Un dispositif qui retient l'eau pour empêcher les mauvaises odeurs","Un type de tuyau","Une vanne"],rep:1,expl:"Le siphon crée une garde d'eau qui bloque les gaz des canalisations."},
+      {q:"Quel diplôme est recommandé pour devenir plombier ?",choices:["BTS Informatique","CAP Monteur en Installations Sanitaires","Bac Pro Électricité","CAP Peinture"],rep:1,expl:"Le CAP MIS ou le Bac Pro TISEC ouvrent la voie vers la plomberie."}
+    ],
+    vraifaux: [
+      {q:"Un plombier ne s'occupe que de l'eau froide.",rep:false,expl:"Il travaille sur l'eau froide, l'eau chaude sanitaire, le chauffage et la climatisation."},
+      {q:"La plomberie est un métier qui recrute beaucoup.",rep:true,expl:"Le secteur manque de professionnels qualifiés, les offres d'emploi sont nombreuses."},
+      {q:"Un plombier peut travailler à son compte.",rep:true,expl:"Beaucoup de plombiers sont artisans indépendants ou gérants de petites entreprises."},
+      {q:"La sécurité gaz ne concerne pas le plombier.",rep:false,expl:"Les plombiers-chauffagistes installent et entretiennent les équipements à gaz."},
+      {q:"Un plombier peut diagnostiquer les fuites sans ouvrir les murs.",rep:true,expl:"Des caméras endoscopiques et détecteurs acoustiques permettent la détection non-destructive."},
+      {q:"La plomberie n'a aucun rapport avec l'environnement.",rep:false,expl:"L'efficacité énergétique, les économies d'eau et le traitement des eaux usées sont des enjeux environnementaux clés."}
+    ],
+    associations: ["Clé à molette","Soudure brasure","Manomètre","Cintreuse","Joint téflon","Débitmètre"],
+    situations: [
+      {title:"Fuite urgente",desc:"Un client vous appelle en urgence : de l'eau coule au plafond. Que faites-vous ?",choices:["Vous dites que vous viendrez la semaine prochaine","Vous lui expliquez comment couper l'arrivée d'eau et intervenez rapidement","Vous raccrochez","Vous demandez des photos"],rep:1,expl:"Couper l'arrivée d'eau stoppe les dégâts en attendant l'intervention."},
+      {title:"Norme non respectée",desc:"Vous constatez que l'installation précédente ne respecte pas les normes. Que faites-vous ?",choices:["Vous continuez sur cette base","Vous signalez le problème au client et proposez une mise en conformité","Vous signez le bon d'intervention sans rien dire","Vous appelez les pompiers"],rep:1,expl:"Un professionnel ne peut valider une installation non conforme."},
+      {title:"Travaux supplémentaires",desc:"En ouvrant la paroi, vous découvrez des tuyaux corrodés à changer. Comment procédez-vous ?",choices:["Vous changez sans en parler","Vous informez le client, demandez son accord et établissez un devis","Vous fermez la paroi en faisant semblant de n'avoir rien vu","Vous refusez de continuer"],rep:1,expl:"Tout travail supplémentaire doit faire l'objet d'un accord du client."}
+    ],
+    journee: ['8h - Départ pour le premier chantier','9h - Diagnostic et remplacement d\'une chaudière','12h - Pause déjeuner en déplacement','13h - Installation sanitaire dans appartement neuf','15h30 - Dépannage fuite urgente','17h - Commande de matériaux pour le lendemain','17h30 - Facturation et compte-rendu client']
+  },
+  'agent-securite': {
+    qcm: [
+      {q:"Quelle carte professionnelle est obligatoire pour exercer comme agent de sécurité ?",choices:["Carte Vitale","Carte professionnelle délivrée par le CNAPS","Carte d'identité","Permis de conduire"],rep:1,expl:"La carte professionnelle CNAPS (Conseil National des Activités Privées de Sécurité) est obligatoire."},
+      {q:"Qu'est-ce qu'une ronde de surveillance ?",choices:["Une réunion d'équipe","Une tournée régulière pour vérifier la sécurité d'un site","Un exercice sportif","Un rapport écrit"],rep:1,expl:"La ronde consiste à parcourir les zones sensibles selon un itinéraire défini."},
+      {q:"Que signifie SSIAP ?",choices:["Syndicat de Sécurité Industrielle et Auxiliaire Professionnelle","Service de Sécurité Incendie et d'Assistance à Personnes","Système de Surveillance Interne et d'Alarme Permanente","Société de Services d'Inspection et d'Audit des Professionnels"],rep:1,expl:"Le SSIAP concerne la sécurité incendie dans les établissements recevant du public."},
+      {q:"Quel geste adopter face à une personne agressive ?",choices:["Répondre à l'agression","Rester calme, garder ses distances, ne pas provoquer","Ignorer totalement","Appeler le SAMU"],rep:1,expl:"La désescalade verbale est la première approche face à une personne agressive."},
+      {q:"Dans quel secteur un agent de sécurité ne peut-il PAS exercer ?",choices:["Commerce","Établissements de nuit","Hôpitaux publics (soins)","Aéroports"],rep:2,expl:"Les hôpitaux publics ont leurs propres agents ; les sociétés privées interviennent dans les autres secteurs."}
+    ],
+    vraifaux: [
+      {q:"Un agent de sécurité peut fouiller les sacs sans autorisation.",rep:false,expl:"La fouille de sac nécessite le consentement de la personne. Il s'agit d'une inspection visuelle autorisée."},
+      {q:"La SST (Sauveteur Secouriste du Travail) est souvent requise pour les agents de sécurité.",rep:true,expl:"La certification SST permet d'intervenir en premiers secours."},
+      {q:"Un agent de sécurité peut faire des arrestations.",rep:false,expl:"Seule la police peut procéder à des arrestations. L'agent peut retenir une personne en flagrant délit jusqu'à l'arrivée des forces de l'ordre."},
+      {q:"La tenue vestimentaire d'un agent de sécurité est réglementée.",rep:true,expl:"L'uniforme doit comporter des mentions réglementaires et ne pas ressembler à une tenue de policier."},
+      {q:"Un agent de sécurité travaille souvent la nuit et les week-ends.",rep:true,expl:"Les horaires décalés sont fréquents dans ce métier."},
+      {q:"La sécurité privée est un secteur qui ne recrute pas.",rep:false,expl:"La sécurité privée est un des secteurs qui recrute le plus en France."}
+    ],
+    associations: ["Carte CNAPS","Radio communication","Détecteur de métaux","Main courante","Caméra de surveillance","EPI protection"],
+    situations: [
+      {title:"Intrusion détectée",desc:"L'alarme se déclenche à 3h du matin dans le bâtiment que vous surveillez. Que faites-vous ?",choices:["Vous allez vérifier seul immédiatement","Vous informez votre centrale, vérifiez les caméras, attendez les renforts si nécessaire","Vous ignorez, ce sont souvent de fausses alertes","Vous rentrez chez vous"],rep:1,expl:"Les procédures de sécurité doivent toujours être suivies, jamais d'improvisation."},
+      {title:"Personne suspecte",desc:"Vous repérez une personne qui rôde autour des accès depuis 30 minutes. Que faites-vous ?",choices:["Vous l'abordez agressivement","Vous l'approchez calmement, lui demandez l'objet de sa présence, notez ses informations","Vous ne faites rien","Vous l'accusez directement"],rep:1,expl:"L'approche professionnelle calme et la traçabilité sont essentielles."},
+      {title:"Accident dans le magasin",desc:"Une personne chute et se blesse dans le magasin. Que faites-vous ?",choices:["Vous continuez votre ronde","Vous sécurisez la zone, portez les premiers secours, alertez les secours","Vous cherchez des témoins","Vous attendez que quelqu'un d'autre intervienne"],rep:1,expl:"Les premiers secours et la sécurisation de la zone sont prioritaires."}
+    ],
+    journee: ['6h - Prise de poste et briefing','7h - Ronde de vérification des accès','9h - Contrôle des entrées du personnel','12h - Relève et pause déjeuner','13h - Surveillance de la zone de stockage','15h - Ronde incendie et vérification extincteurs','18h - Contrôle des sorties','19h - Main courante et passation au collègue']
+  },
+  'operateur-chimie': {
+    qcm: [
+      {q:"Qu'est-ce qu'une FDS (Fiche de Données de Sécurité) ?",choices:["Un formulaire RH","Un document décrivant les risques et précautions d'un produit chimique","Un bilan de production","Un planning de travail"],rep:1,expl:"La FDS est obligatoire pour tout produit chimique et précise les risques et mesures de sécurité."},
+      {q:"Que signifie le pictogramme 'tête de mort' sur un produit ?",choices:["Produit radioactif","Produit très toxique","Produit corrosif","Produit inflammable"],rep:1,expl:"Ce pictogramme signifie que le produit est très toxique, même en faible quantité."},
+      {q:"Quelle formation est nécessaire pour travailler en zone ATEX ?",choices:["Aucune formation spécifique","Formation habilitation ATEX (atmosphères explosives)","CAP Chimie uniquement","Licence de chimie"],rep:1,expl:"La zone ATEX (Atmosphère Explosive) nécessite une formation spécifique obligatoire."},
+      {q:"Qu'est-ce que la traçabilité en chimie industrielle ?",choices:["Surveiller les employés","Enregistrer chaque étape de production pour garantir la qualité et la sécurité","Dessiner des schémas","Compter les produits"],rep:1,expl:"La traçabilité permet de retrouver l'historique complet de chaque lot produit."},
+      {q:"Quel niveau de français est recommandé pour lire les protocoles de sécurité ?",choices:["A1","A2","B1","C2"],rep:2,expl:"Les protocoles de sécurité en chimie nécessitent un niveau B1 minimum."}
+    ],
+    vraifaux: [
+      {q:"Les EPI sont facultatifs en laboratoire chimique.",rep:false,expl:"Les EPI (blouse, lunettes, gants, chaussures) sont obligatoires à tout moment."},
+      {q:"Un opérateur chimie peut travailler en 3x8.",rep:true,expl:"La production chimique fonctionne souvent en continu, nécessitant des rotations 3x8."},
+      {q:"La norme ISO 9001 concerne la qualité des produits.",rep:true,expl:"ISO 9001 est la norme internationale de management de la qualité."},
+      {q:"L'opérateur chimie n'a pas à connaître les risques des produits qu'il manipule.",rep:false,expl:"Chaque opérateur doit connaître les risques et mesures de sécurité de chaque produit."},
+      {q:"Le secteur chimique en Normandie est l'un des plus importants de France.",rep:true,expl:"La Normandie concentre de nombreuses industries chimiques, notamment à Rouen et Le Havre."},
+      {q:"Une fuite de produit chimique peut être ignorée si elle est petite.",rep:false,expl:"Toute fuite doit être signalée et traitée immédiatement selon les procédures."}
+    ],
+    associations: ["Réacteur","Chromatographe","Analyseur pH","Centrifugeuse","FDS","EPI chimique"],
+    situations: [
+      {title:"Odeur suspecte",desc:"Vous détectez une odeur inhabituelle dans l'atelier. Que faites-vous ?",choices:["Vous continuez à travailler","Vous stoppez immédiatement, alertez votre responsable, évacuez si nécessaire","Vous ouvrez les fenêtres et attendez","Vous cherchez l'origine vous-même"],rep:1,expl:"Toute anomalie olfactive peut signaler une fuite dangereuse."},
+      {title:"Non-conformité produit",desc:"Une analyse montre qu'un lot ne respecte pas les spécifications. Que faites-vous ?",choices:["Vous le livrez quand même","Vous isolez le lot, alertez votre responsable et lancez une investigation","Vous le mélangez à un autre lot","Vous changez les résultats d'analyse"],rep:1,expl:"Un lot non conforme doit être bloqué pour investigation obligatoirement."},
+      {title:"Blessure chimique",desc:"Un collègue s'éclaboussed'un produit corrosif. Que faites-vous en premier ?",choices:["Vous appelez les secours sans rien faire","Vous rincez abondamment à l'eau pendant 15 minutes minimum, appelez les secours","Vous appliquez une crème","Vous consultez Internet"],rep:1,expl:"Le rinçage immédiat à grande eau est le premier geste pour les brûlures chimiques."}
+    ],
+    journee: ['6h - Prise de poste, vérification des consignes','7h - Démarrage des réacteurs et contrôles','9h - Prélèvements pour analyses qualité','11h - Ajustement des paramètres de production','12h - Pause et relève partielle','13h - Nettoyage et entretien des équipements','15h - Réunion sécurité hebdomadaire','17h - Passation de consignes à l\'équipe suivante']
+  },
+  'secretaire': {
+    qcm: [
+      {q:"Quel logiciel est indispensable pour une secrétaire administrative ?",choices:["Minecraft","Suite Microsoft Office (Word, Excel, Outlook)","Photoshop","AutoCAD"],rep:1,expl:"Word, Excel et Outlook sont les outils de base du secrétariat administratif."},
+      {q:"Que signifie 'CR' dans le cadre d'une réunion ?",choices:["Compte Rendu","Contrôle Régulier","Chef de Réunion","Correspondance Recommandée"],rep:0,expl:"Le CR (Compte Rendu) résume les décisions et points abordés en réunion."},
+      {q:"Qu'est-ce que la gestion des agendas ?",choices:["Concevoir des agendas personnels","Organiser et planifier les rendez-vous de plusieurs personnes","Imprimer des calendriers","Commander des fournitures"],rep:1,expl:"La gestion des agendas est une mission centrale du secrétariat."},
+      {q:"Quel est le rôle de la secrétaire médicale ?",choices:["Soigner les patients","Accueillir, gérer les dossiers médicaux, fixer les rendez-vous","Prescrire des médicaments","Réaliser des analyses"],rep:1,expl:"La secrétaire médicale assure l'interface administrative entre patients et soignants."},
+      {q:"Qu'est-ce que la confidentialité dans le secrétariat ?",choices:["Ne jamais parler à personne","Protéger les informations personnelles et professionnelles selon les règles","Tout partager avec les collègues","Archiver tous les documents en public"],rep:1,expl:"Le respect de la confidentialité est fondamental, notamment en secteur médical ou juridique."}
+    ],
+    vraifaux: [
+      {q:"Une secrétaire trilingue a plus d'opportunités d'emploi.",rep:true,expl:"Maîtriser plusieurs langues ouvre des postes dans des entreprises internationales."},
+      {q:"Le métier de secrétaire est en voie de disparition.",rep:false,expl:"Le secrétariat évolue avec le numérique mais reste très demandé, notamment en assistanat de direction."},
+      {q:"La maîtrise de la vitesse de frappe est un atout.",rep:true,expl:"Une bonne vitesse de frappe améliore la productivité et la qualité de travail."},
+      {q:"Une secrétaire peut être amenée à gérer des budgets.",rep:true,expl:"Dans le rôle d'assistante de direction, la gestion de budgets et notes de frais est fréquente."},
+      {q:"Le secrétariat ne nécessite pas de compétences relationnelles.",rep:false,expl:"L'accueil, la communication et les relations professionnelles sont au cœur du métier."},
+      {q:"Le BTS Support à l'Action Managériale (SAM) prépare au secrétariat de direction.",rep:true,expl:"Le BTS SAM (ex-Assistant de Manager) est la voie royale pour le secrétariat de direction."}
+    ],
+    associations: ["Traitement de texte","Tableur","Téléphonie","Classement","Agenda numérique","Facturation"],
+    situations: [
+      {title:"Double réservation",desc:"Vous réalisez que deux réunions importantes sont planifiées en même temps. Que faites-vous ?",choices:["Vous ignorez le problème","Vous contactez les deux parties, expliquez la situation et reprogrammez une des réunions","Vous annulez les deux","Vous attendez qu'ils se débrouillent"],rep:1,expl:"La gestion proactive des conflits d'agenda est une compétence clé."},
+      {title:"Document confidentiel",desc:"Un collègue vous demande d'imprimer un document marqué 'confidentiel' pour lui. Que faites-vous ?",choices:["Vous imprimez et laissez le document accessible","Vous imprimez, remettez directement en main propre et vérifiez qu'il a l'autorisation","Vous refusez toujours","Vous lisez le document avant"],rep:1,expl:"Les documents confidentiels nécessitent un traitement sécurisé et discret."},
+      {title:"Appel difficile",desc:"Un client en colère appelle et se montre agressif au téléphone. Comment réagissez-vous ?",choices:["Vous raccrochez","Vous restez calme, écoutez, présentez vos excuses pour le désagrément, transférez si nécessaire","Vous vous énervez aussi","Vous mentez pour calmer"],rep:1,expl:"La gestion des appels difficiles nécessite calme, empathie et professionnalisme."}
+    ],
+    journee: ['8h30 - Ouverture du courrier et tri des emails','9h - Accueil téléphonique et physique','10h - Saisie de documents et mise en forme','12h - Pause déjeuner','13h30 - Gestion des agendas et planification','14h30 - Réunion et prise de notes','16h - Classement et archivage','17h - Vérification et transmission des messages']
+  },
+  'aide-domicile': {
+    qcm: [
+      {q:"Quel diplôme prépare au métier d'aide à domicile ?",choices:["CAP Restauration","DEAVS (Diplôme d'État d'Auxiliaire de Vie Sociale) / ADVF","BTS Informatique","CAP Maçonnerie"],rep:1,expl:"Le DEAVS ou le titre ADVF (Assistant De Vie aux Familles) sont les principales qualifications."},
+      {q:"Qu'est-ce que la bientraitance ?",choices:["Bien soigner physiquement","Respecter la dignité, l'autonomie et le bien-être global de la personne","Donner beaucoup de médicaments","Décider à la place de la personne aidée"],rep:1,expl:"La bientraitance englobe le respect, l'écoute et la préservation de l'autonomie."},
+      {q:"Que fait principalement un(e) aide à domicile ?",choices:["Réparer les appareils électroménagers","Aider les personnes dépendantes dans les actes de la vie quotidienne","Enseigner aux enfants","Gérer les finances des familles"],rep:1,expl:"L'aide aux actes quotidiens (hygiène, repas, courses) est le cœur du métier."},
+      {q:"Qu'est-ce que l'APA ?",choices:["Association Professionnelle des Auxiliaires","Allocation Personnalisée d'Autonomie","Aide Personnelle Alimentaire","Agence de Placement Assisté"],rep:1,expl:"L'APA est une aide financière pour les personnes âgées dépendantes."},
+      {q:"Que signifie 'épuisement professionnel' (burn-out) dans ce secteur ?",choices:["Être très actif","État d'épuisement physique et émotionnel lié au travail","Aimer trop son travail","Faire trop d'heures supplémentaires"],rep:1,expl:"Le burn-out est fréquent dans les métiers d'aide à la personne. La prévention est essentielle."}
+    ],
+    vraifaux: [
+      {q:"L'aide à domicile travaille uniquement avec les personnes âgées.",rep:false,expl:"Elle accompagne aussi les personnes handicapées, familles en difficulté et adultes malades."},
+      {q:"Respecter les habitudes de vie de la personne aidée est important.",rep:true,expl:"Préserver les habitudes (horaires, plats préférés) contribue au bien-être."},
+      {q:"Un(e) aide à domicile peut administrer des médicaments sans formation.",rep:false,expl:"L'administration de médicaments nécessite une formation spécifique et une délégation médicale."},
+      {q:"La discrétion est une qualité indispensable dans ce métier.",rep:true,expl:"La vie privée des personnes aidées doit être protégée en toutes circonstances."},
+      {q:"Ce métier peut se pratiquer à temps partiel.",rep:true,expl:"Le temps partiel est courant dans ce secteur, avec des horaires souvent morcelés."},
+      {q:"La relation de confiance avec la personne aidée n'a pas d'importance.",rep:false,expl:"La confiance est la base de toute relation d'aide à domicile efficace."}
+    ],
+    associations: ["Aide à la toilette","Préparation repas","Aide au déplacement","Entretien du domicile","Accompagnement courses","Stimulation mémoire"],
+    situations: [
+      {title:"Refus d'aide",desc:"La personne que vous accompagnez refuse d'être aidée pour sa toilette aujourd'hui. Comment réagissez-vous ?",choices:["Vous insistez de force","Vous respectez son refus, lui proposez une alternative et notez dans le cahier de liaison","Vous repartez sans rien faire","Vous appelez sa famille immédiatement"],rep:1,expl:"Le respect de l'autonomie et la traçabilité sont essentiels."},
+      {title:"Chute à domicile",desc:"En arrivant chez une personne âgée, vous la trouvez à terre. Que faites-vous ?",choices:["Vous la relevez immédiatement","Vous évaluez la situation, ne la bougez pas si douleur, appelez le 15","Vous appelez sa famille d'abord","Vous attendez qu'elle se relève seule"],rep:1,expl:"En cas de chute, ne jamais bouger la personne sans avis médical."},
+      {title:"Maltraitance suspectée",desc:"Vous remarquez des marques inexpliquées sur la personne aidée. Comment agissez-vous ?",choices:["Vous ne dites rien","Vous en parlez à votre responsable et rédigez un signalement","Vous confrontez directement la famille","Vous prenez des photos et partez"],rep:1,expl:"Tout soupçon de maltraitance doit être signalé à votre responsable et aux autorités."}
+    ],
+    journee: ['8h - Départ pour le premier bénéficiaire','8h30 - Aide à la toilette et habillage','9h30 - Trajet chez un second bénéficiaire','10h - Aide ménagère et préparation repas','12h - Déjeuner avec la personne aidée','13h30 - Accompagnement rendez-vous médical','15h - Courses avec un bénéficiaire','17h - Aide au repas du soir, transmissions au cahier de liaison']
+  },
+  'conducteur-engins': {
+    qcm: [
+      {q:"Quel document est obligatoire pour conduire une pelle hydraulique sur chantier ?",choices:["Permis B uniquement","CACES R482 catégorie B1","Permis poids lourd","Aucune certification"],rep:1,expl:"Le CACES R482 (anciennement R372) est la certification obligatoire pour conduire des engins de chantier."},
+      {q:"Que signifie CACES ?",choices:["Certificat d'Aptitude à la Conduite En Sécurité","Contrôle Annuel des Compétences en Exploitation des Sols","Certificat Administratif de Compétence en Engins Spéciaux","Carnet d'Accréditation à la Conduite des Engins Spéciaux"],rep:0,expl:"Le CACES atteste de la capacité à conduire un engin de manière sécurisée."},
+      {q:"Quelle catégorie de CACES correspond aux chariots élévateurs ?",choices:["CACES R482","CACES R484","CACES R489","CACES R490"],rep:2,expl:"Le CACES R489 concerne les chariots de manutention (catégories 1 à 6)."},
+      {q:"Avant de démarrer un engin, que doit faire le conducteur ?",choices:["Démarrer directement","Effectuer un tour de l'engin et vérifier les niveaux, freins, éclairages","Appeler son responsable","Vérifier uniquement le carburant"],rep:1,expl:"Le check pré-démarrage est obligatoire et tracé dans le carnet de bord."},
+      {q:"Qu'est-ce qu'un levage en zone à risque électrique ?",choices:["Un levage sous la pluie","Un levage à proximité de lignes électriques aériennes nécessitant des précautions spéciales","Un levage très lourd","Un levage de nuit"],rep:1,expl:"Les lignes HTBT ou HTB à proximité nécessitent des zones de sécurité strictes."}
+    ],
+    vraifaux: [
+      {q:"Le CACES est valable à vie.",rep:false,expl:"Le CACES doit être renouvelé tous les 5 ans (sauf certaines catégories)."},
+      {q:"Un conducteur d'engins peut travailler dans le BTP mais aussi dans la logistique.",rep:true,expl:"Les engins de manutention sont utilisés dans les entrepôts, ports, et industries."},
+      {q:"Il n'est pas nécessaire de vérifier la charge maximale d'un engin.",rep:false,expl:"Dépasser la charge maximale autorisée peut entraîner le basculement de l'engin."},
+      {q:"La formation CACES comprend une partie théorique et une partie pratique.",rep:true,expl:"La formation CACES inclut des tests théoriques et des épreuves pratiques sur machine."},
+      {q:"Un conducteur d'engins peut être amené à lire des plans de chantier.",rep:true,expl:"Comprendre les plans permet de travailler avec précision et de respecter les implantations."},
+      {q:"Les vibrations liées aux engins peuvent entraîner des maladies professionnelles.",rep:true,expl:"Les vibrations corps entier sont reconnues comme cause de lombalgies professionnelles."}
+    ],
+    associations: ["Pelle hydraulique","Chariot élévateur","Bulldozer","Niveleuse","Compacteur","Grue à tour"],
+    situations: [
+      {title:"Sol instable",desc:"Vous devez manœuvrer votre engin sur un terrain qui semble meuble. Que faites-vous ?",choices:["Vous avancez quand même","Vous évaluez le terrain, demandez un sondage ou des plaques de répartition","Vous refusez de travailler","Vous roulez très vite pour ne pas vous enfoncer"],rep:1,expl:"Un sol insuffisamment portant peut provoquer le basculement de l'engin."},
+      {title:"Ligne électrique proche",desc:"En levant votre grue, vous réalisez qu'une ligne électrique passe à 3 mètres. Que faites-vous ?",choices:["Vous continuez, vous avez de la marge","Vous arrêtez immédiatement et alertez le responsable de chantier","Vous continuez mais doucement","Vous appelez la mairie"],rep:1,expl:"La zone de sécurité autour des lignes HT est de plusieurs mètres. Arrêt obligatoire."},
+      {title:"Collision évitée",desc:"Vous avez frôlé un piéton sur le chantier. Que faites-vous ?",choices:["Vous continuez votre travail","Vous vous arrêtez, vérifiez que le piéton est sain et sauf, remplissez un rapport d'incident","Vous attendez la fin de la journée pour signaler","Vous cherchez à savoir pourquoi il était là"],rep:1,expl:"Tout incident, même sans blessé, doit être déclaré pour améliorer la sécurité."}
+    ],
+    journee: ['7h - Vérification de l\'engin avant démarrage','7h30 - Briefing chantier et lecture des plans','8h - Terrassement de la zone A','10h - Pause et vérification des niveaux','10h30 - Déchargement de matériaux','12h - Pause déjeuner','13h - Nivellement de la plateforme','16h30 - Rangement de l\'engin et rapport journalier']
   }
 };
 
@@ -3682,20 +3976,39 @@ function renderDashboard(){
   document.getElementById('global-pct').textContent = pct;
   
   // Recommended metiers widget
-  const recDiv = document.getElementById('rec-metiers-dash');
-  if(testResults?.recommended?.length){
-    const all = [...METIERS, ...customMetiers];
-    recDiv.innerHTML = `<div class="section-title">🎯 Mes métiers recommandés</div>` +
-      testResults.recommended.slice(0,3).map(id => {
-        const m = all.find(x => x.id === id);
-        return m ? `<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:6px;cursor:pointer;" onclick="openMetier('${m.id}')">
-          <span style="font-size:1.6rem">${m.emoji}</span>
-          <div style="flex:1"><div style="font-weight:700;font-size:0.88rem;">${m.nom}</div><div style="font-size:0.75rem;color:var(--text3);">${m.cat==='porteur-lh'?'📍 Le Havre':m.cat==='porteur-agglo'?'🌐 Agglo havraise':'ℹ️'}</div></div>
-          <span style="color:var(--primary);font-size:1.1rem;">›</span>
-        </div>` : '';
-      }).join('');
+  var recDiv = document.getElementById('rec-metiers-dash');
+  if(currentUser.testResults && currentUser.testResults.recommended && currentUser.testResults.recommended.length){
+    var allM2 = [...METIERS, ...customMetiers];
+    var recHtml = '<div class="section-title">&#127919; Mes m&eacute;tiers recommand&eacute;s</div>';
+    currentUser.testResults.recommended.slice(0,3).forEach(function(id){
+      var m = allM2.find(function(x){return x.id===id;});
+      if(!m) return;
+      var catLabel = m.cat==='porteur-lh'?'&#128205; Le Havre':m.cat==='porteur-agglo'?'&#127760; Agglo':'&#8505;&#65039;';
+      var safeId = m.id.replace(/'/g,'');
+      recHtml += '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:6px;cursor:pointer;" onclick="openMetier(\''+safeId+'\')">'
+        +'<span style="font-size:1.6rem">'+m.emoji+'</span>'
+        +'<div style="flex:1"><div style="font-weight:700;font-size:0.88rem;">'+m.nom+'</div>'
+        +'<div style="font-size:0.75rem;color:var(--text3);">'+catLabel+'</div></div>'
+        +'<span style="color:var(--primary);font-size:1.1rem;">&rsaquo;</span></div>';
+    });
+    recDiv.innerHTML = recHtml;
   }
   // Security status
+  var ctaDiv=document.getElementById('test-cta-dash');
+  if(ctaDiv){
+    if(!currentUser.testResults){
+      var ctaCard=document.createElement('div');
+      ctaCard.className='card';
+      ctaCard.style.cssText='margin-bottom:1rem;background:var(--primary-pale);border:1.5px solid var(--primary);cursor:pointer;';
+      ctaCard.onclick=function(){showPage('page-test');};
+      ctaCard.innerHTML='<div style="display:flex;align-items:center;gap:12px;">'
+        +'<span style="font-size:2rem;">&#129517;</span>'
+        +'<div><div style="font-weight:700;font-size:0.88rem;color:var(--primary);">Faites le test d&#39;orientation !</div>'
+        +'<div style="font-size:0.78rem;color:var(--text3);">D&eacute;couvrez les m&eacute;tiers faits pour vous (3 minutes)</div></div>'
+        +'<span style="margin-left:auto;font-size:1.2rem;">&rarr;</span></div>';
+      ctaDiv.innerHTML=''; ctaDiv.appendChild(ctaCard);
+    } else { ctaDiv.innerHTML=''; }
+  }
   var secDiv = document.getElementById('security-status');
   if(secDiv){
     if(currentUser.secretQuestion){
@@ -4087,10 +4400,45 @@ function showStagiaireDetail(email){
     +'<div class="modal-footer">'
     +'<button class="btn btn-ghost" onclick="document.getElementById(\'modal-stagiaire-detail\').remove()">Fermer</button>'
     +'<button class="btn btn-outline" onclick="referenteResetPwd(\''+safeEmail+'\')" title="Réinitialiser mot de passe">🔑 Réinit. MDP</button>'
+    +'<button class="btn btn-outline" onclick="assignGroupeModal(\''+safeEmail+'\')" title="Assigner groupe">📂 Groupe</button>'
     +'<button class="btn btn-primary" onclick="printRapportStagiaire(\''+safeEmail+'\')">&#128424; Rapport PDF</button>'
     +'</div></div>';
   document.body.appendChild(m);
 }
+
+function assignGroupeModal(email){
+  var s=users.find(function(u){return u.email===email;}); if(!s) return;
+  var opts='<option value="">— Aucun groupe —</option>'+groups.map(function(g){
+    return '<option value="'+g.nom+'"'+(s.groupe===g.nom?' selected':'')+'>'+g.nom+'</option>';
+  }).join('');
+  var old=document.getElementById('modal-assign-grp'); if(old) old.remove();
+  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-assign-grp';
+  m.innerHTML='<div class="modal" style="max-width:360px;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">&#128194; Assigner un groupe</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" id="assign-close-btn">&#10005;</button></div>'
+    +'<div class="modal-body">'
+    +'<p style="font-size:0.84rem;margin-bottom:0.75rem;">Groupe pour <strong>'+s.prenom+' '+s.nom+'</strong></p>'
+    +'<div class="form-group"><label>Groupe</label>'
+    +'<select id="assign-grp-sel" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);">'
+    +opts+'</select></div>'
+    +'</div>'
+    +'<div class="modal-footer">'
+    +'<button class="btn btn-ghost" id="assign-cancel-btn">Annuler</button>'
+    +'<button class="btn btn-primary" id="assign-save-btn">Enregistrer</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
+  function closeAssign(){ var mo=document.getElementById('modal-assign-grp'); if(mo) mo.remove(); document.body.style.overflow=''; }
+  document.getElementById('assign-close-btn').onclick = closeAssign;
+  document.getElementById('assign-cancel-btn').onclick = closeAssign;
+  document.getElementById('assign-save-btn').onclick = function(){
+    var g=document.getElementById('assign-grp-sel').value;
+    var idx=users.findIndex(function(u){return u.email===email;});
+    if(idx>=0){users[idx].groupe=g;save('users',users);}
+    closeAssign(); renderStagiairesList();
+    showToast(g?'✅ Groupe assigné : '+g:'✅ Groupe retiré.');
+  };
+}
+
 function referenteResetPwd(email){
   var s = users.find(function(u){ return u.email===email; });
   if(!s) return;
@@ -4374,14 +4722,6 @@ function populateMetierSelect(){
   if(!sel) return;
   const all = [...METIERS, ...customMetiers];
   sel.innerHTML = all.map(m => `<option value="${m.id}">${m.nom}</option>`).join('');
-}
-function updateRapportStats(){
-  const stagiaires = users.filter(u => u.profile === 'stagiaire');
-  document.getElementById('r-total-stagiaires').textContent = stagiaires.length;
-  const week = new Date(); week.setDate(week.getDate()-7);
-  document.getElementById('r-actifs').textContent = stagiaires.filter(s => s.navHistory?.some(h => new Date(h.time) > week)).length;
-  document.getElementById('r-metiers-explores').textContent = stagiaires.reduce((a,s)=>a+(s.stats?.metiersExplored||[]).length,0);
-  document.getElementById('r-attestations').textContent = stagiaires.reduce((a,s)=>a+(s.attestations||[]).length,0);
 }
 function openRapportModal(){
   var stSel = document.getElementById('rapport-stagiaire-sel');
@@ -4711,6 +5051,13 @@ function generateRapportPDF(){
   win.document.close();
 }
 
+
+function canvasToDataURL(canvasId){
+  var c=document.getElementById(canvasId);
+  if(!c) return '';
+  try{ return c.toDataURL('image/png'); }catch(e){ return ''; }
+}
+
 function printRapportStagiaire(email){
   var s = users.find(function(u){ return u.email===email; });
   if(!s) return;
@@ -4762,6 +5109,36 @@ function printRapportStagiaire(email){
     +'<script>window.onload=function(){window.print();}<\/script>'
     +'</body></html>');
   win.document.close();
+}
+
+function printAttestationInModal(nom, metier, date){
+  var logo=localStorage.getItem('attestation_logo')||'';
+  var old=document.getElementById('modal-attestation-print'); if(old) old.remove();
+  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-attestation-print';
+  m.style.cssText='z-index:10000;background:rgba(0,0,0,0.7);';
+  m.innerHTML='<div class="modal" style="max-width:500px;text-align:center;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">📜 Attestation</h3>'
+    +'<button class="btn-icon" style="color:var(--text2);background:var(--surface2);" id="att-modal-close-btn">&#10005;</button></div>'
+    +'<div class="modal-body" id="attestation-print-body" style="text-align:center;padding:1.5rem;">'
+    +(logo?'<img src="'+logo+'" style="max-height:50px;max-width:150px;margin-bottom:1rem;"><br>':'<div style="font-size:3rem;margin-bottom:0.5rem;">⚓</div>')
+    +'<div style="font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem;">Cap Avenir – Le Havre</div>'
+    +'<div style="font-size:0.82rem;color:var(--text3);margin-bottom:1.5rem;">Attestation de découverte métier</div>'
+    +'<div style="font-size:1.3rem;font-weight:700;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0.75rem 0;margin:0.75rem 0;">'+nom+'</div>'
+    +'<div style="font-size:0.85rem;color:var(--text2);margin-bottom:0.5rem;">a découvert et validé le métier de</div>'
+    +'<div style="background:var(--primary-pale);color:var(--primary);font-weight:700;padding:8px 24px;border-radius:8px;display:inline-block;margin-bottom:0.75rem;">'+metier+'</div>'
+    +'<div style="font-size:0.82rem;color:var(--text3);">Le <strong>'+date+'</strong></div>'
+    +'<div style="font-size:0.72rem;color:var(--text3);margin-top:0.5rem;font-style:italic;">Document pédagogique non officiel</div>'
+    +'</div>'
+    +'<div class="modal-footer">'
+    +'<button class="btn btn-ghost" id="att-modal-fermer-btn">Fermer</button>'
+    +'<button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
+  var closeAtt = function(){ var mo=document.getElementById('modal-attestation-print'); if(mo) mo.remove(); document.body.style.overflow=''; };
+  var closeBtn = document.getElementById('att-modal-close-btn');
+  var fermerBtn = document.getElementById('att-modal-fermer-btn');
+  if(closeBtn) closeBtn.onclick = closeAtt;
+  if(fermerBtn) fermerBtn.onclick = closeAtt;
 }
 
 function printAttestationForStagiaire(nom, metier, date){
@@ -4851,6 +5228,40 @@ const GLOSSAIRE_LOCAL = [
 ];
 
 let glossaireSearchTimeout = null;
+
+
+function showPage_profil(){
+  if(!currentUser) return;
+  var p=document.getElementById('profil-prenom'); if(p) p.value=currentUser.prenom||'';
+  var n=document.getElementById('profil-nom'); if(n) n.value=currentUser.nom||'';
+  var e=document.getElementById('profil-email'); if(e) e.value=currentUser.email||'';
+}
+function saveProfilInfo(){
+  if(!currentUser) return;
+  var prenom=(document.getElementById('profil-prenom').value||'').trim();
+  var nom=(document.getElementById('profil-nom').value||'').trim();
+  if(!prenom||!nom){ showToast('❌ Prénom et nom obligatoires.'); return; }
+  currentUser.prenom=prenom; currentUser.nom=nom;
+  saveCurrentUser();
+  var idx=users.findIndex(function(u){return u.email===currentUser.email;});
+  if(idx>=0){users[idx].prenom=prenom;users[idx].nom=nom;save('users',users);}
+  showToast('✅ Profil mis à jour !');
+}
+function saveProfilPwd(){
+  if(!currentUser) return;
+  var oldP=document.getElementById('profil-pwd-old').value;
+  var newP=document.getElementById('profil-pwd-new').value;
+  var errEl=document.getElementById('err-profil-pwd');
+  errEl.style.display='none';
+  if(oldP!==currentUser.pwd){errEl.textContent='Mot de passe actuel incorrect.';errEl.style.display='block';return;}
+  if(newP.length<8){errEl.textContent='Le nouveau mot de passe doit faire au moins 8 caractères.';errEl.style.display='block';return;}
+  currentUser.pwd=newP; saveCurrentUser();
+  var idx=users.findIndex(function(u){return u.email===currentUser.email;});
+  if(idx>=0){users[idx].pwd=newP;save('users',users);}
+  document.getElementById('profil-pwd-old').value='';
+  document.getElementById('profil-pwd-new').value='';
+  showToast('✅ Mot de passe modifié !');
+}
 
 function showPage_glossaire(){
   const chips = document.getElementById('glossaire-chips');
@@ -5083,6 +5494,163 @@ initHandicapChecks();
 // Set today date default
 document.getElementById('new-form-date').valueAsDate = new Date();
 document.getElementById('new-groupe-date').value = new Date().toLocaleDateString('fr-FR');
+
+
+// ==================== TOAST ====================
+function showToast(msg, dur){
+  dur=dur||3500;
+  var ex=document.getElementById('toast-notif'); if(ex) ex.remove();
+  var t=document.createElement('div'); t.id='toast-notif';
+  t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:22px;font-size:0.82rem;z-index:9999;max-width:85vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.35);pointer-events:none;';
+  t.textContent=msg; document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity 0.4s'; setTimeout(function(){if(t.parentNode)t.remove();},400); },dur);
+}
+
+// ==================== SÉCURITÉ MOTS DE PASSE ====================
+function hashPwdSimple(pwd){
+  var h=5381;
+  for(var i=0;i<pwd.length;i++){ h=((h<<5)+h)+pwd.charCodeAt(i); h=h&h; }
+  return 'cap'+Math.abs(h).toString(36)+pwd.length.toString(36);
+}
+
+// ==================== MULTI-APPAREILS : EXPORT / IMPORT ====================
+function exportMyData(){
+  if(!currentUser){ showToast('Connectez-vous pour exporter.'); return; }
+  var snapshot = {v:3, at:new Date().toISOString(), user:JSON.parse(JSON.stringify(currentUser))};
+  var blob = new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='cap-avenir-'+(currentUser.prenom||'data')+'-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('✅ Fichier téléchargé ! Gardez-le pour retrouver vos données sur un autre ordinateur.');
+}
+
+function importMyData(){
+  var inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange=function(e){
+    var file=e.target.files[0]; if(!file) return;
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        var d=JSON.parse(ev.target.result);
+        if(!d.user||!d.user.email) throw new Error('invalid');
+        var idx=users.findIndex(function(u){return u.email===d.user.email;});
+        if(idx>=0){ users[idx]=d.user; } else { users.push(d.user); }
+        save('users',users);
+        currentUser=d.user; saveCurrentUser();
+        showToast('✅ Données restaurées !');
+        setTimeout(postLogin, 500);
+      }catch(err){ alert('Fichier invalide ou corrompu.'); }
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+function exportReferenteCSV(){
+  var stagList=users.filter(function(u){return u.profile==='stagiaire';});
+  if(!stagList.length){ alert('Aucun stagiaire.'); return; }
+  var hdrs=['Nom','Prénom','Email','Groupe','Inscription','Métiers','Badges','Jeux','Attestations'];
+  var rows=stagList.map(function(s){
+    return [s.nom||'',s.prenom||'',s.email||'',s.groupe||'',
+      s.createdAt?new Date(s.createdAt).toLocaleDateString('fr-FR'):'',
+      (s.stats&&s.stats.metiersExplored||[]).length,
+      (s.stats&&s.stats.badges||[]).length,
+      s.stats&&s.stats.games||0,
+      (s.attestations||[]).length
+    ].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
+  });
+  var csv='\uFEFF'+hdrs.map(function(h){return '"'+h+'"';}).join(',')+'\n'+rows.join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='stagiaires-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+// ==================== DÉCONNEXION AUTOMATIQUE ====================
+var _idleTimer=null, _idleSecs=0, IDLE_LIMIT=1200; // 20 min
+function resetIdle(){ _idleSecs=0; }
+function startIdleWatch(){
+  stopIdleWatch();
+  _idleTimer=setInterval(function(){
+    if(!currentUser) return;
+    _idleSecs++;
+    if(_idleSecs===IDLE_LIMIT-120) showToast('⚠️ Déconnexion dans 2 min par inactivité.');
+    if(_idleSecs>=IDLE_LIMIT){ stopIdleWatch(); showToast('🔒 Déconnecté par inactivité.'); setTimeout(logout,1800); }
+  },1000);
+}
+function stopIdleWatch(){ clearInterval(_idleTimer); _idleSecs=0; }
+['click','keydown','touchstart','mousemove'].forEach(function(ev){
+  document.addEventListener(ev,resetIdle,{passive:true});
+});
+
+// Warn before leaving on shared PC
+window.addEventListener('beforeunload',function(e){
+  if(currentUser && localStorage.getItem('shared_pc')==='true'){
+    e.preventDefault(); e.returnValue='Exportez vos données avant de partir !'; return e.returnValue;
+  }
+});
+
+// ==================== MODE PC PARTAGÉ ====================
+function checkPCType(){
+  if(localStorage.getItem('pc_type_asked')) return;
+  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-pc-type';
+  m.innerHTML='<div class="modal" style="max-width:400px;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">💻 Quel appareil ?</h3></div>'
+    +'<div class="modal-body">'
+    +'<p style="font-size:0.84rem;color:var(--text2);margin-bottom:1rem;">Cela nous aide à protéger vos données.</p>'
+    +'<div style="display:flex;flex-direction:column;gap:10px;">'
+    +'<button class="btn btn-primary btn-full" onclick="setPCType(false)"><span style="font-size:1.2rem;">🏠</span><br>Mon ordinateur personnel<br><small style="opacity:0.8;">Données sauvegardées automatiquement</small></button>'
+    +'<button class="btn btn-outline btn-full" onclick="setPCType(true)"><span style="font-size:1.2rem;">🏫</span><br>PC de salle / partagé<br><small style="color:var(--text3);">Pensez à exporter vos données</small></button>'
+    +'</div></div></div>';
+  document.body.appendChild(m);
+}
+function setPCType(shared){
+  localStorage.setItem('shared_pc', shared?'true':'false');
+  localStorage.setItem('pc_type_asked','true');
+  var m=document.getElementById('modal-pc-type'); if(m) m.remove();
+  document.body.style.overflow='';
+  if(shared){
+    showToast('🏫 Mode PC partagé : exportez vos données avant de partir !');
+    startIdleWatch();
+    // Show export button in dashboard
+    var exportBtn=document.getElementById('export-data-btn');
+    if(exportBtn) exportBtn.style.display='block';
+  }
+}
+
+// ==================== NAVIGATION HISTORY ====================
+var navStack=[];
+function pushNavHistory(id){ if(navStack[navStack.length-1]!==id) navStack.push(id); if(navStack.length>30) navStack.shift(); }
+
+function startDemo(){
+  var demoUser={
+    email:'demo@cap-avenir.fr', prenom:'Camila', nom:'Exemple', pwd:'demo1234',
+    profile:'stagiaire', createdAt:new Date().toISOString(),
+    groupe:'Démo', secretQuestion:'', secretAnswer:'',
+    stats:{metiersExplored:['agent-portuaire','cariste','infirmier'],badges:['cariste'],games:7,scores:{'agent-portuaire':45,'cariste':72,'infirmier':55}},
+    attestations:[{metier:'Cariste',date:new Date().toLocaleDateString('fr-FR')}],
+    navHistory:[], testResults:{top:[{id:'cariste',score:85},{id:'agent-logistique',score:72},{id:'conducteur-spl',score:68}]}
+  };
+  currentUser=demoUser;
+  showToast('👀 Mode démonstration — aucune donnée ne sera sauvegardée.');
+  showPage('page-dashboard-stagiaire');
+}
+
+function confirmRestartTest(){
+  if(!currentUser||!currentUser.testResults){ startTest(); return; }
+  if(confirm("Vous avez déjà fait le test. Recommencer effacera vos résultats actuels. Continuer ?")){ startTest(); }
+}
+function goBack(){
+  if(navStack.length>1){ navStack.pop(); showPage(navStack[navStack.length-1]); }
+  else { showPage(currentUser&&currentUser.profile==='referente'?'page-dashboard-referente':'page-dashboard-stagiaire'); }
+}
+
+// ==================== GLOBAL ERROR HANDLER ====================
+window.onerror=function(msg,src,line,col,err){
+  console.error('JS Error:',msg,src,line);
+  return false;
+};
 
 // Auto-login if session exists
 if(currentUser){ postLogin(); }
