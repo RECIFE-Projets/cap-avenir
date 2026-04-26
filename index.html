@@ -247,6 +247,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .stat-label{font-size:0.73rem;color:var(--text3);margin-top:2px;}
 
 /* TOOLTIP */
+.glossaire-fab{position:fixed;bottom:155px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:var(--shadow-lg);z-index:200;display:none;align-items:center;justify-content:center;}
+.glossaire-fab.visible{display:flex;}
 .help-fab{position:fixed;bottom:80px;right:16px;z-index:200;background:var(--accent);color:#fff;width:48px;height:48px;border-radius:50%;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(244,160,32,0.5);display:none;align-items:center;justify-content:center;}
 .help-fab.visible{display:flex;}
 
@@ -1155,8 +1157,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="qcm-next-btn" onclick="nextQcmQuestion()">Question suivante →</button>
   </div>
 </div>
-
-<!-- ===== PAGE GAME VRAI OU FAUX ===== -->
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
 <div id="page-game-vraifaux" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="vf-title">Vrai ou Faux</span></div>
@@ -1183,8 +1190,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="vf-next-btn" onclick="nextVF()">Suivant →</button>
   </div>
 </div>
-
-<!-- ===== PAGE GAME GLISSER-DEPOSER ===== -->
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
 <div id="page-game-glisser" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="gl-title">Associer</span></div>
@@ -1207,8 +1219,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-ghost btn-full" style="margin-top:8px;display:none;" id="gl-next-btn" onclick="showPage('page-metier-detail')">← Retour au métier</button>
   </div>
 </div>
-
-<!-- ===== PAGE GAME SITUATION PRO ===== -->
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
 <div id="page-game-situation" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="sit-title">Situation pro</span></div>
@@ -1234,8 +1251,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="sit-next-btn" onclick="nextSituation()">Scénario suivant →</button>
   </div>
 </div>
-
-<!-- ===== PAGE GAME JOURNEE TYPE ===== -->
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav>
+</div>
 <div id="page-game-journee" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="jt-title">Journée type</span></div>
@@ -2147,6 +2169,9 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   </div>
 </div>
 
+<!-- FAB Glossaire -->
+<button class="glossaire-fab" id="glossaire-fab" onclick="showPage('page-glossaire')" title="Glossaire" aria-label="Glossaire multilingue">&#128214;</button>
+
 <!-- FAB Help -->
 <button class="help-fab" id="help-fab" onclick="showModal('modal-help')" title="Aide">❓</button>
 
@@ -2884,7 +2909,7 @@ function postLogin(){
   if(currentUser.profile === 'referente') goToReferente();
   else {
     testResults = load('testResults_'+currentUser.email, null);
-    if(!testResults && !currentUser._isDemo) showPage('page-test');
+    if(!testResults && !currentUser._isDemo && !currentUser.testResults) showPage('page-test');
     else goToDashboard();
   }
 }
@@ -2968,7 +2993,7 @@ function generateResults(){
 
   if(!scored.length){ showPage('page-metiers'); return; }
 
-  var resultsDiv = document.getElementById('test-results');
+  var resultsDiv = document.getElementById('recommended-metiers');
   if(!resultsDiv) return;
 
   var html = '<div style="text-align:center;margin-bottom:1rem;">'
