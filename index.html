@@ -58,8 +58,8 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font2);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 h1,h2,h3,h4{font-family:var(--font);}
-.page{display:none;flex-direction:column;}
-.page.active{display:flex;}
+.page{display:none;flex-direction:column;pointer-events:none;}
+.page.active{display:flex;pointer-events:auto;}
 
 /* NAV */
 .topbar{background:var(--primary);color:#fff;padding:0.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
@@ -154,7 +154,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 @media(min-width:480px){.step-label{display:block;}}
 
 /* BOTTOM NAV */
-.bottom-nav{background:var(--surface);border-top:1.5px solid var(--border);display:none;position:sticky;bottom:0;z-index:90;}
+.bottom-nav{background:var(--surface);border-top:1.5px solid var(--border);display:none;position:relative;bottom:0;z-index:90;margin-top:auto;}
 .page.active .bottom-nav.visible{display:flex;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:0.55rem 0.25rem;cursor:pointer;gap:3px;transition:color 0.2s;border:none;background:none;color:var(--text3);}
 .nav-item.active{color:var(--primary);}
@@ -162,7 +162,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .nav-item .nav-label{font-size:0.62rem;font-weight:600;}
 
 /* LANDING */
-#page-landing{background:#04182e;color:#fff;overflow-y:auto;}
+#page-landing{background:#04182e;color:#fff;overflow-y:auto;pointer-events:auto;}
 .landing-wrap{min-height:100vh;display:flex;flex-direction:column;}
 @keyframes popIn{from{opacity:0;transform:scale(0.6)}to{opacity:1;transform:scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -358,7 +358,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div class="land-anchor">⚓</div>
     <h1 class="land-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
     <p class="land-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
-    <div class="land-btns">
+    <div class="land-btns" style="pointer-events:auto;position:relative;z-index:50;">
       <button class="btn btn-white" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;width:100%;max-width:340px;">&#10024; Commencer — c'est gratuit</button>
       <button class="btn btn-outline-white" onclick="showPage('page-login')" style="font-size:0.92rem;padding:0.85rem;border-radius:14px;width:100%;max-width:340px;">&#128273; J'ai déjà un compte</button>
     </div>
@@ -2177,7 +2177,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
 <script>
 // ==================== DATA ====================
-const METIERS = [
+var METIERS = [
   // PORTEURS LE HAVRE
   {id:'agent-portuaire',nom:'Agent portuaire',emoji:'⚓',cat:'porteur-lh',couleur:'#0a3d6b',
    desc:'L\'agent portuaire travaille dans le port du Havre, le 2e port de France. Il s\'occupe du chargement et déchargement des navires. C\'est un travail physique en extérieur, souvent en équipe.',
@@ -2568,10 +2568,10 @@ const METIERS = [
 ];
 
 // FORMATIONS BASE (modifiable par référente)
-let FORMATIONS_CUSTOM; try{ FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom')||'[]'); if(!Array.isArray(FORMATIONS_CUSTOM)) FORMATIONS_CUSTOM=[]; } catch(e){ FORMATIONS_CUSTOM=[]; }
+var FORMATIONS_CUSTOM; try{ FORMATIONS_CUSTOM = JSON.parse(localStorage.getItem('formations_custom')||'[]'); if(!Array.isArray(FORMATIONS_CUSTOM)) FORMATIONS_CUSTOM=[]; } catch(e){ FORMATIONS_CUSTOM=[]; }
 
 // ENTREPRISES enrichies
-const ENTREPRISES = [
+var ENTREPRISES = [
   // Maritime & Port
   {nom:'Haropa Port Le Havre',secteur:'Maritime',ville:'Le Havre',lien:'https://www.haropaport.com/fr',desc:'Premier port à conteneurs de France, recrutements réguliers'},
   {nom:'CMA CGM',secteur:'Maritime',ville:'Le Havre',lien:'https://www.cma-cgm.com/fr',desc:'3e armateur mondial, siège mondial au Havre'},
@@ -2621,9 +2621,9 @@ const ENTREPRISES = [
 ];
 
 // ==================== STATE ====================
-let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-let users = JSON.parse(localStorage.getItem('users') || '[]');
-let groups = JSON.parse(localStorage.getItem('groups') || '[]');
+var currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+var users = JSON.parse(localStorage.getItem('users') || '[]');
+var groups = JSON.parse(localStorage.getItem('groups') || '[]');
 if(!groups.length && !localStorage.getItem('groups_initialized')){
   groups = [
     {nom:'Groupe A', dispositif:'FLE A1-A2', date:new Date().toLocaleDateString('fr-FR'), code:'GRPA'},
@@ -2632,18 +2632,18 @@ if(!groups.length && !localStorage.getItem('groups_initialized')){
   localStorage.setItem('groups', JSON.stringify(groups));
   localStorage.setItem('groups_initialized','1');
 }
-let testResults = JSON.parse(localStorage.getItem('testResults_' + (currentUser?.email||'')) || 'null');
-let selectedProfile = '';
-let currentMetier = null;
-let qcmQuestions = [];
-let qcmIndex = 0;
-let qcmScore = 0;
-let selectedHandicap = [];
-let selectedPrefs = [];
-let selectedInterests = [];
-let selectedSkills = [];
-let selectedNiveauFr = '';
-let customMetiers = JSON.parse(localStorage.getItem('custom_metiers') || '[]');
+var testResults = JSON.parse(localStorage.getItem('testResults_' + (currentUser?.email||'')) || 'null');
+var selectedProfile = '';
+var currentMetier = null;
+var qcmQuestions = [];
+var qcmIndex = 0;
+var qcmScore = 0;
+var selectedHandicap = [];
+var selectedPrefs = [];
+var selectedInterests = [];
+var selectedSkills = [];
+var selectedNiveauFr = '';
+var customMetiers = JSON.parse(localStorage.getItem('custom_metiers') || '[]');
 
 // ==================== UTILS ====================
 function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
@@ -3135,7 +3135,7 @@ function startGame(type){
 function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
 
 // --------- DONNÉES JEUX PAR MÉTIER ---------
-const GAMES_DATA = {
+var GAMES_DATA = {
   'agent-portuaire': {
     vraifaux:[
       {s:'Le port du Havre est le 1er port de France pour les conteneurs.',r:true,expl:'Vrai ! Le Havre est le 1er port à conteneurs de France.'},
@@ -3599,7 +3599,7 @@ function getGameData(metierID) {
 }
 
 // --------- VRAI OU FAUX ---------
-let vfQuestions=[], vfIndex=0, vfScore=0, vfSerie=0;
+var vfQuestions=[], vfIndex=0, vfScore=0, vfSerie=0;
 function startVraiFaux(){
   const data = getGameData(currentMetier.id);
   vfQuestions = shuffle(data.vraifaux || []);
@@ -3656,9 +3656,9 @@ function endVF(){
 }
 
 // --------- GLISSER-DÉPOSER (tap to match) ---------
-let glSelectedItem = null;
-let glAnswers = {};
-let glData = null;
+var glSelectedItem = null;
+var glAnswers = {};
+var glData = null;
 function startGlisser(){
   glData = (getGameData(currentMetier.id)).glisser;
   glSelectedItem = null;
@@ -3766,7 +3766,7 @@ function checkGlisser(){
 }
 
 // --------- SITUATION PRO ---------
-let sitIndex=0, sitScore=0, sitQuestions=[];
+var sitIndex=0, sitScore=0, sitQuestions=[];
 function startSituation(){
   const data = getGameData(currentMetier.id);
   sitQuestions = shuffle(data.situations || []);
@@ -3824,10 +3824,10 @@ function endSituation(){
 }
 
 // --------- JOURNÉE TYPE ---------
-let jtSelected = null;
-let jtPlaced = [];
-let jtTasks = [];
-let jtCorrectOrder = [];
+var jtSelected = null;
+var jtPlaced = [];
+var jtTasks = [];
+var jtCorrectOrder = [];
 function startJournee(){
   const data = getGameData(currentMetier.id);
   jtCorrectOrder = data.journee || [];
@@ -4135,7 +4135,7 @@ function saveSecurityQuestion(){
   var btn = document.querySelector('#security-card button');
   if(btn){ btn.textContent='✅ Question enregistrée !'; setTimeout(function(){ btn.textContent='⚙️ Modifier ma question secrète'; },2500); }
 }
-const QUESTIONS_ENTRETIEN = [
+var QUESTIONS_ENTRETIEN = [
   {cat:'presentation',q:'«\u00a0Parlez-moi de vous.\u00a0»',conseil:'Pr\u00e9sentez votre parcours en 2\u20133 minutes : d\'o\u00f9 venez-vous professionnellement, ce que vous avez fait, et pourquoi vous \u00eates l\u00e0 aujourd\'hui. Restez positif et concis.'},
   {cat:'presentation',q:'«\u00a0Comment d\u00e9cririez-vous votre parcours professionnel\u00a0?\u00a0»',conseil:'R\u00e9sumez vos exp\u00e9riences les plus importantes en lien avec le poste vis\u00e9. Mettez en avant les comp\u00e9tences acquises.'},
   {cat:'motivation',q:'«\u00a0Pourquoi postulez-vous \u00e0 ce poste\u00a0?\u00a0»',conseil:'Montrez que vous connaissez l\'entreprise et que vous avez choisi ce poste intentionnellement. \u00c9vitez de dire "pour le salaire".'},
@@ -4202,7 +4202,7 @@ function renderEntreprisesFiltered(secteur){
 }
 
 // MAP DATA - Centres de formation avec vraies adresses
-const MAP_CENTRES = [
+var MAP_CENTRES = [
   {nom:'GRETA C\u00f4tes Normandes',secteurs:['Industrie','Logistique','Transport','BTP','Num\u00e9rique','Sant\u00e9'],adresse:'42 rue Jules Lecesne, 76600 Le Havre',lien:'https://greta.ac-normandie.fr/greta/greta-cotes-normandes/',lat:49.495,lng:0.107,tel:'02 35 19 10 50'},
   {nom:'IFSI / IFAS - CHU du Havre',secteurs:['Sant\u00e9'],adresse:'29 Av. Pierre Mend\u00e8s France, 76290 Montivilliers',lien:'https://www.chu-lehavre.fr/formation',lat:49.551,lng:0.200,tel:'02 32 73 32 32'},
   {nom:'\u00c9cole 42 Le Havre',secteurs:['Num\u00e9rique'],adresse:'3 Rue de Normandie, 76600 Le Havre',lien:'https://42lehavre.fr',lat:49.490,lng:0.110,tel:''},
@@ -4357,7 +4357,7 @@ function renderMapList(type){
 }
 
 // QUESTIONS ENTRETIEN
-let currentQuestionFilter = 'tous';
+var currentQuestionFilter = 'tous';
 function filterQuestions(cat, btn){
   currentQuestionFilter = cat;
   document.querySelectorAll('[onclick^="filterQuestions"]').forEach(b => {
@@ -5280,7 +5280,7 @@ function printAllAttestations(){
 }
 
 // ==================== GLOSSAIRE MULTILINGUE ====================
-const GLOSSAIRE_LOCAL = [
+var GLOSSAIRE_LOCAL = [
   {mot:'CACES',def:'Certificat d\'Aptitude à la Conduite En Sécurité. Certification obligatoire pour conduire des engins (chariots, pelleteuses, nacelles…).'},
   {mot:'CDI',def:'Contrat à Durée Indéterminée. Contrat de travail sans date de fin fixée. C\'est le contrat le plus stable.'},
   {mot:'CDD',def:'Contrat à Durée Déterminée. Contrat de travail avec une date de fin prévue. Peut être renouvelé.'},
@@ -5323,7 +5323,7 @@ const GLOSSAIRE_LOCAL = [
   {mot:'Reconversion professionnelle',def:'Changer de métier. Se former à un nouveau métier différent de celui que l\'on faisait avant.'},
 ];
 
-let glossaireSearchTimeout = null;
+var glossaireSearchTimeout = null;
 
 
 function showPage_profil(){
