@@ -343,6 +343,10 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 .editable-list-item:hover .item-actions{opacity:1;}
 .item-actions{display:flex;gap:4px;margin-left:auto;opacity:0;transition:opacity 0.2s;}
 @media(max-width:600px){.item-actions{opacity:1;}}
+
+/* Page transition — entrée visible */
+@keyframes pageEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.page.active > *:first-child { animation: pageEnter 0.35s ease both; }
 </style>
 </head>
 <body>
@@ -386,6 +390,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span class="nav-trail-current">Inscription</span>
     </div>
 
+  <div style="background:var(--primary);color:#fff;text-align:center;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;letter-spacing:0.5px;">✨ Inscription — Créez votre compte Cap Avenir</div>
     <div class="section-title">Créer mon compte</div>
 
     <div class="alert alert-info" style="margin-bottom:1rem;">
@@ -498,6 +503,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span class="nav-trail-sep">›</span>
       <span class="nav-trail-current">Connexion</span>
     </div>
+  <div style="background:var(--primary);color:#fff;text-align:center;padding:0.5rem 1rem;font-size:0.82rem;font-weight:600;letter-spacing:0.5px;">🔑 Connexion — Accédez à votre espace Cap Avenir</div>
     <div class="section-title">Se connecter</div>
 
     <form id="login-form" onsubmit="handleLogin(event)">
@@ -2459,10 +2465,11 @@ function showPage(id){
   pushNavHistory(id);
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   var pg = document.getElementById(id);
-  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; } document.body.style.overflow='';
+  if(pg){ pg.classList.add('active'); pg.scrollTop = 0; } document.body.scrollTop = 0; document.documentElement.scrollTop = 0; window.scrollTo(0,0); document.body.style.overflow='';
   updateFab(id);
   trackNavigation(id);
   // Init pages on first show
+  if(id === 'page-register') showToast('✨ Bienvenue ! Remplissez ce formulaire pour créer votre compte.');
   if(id === 'page-metiers') renderMetiers();
   if(id === 'page-entreprises') renderEntreprisesPage();
   if(id === 'page-carte') renderMapPage();
