@@ -228,7 +228,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .quiz-option .opt-letter{width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;flex-shrink:0;}
 
 /* MÉTIER CARD */
-.metier-card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;cursor:pointer;transition:all 0.2s;box-shadow:var(--shadow);}
+.metier-card{background:var(--surface);border-radius:var(--radius);position:relative;overflow:hidden;border:1.5px solid var(--border);overflow:hidden;cursor:pointer;transition:all 0.2s;box-shadow:var(--shadow);}
 .metier-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
 .metier-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:3rem;}
 .metier-info{padding:0.9rem;}
@@ -347,12 +347,17 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 /* Page transition — entrée visible */
 @keyframes pageEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .page.active > *:first-child { animation: pageEnter 0.35s ease both; }
+@keyframes pageEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.page.active > .topbar,.page.active > .scroll-content{animation:pageEnter 0.3s ease both;}
 </style>
 </head>
 <body>
 
 <!-- ===== PAGE LANDING ===== -->
-<div id="page-landing" class="page active" style="display:flex;flex-direction:column;min-height:100vh;background:#04182e;color:#fff;overflow-y:auto;">
+<div id="offline-global-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#b71c1c;color:#fff;padding:8px 16px;font-size:0.8rem;font-weight:600;z-index:999;align-items:center;gap:8px;justify-content:center;">
+  &#128225; Mode hors ligne &mdash; Vid&eacute;os et traductions indisponibles. Vos donn&eacute;es sont sauvegard&eacute;es localement.
+</div>
+<div id="page-landing"  class="page active" style="display:flex;flex-direction:column;min-height:100vh;background:#04182e;color:#fff;overflow-y:auto;">
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.25rem 1.5rem;">
     <div style="width:80px;height:80px;background:#f4a020;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1.25rem;box-shadow:0 8px 32px rgba(244,160,32,0.45);">&#9875;</div>
     <h1 style="font-family:'Poppins',sans-serif;font-size:2.2rem;font-weight:800;line-height:1.1;margin-bottom:0.9rem;">Votre avenir<br>commence à <span style="color:#f4a020;">Le Havre</span></h1>
@@ -455,14 +460,24 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
           </div>
         </div>
         <div class="error-msg" id="err-profile">Veuillez choisir un profil</div>
+      <div id="ref-code-section" style="display:none;margin-top:0.75rem;" class="alert alert-info">
+        <span>&#128272;</span>
+        <div style="flex:1;"><strong>Code r&eacute;f&eacute;rente requis</strong>
+          <div class="form-group" style="margin-top:0.5rem;margin-bottom:0;">
+            <input type="text" id="reg-ref-code" placeholder="Code fourni par RECIFE" autocomplete="off" style="text-transform:uppercase;letter-spacing:2px;">
+            <div id="err-ref-code" class="error-msg" style="display:none"></div>
+          </div>
+        </div>
+      </div>
       </div>
 
       <button type="submit" class="btn btn-primary btn-full btn-lg">Créer mon compte →</button>
 
       <!-- Question secrète pour récupération mot de passe -->
       <div class="form-group">
-        <label>Code de classe (optionnel)</label>
-        <input type="text" id="reg-group-code" placeholder="Demandez ce code à votre référente" autocomplete="off">
+        <label>Code de classe <span style="font-size:0.72rem;color:var(--text3);">(optionnel)</span></label>
+        <input type="text" id="reg-group-code" placeholder="Ex : GRP01 - laissez vide si inconnu" autocomplete="off" style="text-transform:uppercase;">
+        <p style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Code fourni par votre r&eacute;f&eacute;rente. Laissez vide sinon.</p>
       </div>
       <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.75rem;border:1px dashed var(--border);">
         <div style="font-size:0.78rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;">🔐 Récupération de mot de passe (recommandé)</div>
@@ -567,8 +582,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <!-- SECTION 2 : HANDICAP -->
     <div id="test-section-2" class="test-section" style="display:none">
       <div style="margin-top:1.25rem" class="card">
-        <div class="card-title">♿ Situation de handicap</div>
-        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Ces informations permettent de vous orienter vers des métiers adaptés. Elles sont <strong>confidentielles</strong> et uniquement visibles par votre conseillère. Vous pouvez choisir de ne pas répondre.</p>
+        <div class="card-title">&#9855; Accessibilit&eacute; au travail <span style="font-size:0.7rem;color:var(--text3);font-weight:400;">(optionnel)</span></div>
+        <p style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">Cette information nous aide &agrave; proposer des m&eacute;tiers adapt&eacute;s. Elle est <strong>strictement confidentielle</strong>, visible uniquement par votre conseill&egrave;re. Vous pouvez passer cette &eacute;tape.</p>
         <div class="form-group" style="margin-bottom:0.75rem;">
           <label>Avez-vous une situation de handicap ?</label>
           <div class="choice-group">
@@ -825,6 +840,15 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     </div>
 
     <div id="test-cta-dash"></div>
+    <div id="first-time-cta" style="display:none;margin-bottom:1rem;">
+      <div class="card" style="border:2px solid var(--primary);background:var(--primary-pale);text-align:center;padding:1.5rem 1rem;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">&#127919;</div>
+        <div style="font-family:var(--font);font-size:1rem;font-weight:700;margin-bottom:0.5rem;">Bienvenue sur Cap Avenir&nbsp;!</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">Commencez par le test d&rsquo;orientation pour d&eacute;couvrir les m&eacute;tiers qui vous correspondent.</p>
+        <button class="btn btn-primary btn-full" onclick="showPage('page-test')">&#127919; Faire le test d&rsquo;orientation &rarr;</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="goToMetiers()">Voir directement les m&eacute;tiers</button>
+      </div>
+    </div>
     <div id="rec-metiers-dash" style="margin-bottom:1rem;"></div>
 
     
@@ -896,7 +920,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 <div id="page-metier-detail" class="page">
   <div class="topbar">
     <div class="topbar-brand" id="metier-detail-title"><div class="logo-badge">⚓</div>Métier</div>
-    <button class="btn-icon" onclick="showPage('page-metiers')">←</button>
+    <button class="btn-icon" onclick="goBack()" title="Retour">&#8592;</button>
   </div>
   <div class="scroll-content">
     <div class="nav-trail" id="metier-trail"></div>
@@ -1401,6 +1425,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <button class="admin-tab" onclick="showAdminTab('tab-metiers-admin',this)">🗂 Métiers</button>
       <button class="admin-tab" onclick="showAdminTab('tab-formations-admin',this)">🎓 Formations</button>
       <button class="admin-tab" onclick="showAdminTab('tab-rapports',this)">📊 Rapports</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-parametres',this)">&#9881; Param&egrave;tres</button>
     </div>
 
     <!-- TAB STAGIAIRES -->
@@ -1443,8 +1468,30 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <div id="admin-formations-list"></div>
     </div>
 
+    <!-- TAB PARAMETRES -->
+    <div id="tab-parametres" class="admin-tab-content" style="display:none">
+      <div class="section-title">&#9881; Param&egrave;tres</div>
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-title">&#127970; Organisme de formation</div>
+        <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Ce nom apparaîtra sur les attestations.</p>
+        <div class="form-group"><input type="text" id="organisme-nom" placeholder="Ex : RECIFE, GRETA..." style="font-size:0.88rem;"></div>
+        <button class="btn btn-primary" onclick="saveOrganisme()">&#128190; Sauvegarder</button>
+      </div>
+      <div class="card">
+        <div class="card-title">&#128272; Code d&rsquo;acc&egrave;s r&eacute;f&eacute;rente</div>
+        <p style="font-size:0.82rem;color:var(--text2);">Code actuel&nbsp;: <strong>RECIFE2025</strong>. Contactez votre administrateur pour le modifier.</p>
+      </div>
+    </div>
+
     <!-- TAB RAPPORTS -->
     <div id="tab-rapports" class="admin-tab-content" style="display:none">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;">
+        <div class="section-title" style="margin:0;flex:1;">Rapports</div>
+        <select id="rapport-groupe-filter" style="font-size:0.82rem;padding:0.4rem;border-radius:8px;border:1.5px solid var(--border);" onchange="renderRapports()">
+          <option value="">Tous les groupes</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="exportReferenteCSV()">&#128229; Export CSV</button>
+      </div>
       <div class="section-title">Rapports & Statistiques</div>
       <div class="stats-grid" style="margin-bottom:1rem;">
         <div class="stat-card"><div class="stat-value" id="r-total-stagiaires">0</div><div class="stat-label">Stagiaires total</div></div>
@@ -2480,6 +2527,13 @@ function showPage(id){
   if(id === 'page-profil') showPage_profil();
 }
 function updateFab(pageId){
+  // Active state on bottom nav
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(function(btn){
+    btn.classList.remove('active');
+    var oc=btn.getAttribute('onclick')||'';
+    if(oc.indexOf("'"+pageId+"'")>=0||oc.indexOf('"'+pageId+'"')>=0) btn.classList.add('active');
+  });
+  
   var fab = document.getElementById('help-fab');
   var gfab = document.getElementById('glossaire-fab');
   var noFab = ['page-landing','page-login','page-register'];
@@ -2501,6 +2555,7 @@ function trackNavigation(pageId){
 function saveCurrentUser(){
   if(!currentUser) return;
   if(currentUser._isDemo) return; // Never save demo data
+  currentUser.lastActivity = new Date().toISOString();
   save('currentUser', currentUser);
   var idx = users.findIndex(function(u){ return u.email === currentUser.email; });
   if(idx >= 0) users[idx] = currentUser;
@@ -2521,6 +2576,7 @@ function togglePwd(inputId, btnId){
 // ==================== OFFLINE DETECTION ====================
 function updateOfflineStatus(){
   var online = navigator.onLine;
+  var ob=document.getElementById('offline-global-banner'); if(ob) ob.style.display=online?'none':'flex';
   document.querySelectorAll('.offline-indicator').forEach(function(el){
     el.classList.toggle('show', !online);
   });
@@ -2553,6 +2609,14 @@ function handleRegister(e){
   if(pwd.length < 8){ showErr('err-pwd'); valid = false; }
   if(pwd !== pwd2){ showErr('err-pwd2'); valid = false; }
   if(!selectedProfile){ showErr('err-profile'); valid = false; }
+  if(selectedProfile === 'referente'){
+    var refCode = (document.getElementById('reg-ref-code')||{}).value||'';
+    if(refCode.toUpperCase() !== 'RECIFE2025'){
+      var errRef = document.getElementById('err-ref-code');
+      if(errRef){ errRef.style.display='block'; errRef.textContent='Code incorrect. Contactez votre responsable.'; }
+      valid = false;
+    }
+  }
   if(!valid) return;
 
   if(users.find(function(u){ return u.email === email; })){
@@ -2807,8 +2871,8 @@ function generateResults(){
 
   if(!scored.length){ showPage('page-metiers'); return; }
 
-  var resultsDiv = document.getElementById('test-results');
-  if(!resultsDiv) return;
+  var resultsDiv = document.getElementById('recommended-metiers');
+  if(!resultsDiv){ showPage('page-metiers'); return; }
 
   var html = '<div style="text-align:center;margin-bottom:1rem;">'
     +'<div style="font-size:2rem;">&#127919;</div>'
@@ -2821,12 +2885,21 @@ function generateResults(){
     var colors = ['#0a3d6b','#f4a020','#1a8a4a'];
     var labels = ['1er choix','2&egrave;me','3&egrave;me'];
     var safeId = m.id.replace(/'/g,'');
+    // Raisons de la recommandation
+    var niveaux2={A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
+    var why=[];
+    if((niveaux2[selectedNiveauFr||'A1']||1)>=(niveaux2[m.niveauFr||'A2']||2)) why.push('Niveau fran&ccedil;ais adapt&eacute;');
+    if(selectedInterests.includes(m.secteur)) why.push('Secteur choisi');
+    if(m.competences&&m.competences.some(function(c){return selectedPrefs.includes(c)||selectedSkills.includes(c);})) why.push('Correspond &agrave; vos pr&eacute;f&eacute;rences');
+    var whyHtml = why.length ? '<div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap;">'
+      +why.map(function(r){return '<span style="font-size:0.64rem;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:10px;">&check; '+r+'</span>';}).join('')+'</div>' : '';
     html += '<div class="card" style="margin-bottom:0.75rem;border-left:4px solid '+colors[i]+';cursor:pointer;" onclick="openMetier(\''+safeId+'\')">'
       +'<div style="display:flex;align-items:center;gap:12px;">'
       +'<span style="font-size:2rem;">'+m.emoji+'</span>'
       +'<div style="flex:1;">'
       +'<div style="font-weight:700;font-size:0.92rem;">'+m.nom+'</div>'
       +'<div style="font-size:0.75rem;color:var(--text3);margin-top:2px;">'+m.desc.slice(0,80)+'...</div>'
+      + whyHtml
       +'<div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">'
       +(m.tags||[]).slice(0,3).map(function(t){ return '<span class="badge badge-blue" style="font-size:0.68rem;">'+t+'</span>'; }).join('')
       +'</div></div>'
@@ -2883,6 +2956,7 @@ function renderMetiers(cat, search){
     grid.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3);">Aucun m&eacute;tier trouv&eacute;.</div>';
     return;
   }
+  var recIds = (testResults && (testResults.top3||testResults.recommended)) ? (testResults.top3||testResults.recommended) : [];
   var hasBadges = currentUser && currentUser.stats && currentUser.stats.badges;
   grid.innerHTML = filtered.map(function(m){
     var catBadge = m.cat==='porteur-lh' ? '<span class="badge badge-blue">&#128205; LH</span>'
@@ -2890,8 +2964,10 @@ function renderMetiers(cat, search){
       : '<span class="badge badge-gray">&#8505; Info</span>';
     var hasBadge = hasBadges && currentUser.stats.badges.includes(m.id);
     var safeId = m.id.replace(/'/g, '');
-    return '<div class="metier-card" onclick="openMetier(\'' + safeId + '\')">'
-      + '<div class="metier-banner" style="background:' + (m.couleur||'#0a3d6b') + '22">' + m.emoji + '</div>'
+    var isRec = recIds.includes(m.id);
+    return '<div class="metier-card" style="'+(isRec?'border:2px solid var(--accent);':'') +'" onclick="openMetier(\'' + safeId + '\')">'
+      + (isRec ? '<div style="background:var(--accent);color:#fff;font-size:0.6rem;font-weight:700;padding:2px;text-align:center;border-radius:4px 4px 0 0;">&#11088; RECOMMAND&Eacute; POUR VOUS</div>' : '')
+      + '<div class="metier-banner" style="background:' + (m.couleur||'#0a3d6b') + '22;' + (isRec?'border-radius:0;':'') + '">' + m.emoji + '</div>'
       + '<div class="metier-info">'
       + '<div class="metier-title">' + m.nom + '</div>'
       + '<div class="metier-tags">' + catBadge + (hasBadge ? '<span class="badge badge-amber">&#127885;</span>' : '') + '</div>'
@@ -2950,6 +3026,7 @@ function openMetier(id){
 // ==================== GAMES ====================
 function startGame(type){
   if(!currentMetier) return;
+  showToast('&#127919; Objectif : 60% minimum pour obtenir le badge !');
   if(type === 'qcm') startQCM();
   else if(type === 'vraifaux') startVraiFaux();
   else if(type === 'glisser') startGlisser();
@@ -3807,11 +3884,36 @@ function renderAttestations(){
 function downloadAttestation(metier, date){
   var nom = (currentUser && currentUser.nom) || '';
   var prenom = (currentUser && currentUser.prenom) || '';
-  var win = window.open('','_blank');
-  win.document.write('<!DOCTYPE html><html><head><title>Attestation</title><style>body{font-family:Arial,sans-serif;margin:40px auto;max-width:600px;}.box{border:3px double #0a3d6b;padding:40px;border-radius:12px;text-align:center;}h1{color:#0a3d6b;font-size:1.4rem;}.disclaimer{font-size:0.78rem;color:#888;margin-top:20px;font-style:italic;}.logo{font-size:2rem;margin-bottom:1rem;}</style></head><body><div class="box"><div class="logo">&#9875;</div><h1>ATTESTATION DE PARTICIPATION</h1><p>La plateforme <strong>Cap Avenir &ndash; Le Havre</strong></p><p>certifie que</p><h2>'+prenom+' '+nom+'</h2><p>a suivi et compl&eacute;t&eacute; avec succ&egrave;s le module</p><h3 style="color:#f4a020;">'+metier+'</h3><p>D&eacute;livr&eacute; le '+date+'</p><p class="disclaimer">Cette attestation n&#39;est pas un document officiel.</p></div><script>window.print();<\/script></body></html>');
+  var organisme = (currentUser && currentUser.organisme) || load('organisme_global','RECIFE');
+  var html = '<div style="font-family:Arial,sans-serif;max-width:580px;margin:0 auto;">'
+    +'<div style="border:3px double #0a3d6b;padding:36px;border-radius:12px;text-align:center;">'
+    +'<div style="font-size:2rem;margin-bottom:0.4rem;">&#9875;</div>'
+    +'<div style="font-size:0.8rem;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">'+organisme+'</div>'
+    +'<h1 style="color:#0a3d6b;font-size:1.3rem;margin-bottom:0.4rem;">ATTESTATION DE PARTICIPATION</h1>'
+    +'<p style="margin:0.4rem 0;font-size:0.9rem;">La plateforme <strong>Cap Avenir &ndash; Le Havre</strong> certifie que</p>'
+    +'<h2 style="font-size:1.5rem;color:#0a3d6b;margin:0.8rem 0;">'+prenom+' '+nom+'</h2>'
+    +'<p style="font-size:0.9rem;">a suivi et compl&eacute;t&eacute; avec succ&egrave;s le module</p>'
+    +'<h3 style="color:#f4a020;font-size:1.1rem;margin:0.6rem 0;">'+metier+'</h3>'
+    +'<p style="font-size:0.85rem;">D&eacute;livr&eacute; le '+date+'</p>'
+    +'<p style="font-size:0.7rem;color:#aaa;margin-top:1rem;padding-top:0.75rem;border-top:1px solid #eee;">Document p&eacute;dagogique &mdash; ne constitue pas une certification officielle</p>'
+    +'</div></div>';
+  var modal = document.getElementById('modal-attestation-print');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'modal-attestation-print';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = '<div class="modal-card" style="max-width:640px;">'
+      +'<div id="att-print-body"></div>'
+      +'<div class="modal-footer" style="gap:8px;margin-top:1rem;">'
+      +'<button class="btn btn-primary" onclick="window.print()">&#128424; Imprimer</button>'
+      +'<button class="btn btn-ghost" onclick="closeModal(&quot;modal-attestation-print&quot;)">Fermer</button>'
+      +'</div></div>';
+    document.body.appendChild(modal);
+  }
+  document.getElementById('att-print-body').innerHTML = html;
+  showModal('modal-attestation-print');
 }
 
-// ==================== DASHBOARD STAGIAIRE ====================
 function renderDashboard(){
   if(!currentUser) return;
   document.getElementById('dash-welcome').textContent = currentUser.prenom + ' ' + currentUser.nom;
@@ -3823,6 +3925,8 @@ function renderDashboard(){
   document.getElementById('stat-badges').textContent = (stats.badges||[]).length;
   document.getElementById('stat-games').textContent = stats.games || 0;
   var pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
+  var firstCta = document.getElementById('first-time-cta');
+  if(firstCta) firstCta.style.display = (!testResults && !currentUser._isDemo) ? 'block' : 'none';
   document.getElementById('global-progress').style.width = pct+'%';
   document.getElementById('global-pct').textContent = pct;
   
@@ -4158,6 +4262,18 @@ function toggleQuestion(el){
 }
 
 // ==================== RÉFÉRENTE ====================
+function saveOrganisme(){
+  var nom=(document.getElementById('organisme-nom')||{}).value||'';
+  if(!nom) return;
+  if(currentUser){ currentUser.organisme=nom; saveCurrentUser(); }
+  save('organisme_global',nom);
+  showToast('Organisme mis à jour : '+nom);
+}
+function loadOrganismeField(){
+  var saved=(currentUser&&currentUser.organisme)||load('organisme_global','RECIFE');
+  var inp=document.getElementById('organisme-nom');
+  if(inp) inp.value=saved;
+}
 function goToReferente(){ showPage('page-dashboard-referente'); }
 function renderReferenteDashboard(){
   initLogoPreview();
@@ -4304,6 +4420,17 @@ function referenteResetPwd(email){
   alert('✅ Mot de passe de ' + s.prenom + ' ' + s.nom + ' réinitialisé !\n\nNouveau mot de passe : ' + newPwd + '\n\nTransmettez-le au stagiaire en privé.');
 }
 function confirmDelete(email){
+  var u = users.find(function(x){ return x.email === email; });
+  var name = u ? (u.prenom+' '+u.nom) : email;
+  if(!confirm('Supprimer le compte de '+name+' ?\n\nSes données seront archivées 30 jours.')) return;
+  var archived=load('archived_stagiaires',[]);
+  if(u){ u._archivedAt=new Date().toISOString(); archived.push(u); save('archived_stagiaires',archived); }
+  users=users.filter(function(x){ return x.email!==email; });
+  save('users',users); renderStagiairesList();
+  showToast('Compte archivé et supprimé.');
+  return;
+  // Original:
+  var _orig=true;
   var s = users.find(function(u){ return u.email===email; });
   if(!s) return;
   var body = document.querySelector('#modal-confirm-delete .modal-body');
@@ -4349,6 +4476,9 @@ function addGroupe(){
   save('groups', groups);
   closeModal('modal-add-groupe');
   renderGroupesList();
+  var fc=grpCode.toUpperCase();
+  if(fc){var disp=document.getElementById('modal-code-display');if(disp)disp.textContent=fc;showModal('modal-code-classe');}
+  else showToast('Groupe créé !');
 }
 function renameGroupe(i){
   var newNom = prompt('Nouveau nom du groupe :', groups[i].nom);
@@ -4854,7 +4984,11 @@ function printRapportGroupe(grpNom){
 }
 
 function updateRapportStats(){
-  var stagList=users.filter(function(u){return u.profile==='stagiaire';});
+  var grf=document.getElementById('rapport-groupe-filter');
+  if(grf){ var cv=grf.value; while(grf.options.length>1)grf.remove(1); groups.forEach(function(g){var o=document.createElement('option');o.value=g.nom;o.textContent=g.nom+(g.code?' ('+g.code+')':'');grf.appendChild(o);}); grf.value=cv; }
+  var fgrp=grf?grf.value:'';
+  var stagList=users.filter(function(u){
+    if(fgrp && u.groupe!==fgrp) return false;return u.profile==='stagiaire';});
   var el=document.getElementById('r-total-stagiaires');if(el)el.textContent=stagList.length;
   el=document.getElementById('r-actifs');
   if(el){var week=new Date();week.setDate(week.getDate()-7);el.textContent=stagList.filter(function(s){return s.navHistory&&s.navHistory.some(function(h){return new Date(h.time)>week;});}).length;}
@@ -5247,9 +5381,10 @@ var METIERSCOPE_URLS = {
 
 function openVideoModal(){
   if(!currentMetier) return;
+  var url = currentMetier.video||'';
+  if(!url){ showToast('Pas de vid&eacute;o disponible pour ce m&eacute;tier.'); return; }
   var metierNom = currentMetier.nom;
   var metierLabel = (currentMetier.videoLabel||metierNom).replace(/'/g,'&#39;');
-  var url = currentMetier.video||'';
   var vid = '';
   if(url.includes('youtube.com/watch?v=')) vid = url.split('v=')[1].split('&')[0];
   else if(url.includes('youtu.be/')) vid = url.split('youtu.be/')[1].split('?')[0];
@@ -5445,14 +5580,18 @@ function importMyData(){
 function exportReferenteCSV(){
   var stagList=users.filter(function(u){return u.profile==='stagiaire';});
   if(!stagList.length){ alert('Aucun stagiaire.'); return; }
-  var hdrs=['Nom','Prénom','Email','Groupe','Inscription','Métiers','Badges','Jeux','Attestations'];
+  var hdrs=['Nom','Prénom','Email','Groupe','Inscription','Test','Niveau FR','Métiers','Badges','Jeux','Attestations','Dernière activité'];
   var rows=stagList.map(function(s){
+    var tr2=load('testResults_'+s.email,null);
+    var tStat=tr2?'Complété':(s.stats&&(s.stats.metiersExplored||[]).length>0?'Ignoré':'Non commencé');
+    var lAct=s.lastActivity?new Date(s.lastActivity).toLocaleDateString('fr-FR'):(s.createdAt?new Date(s.createdAt).toLocaleDateString('fr-FR'):'');
     return [s.nom||'',s.prenom||'',s.email||'',s.groupe||'',
       s.createdAt?new Date(s.createdAt).toLocaleDateString('fr-FR'):'',
+      tStat,(tr2&&tr2.niveau)||'',
       (s.stats&&s.stats.metiersExplored||[]).length,
       (s.stats&&s.stats.badges||[]).length,
       s.stats&&s.stats.games||0,
-      (s.attestations||[]).length
+      (s.attestations||[]).length,lAct
     ].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
   });
   var csv='\uFEFF'+hdrs.map(function(h){return '"'+h+'"';}).join(',')+'\n'+rows.join('\n');
@@ -5464,15 +5603,28 @@ function exportReferenteCSV(){
 
 // ==================== DÉCONNEXION AUTOMATIQUE ====================
 var _idleTimer=null, _idleSecs=0, IDLE_LIMIT=1200; // 20 min
-function resetIdle(){ _idleSecs=0; }
+function resetIdle(){ _idleSecs=0; var iw=document.getElementById('idle-warning-bar'); if(iw) iw.remove(); }
 function startIdleWatch(){
   stopIdleWatch();
   _idleTimer=setInterval(function(){
     if(!currentUser) return;
     _idleSecs++;
-    if(_idleSecs===IDLE_LIMIT-120) showToast('⚠️ Déconnexion dans 2 min par inactivité.');
+    if(_idleSecs===IDLE_LIMIT-120){
+      var iw=document.getElementById('idle-warning-bar');
+      if(!iw){
+        iw=document.createElement('div');iw.id='idle-warning-bar';
+        iw.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#b71c1c;color:#fff;padding:10px 18px;border-radius:12px;z-index:500;font-size:0.85rem;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:320px;width:90%;';
+        iw.innerHTML='<span>&#8987; Session expire dans 2 min</span><button onclick="resetIdleTimer()" style="background:#fff;color:#b71c1c;border:none;border-radius:8px;padding:3px 10px;font-size:0.8rem;font-weight:700;cursor:pointer;">Rester</button>';
+        document.body.appendChild(iw);
+      }
+    }
     if(_idleSecs>=IDLE_LIMIT){ stopIdleWatch(); showToast('🔒 Déconnecté par inactivité.'); setTimeout(logout,1800); }
   },1000);
+}
+function resetIdleTimer(){
+  _idleSecs=0;
+  var iw=document.getElementById('idle-warning-bar'); if(iw) iw.remove();
+  showToast('Session prolongée !');
 }
 function stopIdleWatch(){ clearInterval(_idleTimer); _idleSecs=0; }
 ['click','keydown','touchstart','mousemove'].forEach(function(ev){
@@ -5560,7 +5712,23 @@ function getAllMetiers(){ return [...METIERS,...customMetiers]; }
 function uploadLogo(){
   var input = document.getElementById('logo-upload');
   if(!input || !input.files[0]) return;
-  var file = input.files[0];
+  var file = input.files[0,
+  {mot:'CV',def:'Curriculum Vitae : document résumant votre parcours, formations et compétences pour postuler.'},
+  {mot:'Contrat',def:'Accord écrit entre employeur et salarié définissant les conditions de travail.'},
+  {mot:'Fiche de paie',def:'Document mensuel détaillant salaire brut, cotisations et salaire net.'},
+  {mot:'Conges',def:'Vacances payées : 2,5 jours par mois travaillé, soit 5 semaines par an.'},
+  {mot:'France Travail',def:'Ancien Pôle Emploi : aide les demandeurs d\'emploi et verse les allocations.'},
+  {mot:'Entretien',def:'Rencontre avec un employeur pour évaluer votre candidature.'},
+  {mot:'Lettre motivation',def:'Courrier accompagnant le CV pour expliquer votre candidature.'},
+  {mot:'Salaire',def:'Rémunération mensuelle versée par l\'employeur.'},
+  {mot:'Mutuelle',def:'Assurance santé complémentaire, souvent proposée par l\'employeur.'},
+  {mot:'Mission locale',def:'Structure aidant les jeunes (16-25 ans) dans leur orientation et recherche d\'emploi.'},
+  {mot:'Titre pro',def:'Diplôme d\'Etat reconnu par les employeurs, obtenu après une formation.'},
+  {mot:'CAF',def:'Caisse d\'Allocations Familiales : verse aides logement et familiales.'},
+  {mot:'Arret maladie',def:'Document médical autorisant l\'absence pour raison de santé.'},
+  {mot:'Immersion',def:'Période de découverte d\'un métier en entreprise (PMSMP) sans être salarié.'},
+  {mot:'Reference professionnelle',def:'Personne pouvant confirmer vos compétences auprès d\'un recruteur.'}
+];
   if(file.size > 300000){
     alert('Image trop grande (max 300KB). Compressez votre logo avant de l\'importer.');
     input.value = ''; return;
