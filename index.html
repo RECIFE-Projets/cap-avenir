@@ -58,7 +58,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font2);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 h1,h2,h3,h4{font-family:var(--font);}
-.page{display:none;flex-direction:column;pointer-events:none;}
+.page{display:none;min-height:100vh;flex-direction:column;;pointer-events:none;}
 .page.active{display:flex;pointer-events:auto;}
 
 /* NAV */
@@ -162,7 +162,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .nav-item .nav-label{font-size:0.62rem;font-weight:600;}
 
 /* LANDING */
-#page-landing{background:#04182e;color:#fff;overflow-y:auto;pointer-events:auto;}
+#page-landing{background:#04182e;color:#fff;overflow-y:auto;}
 .landing-wrap{min-height:100vh;display:flex;flex-direction:column;}
 @keyframes popIn{from{opacity:0;transform:scale(0.6)}to{opacity:1;transform:scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -177,10 +177,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 /* HERO with skyline */
 .land-hero{text-align:center;padding:2.5rem 1.25rem 1.75rem;background:#04182e;}
 .land-anchor{width:80px;height:80px;background:var(--accent);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1.25rem;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 8px 32px rgba(244,160,32,0.45);}
-.land-title{font-family:var(--font);font-size:2.2rem;font-weight:800;line-height:1.1;margin-bottom:0.9rem;}
+.land-title{font-family:var(--font);font-size:2.2rem;font-weight:800;line-height:1.1;margin-bottom:0.9rem;animation:fadeUp .6s .15s both ease-out;}
 .land-title span{color:var(--accent);}
 .land-sub{font-size:0.93rem;opacity:0.78;line-height:1.65;max-width:380px;margin:0 auto 1.75rem;animation:fadeUp .6s .25s both ease-out;}
-.land-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;margin:0 auto;position:relative;z-index:10;}
+.land-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;margin:0 auto;animation:fadeUp .6s .35s both ease-out;}
 
 /* STATS STRIP */
 .land-stats{display:grid;grid-template-columns:repeat(4,1fr);margin:0;border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);}
@@ -247,10 +247,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .stat-label{font-size:0.73rem;color:var(--text3);margin-top:2px;}
 
 /* TOOLTIP */
-.glossaire-fab{position:fixed;bottom:155px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:var(--shadow-lg);z-index:200;display:none;align-items:center;justify-content:center;}
-.glossaire-fab.visible{display:flex;}
 .help-fab{position:fixed;bottom:80px;right:16px;z-index:200;background:var(--accent);color:#fff;width:48px;height:48px;border-radius:50%;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(244,160,32,0.5);display:none;align-items:center;justify-content:center;}
-.help-fab.visible{display:flex;pointer-events:auto;}
+.help-fab.visible{display:flex;}
 
 /* HANDICAP SELECTOR */
 .handicap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
@@ -261,8 +259,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .handicap-item .h-text{font-size:0.8rem;font-weight:600;color:var(--text);}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;pointer-events:none;}
-.modal-overlay.open{display:flex;align-items:flex-start;pointer-events:auto;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;align-items:flex-start;}
 .modal{background:var(--surface);border-radius:16px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);margin:auto;}
 .modal-header{padding:1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .modal-body{padding:1.25rem;}
@@ -350,197 +348,29 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 <body>
 
 <!-- ===== PAGE LANDING ===== -->
-<div id="page-landing" class="page active">
-<div class="landing-wrap">
-
-  <!-- HERO : texte + boutons -->
-  <div class="land-hero">
-    <div class="land-anchor">⚓</div>
-    <h1 class="land-title">Votre avenir<br>commence à <span>Le Havre</span></h1>
-    <p class="land-sub">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
-    <div class="land-btns" style="pointer-events:auto;position:relative;z-index:50;">
-      <button class="btn btn-white" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;width:100%;max-width:340px;">&#10024; Commencer — c'est gratuit</button>
-      <button class="btn btn-outline-white" onclick="showPage('page-login')" style="font-size:0.92rem;padding:0.85rem;border-radius:14px;width:100%;max-width:340px;">&#128273; J'ai déjà un compte</button>
+<div id="page-landing" class="page active" style="display:flex;flex-direction:column;min-height:100vh;background:#04182e;color:#fff;overflow-y:auto;">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.25rem 1.5rem;">
+    <div style="width:80px;height:80px;background:#f4a020;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1.25rem;box-shadow:0 8px 32px rgba(244,160,32,0.45);">&#9875;</div>
+    <h1 style="font-family:'Poppins',sans-serif;font-size:2.2rem;font-weight:800;line-height:1.1;margin-bottom:0.9rem;">Votre avenir<br>commence à <span style="color:#f4a020;">Le Havre</span></h1>
+    <p style="font-size:1rem;opacity:0.8;max-width:340px;margin:0 auto 2rem;line-height:1.5;">Découvrez les métiers qui recrutent, construisez votre projet professionnel et passez à l'action — gratuitement.</p>
+    <div id="landing-btns" style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px;margin:0 auto;">
+      <button id="btn-commencer" type="button" style="background:#fff;color:#04182e;font-weight:700;font-size:1rem;padding:1rem;border-radius:14px;width:100%;border:none;cursor:pointer;font-family:inherit;">&#10024; Commencer — c'est gratuit</button>
+      <button id="btn-connexion" type="button" style="background:transparent;color:#fff;font-weight:600;font-size:0.92rem;padding:0.85rem;border-radius:14px;width:100%;border:2px solid rgba(255,255,255,0.4);cursor:pointer;font-family:inherit;">&#128273; J'ai déjà un compte</button>
     </div>
   </div>
-
-  <!-- SKYLINE Le Havre : flux normal, après le hero -->
-  <div style="background:#04182e;line-height:0;margin-top:-2px;">
-    <svg width="100%" viewBox="0 0 800 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" style="display:block;">
-      <rect x="0" y="0" width="800" height="210" fill="#04182e"/>
-      <!-- Étoiles -->
-      <circle cx="60" cy="18" r="1.2" fill="#fff" opacity=".6"/>
-      <circle cx="140" cy="10" r="1" fill="#fff" opacity=".5"/>
-      <circle cx="240" cy="22" r="1.3" fill="#fff" opacity=".7"/>
-      <circle cx="380" cy="8" r="1" fill="#fff" opacity=".4"/>
-      <circle cx="500" cy="16" r="1.2" fill="#fff" opacity=".6"/>
-      <circle cx="620" cy="9" r="1" fill="#fff" opacity=".5"/>
-      <circle cx="720" cy="20" r="1.3" fill="#fff" opacity=".6"/>
-      <circle cx="760" cy="12" r="1" fill="#fff" opacity=".4"/>
-      <!-- Lune -->
-      <circle cx="720" cy="35" r="14" fill="#f0e8c8" opacity=".9"/>
-      <circle cx="726" cy="30" r="12" fill="#04182e" opacity=".88"/>
-      <!-- Zone industrielle gauche Gonfreville -->
-      <rect x="0" y="115" width="30" height="55" fill="#0a2a45"/>
-      <rect x="8" y="98" width="14" height="72" fill="#0d3055"/>
-      <rect x="38" y="122" width="18" height="48" fill="#0a2a45"/>
-      <rect x="42" y="113" width="10" height="10" rx="5" fill="#0d3055"/>
-      <path d="M47 113 Q44 100 48 88 Q52 76 49 64" fill="none" stroke="#1a3a55" stroke-width="2" opacity=".5"/>
-      <path d="M47 113 Q50 100 47 87 Q44 74 48 62" fill="none" stroke="#1a3a55" stroke-width="1.5" opacity=".3"/>
-      <!-- Grue 1 -->
-      <rect x="105" y="62" width="5" height="108" fill="#1a5a8a"/>
-      <rect x="70" y="65" width="75" height="4" fill="#1a5a8a"/>
-      <rect x="70" y="65" width="4" height="30" fill="#1a5a8a"/>
-      <line x1="110" y1="69" x2="80" y2="92" stroke="#1a5a8a" stroke-width="1.5"/>
-      <line x1="110" y1="69" x2="140" y2="82" stroke="#1a5a8a" stroke-width="1.5"/>
-      <rect x="104" y="77" width="12" height="9" fill="#2a6a9a" rx="1"/>
-      <!-- Grue 2 -->
-      <rect x="172" y="52" width="5" height="118" fill="#1a5a8a"/>
-      <rect x="145" y="55" width="60" height="4" fill="#1a5a8a"/>
-      <rect x="145" y="55" width="4" height="28" fill="#1a5a8a"/>
-      <line x1="175" y1="59" x2="155" y2="80" stroke="#1a5a8a" stroke-width="1.5"/>
-      <line x1="175" y1="59" x2="200" y2="70" stroke="#1a5a8a" stroke-width="1.5"/>
-      <rect x="171" y="67" width="11" height="8" fill="#2a6a9a" rx="1"/>
-      <!-- Navire porte-conteneurs -->
-      <path d="M55 162 L230 162 L240 170 L45 170 Z" fill="#0e3558" stroke="#1a4a6a" stroke-width="0.5"/>
-      <rect x="68" y="150" width="22" height="12" fill="#c0392b" rx="1"/>
-      <rect x="93" y="150" width="22" height="12" fill="#1a5a8a" rx="1"/>
-      <rect x="118" y="150" width="22" height="12" fill="#f4a020" rx="1"/>
-      <rect x="143" y="150" width="22" height="12" fill="#2c7a3a" rx="1"/>
-      <rect x="168" y="150" width="22" height="12" fill="#c0392b" rx="1"/>
-      <rect x="80" y="138" width="22" height="12" fill="#1a5a8a" rx="1"/>
-      <rect x="105" y="138" width="22" height="12" fill="#f4a020" rx="1"/>
-      <rect x="130" y="138" width="22" height="12" fill="#2c7a3a" rx="1"/>
-      <rect x="155" y="138" width="22" height="12" fill="#c0392b" rx="1"/>
-      <!-- Immeubles centre Le Havre -->
-      <rect x="268" y="108" width="28" height="62" fill="#0c2d4a" rx="1"/>
-      <rect x="273" y="113" width="5" height="4" fill="#f4a020" opacity=".6"/>
-      <rect x="281" y="113" width="5" height="4" fill="#8cc4e8" opacity=".3"/>
-      <rect x="273" y="121" width="5" height="4" fill="#8cc4e8" opacity=".25"/>
-      <rect x="281" y="121" width="5" height="4" fill="#f4a020" opacity=".4"/>
-      <rect x="273" y="129" width="5" height="4" fill="#8cc4e8" opacity=".2"/>
-      <rect x="300" y="92" width="22" height="78" fill="#0e3356"/>
-      <rect x="303" y="97" width="4" height="4" fill="#f4a020" opacity=".65"/>
-      <rect x="310" y="97" width="4" height="4" fill="#8cc4e8" opacity=".25"/>
-      <rect x="303" y="105" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
-      <rect x="310" y="105" width="4" height="4" fill="#f4a020" opacity=".5"/>
-      <rect x="303" y="113" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
-      <rect x="310" y="113" width="4" height="4" fill="#f4a020" opacity=".4"/>
-      <!-- Tour principale -->
-      <rect x="326" y="74" width="18" height="96" fill="#102040"/>
-      <rect x="330" y="62" width="10" height="16" fill="#122445" rx="1"/>
-      <rect x="333" y="56" width="4" height="9" fill="#8cc4e8" opacity=".35"/>
-      <rect x="329" y="80" width="3" height="3" fill="#f4a020" opacity=".75"/>
-      <rect x="334" y="80" width="3" height="3" fill="#8cc4e8" opacity=".25"/>
-      <rect x="340" y="80" width="3" height="3" fill="#8cc4e8" opacity=".2"/>
-      <rect x="329" y="88" width="3" height="3" fill="#8cc4e8" opacity=".2"/>
-      <rect x="334" y="88" width="3" height="3" fill="#f4a020" opacity=".5"/>
-      <rect x="348" y="102" width="25" height="68" fill="#0c2d4a"/>
-      <rect x="352" y="108" width="5" height="4" fill="#8cc4e8" opacity=".25"/>
-      <rect x="360" y="108" width="5" height="4" fill="#f4a020" opacity=".55"/>
-      <rect x="352" y="116" width="5" height="4" fill="#f4a020" opacity=".45"/>
-      <!-- Clocher/phare -->
-      <rect x="383" y="118" width="14" height="52" fill="#0d2e4a"/>
-      <polygon points="383,118 397,118 390,97" fill="#102040"/>
-      <circle cx="390" cy="115" r="3" fill="#f4a020" opacity=".85"/>
-      <!-- Immeubles droite -->
-      <rect x="408" y="110" width="20" height="60" fill="#0c2d4a"/>
-      <rect x="431" y="97" width="24" height="73" fill="#0e3356"/>
-      <rect x="434" y="102" width="4" height="4" fill="#f4a020" opacity=".6"/>
-      <rect x="441" y="102" width="4" height="4" fill="#8cc4e8" opacity=".25"/>
-      <rect x="434" y="110" width="4" height="4" fill="#8cc4e8" opacity=".2"/>
-      <rect x="441" y="110" width="4" height="4" fill="#f4a020" opacity=".45"/>
-      <rect x="458" y="120" width="18" height="50" fill="#0a2a42"/>
-      <rect x="479" y="107" width="22" height="63" fill="#0c2d4a"/>
-      <rect x="504" y="117" width="16" height="53" fill="#0a2840"/>
-      <!-- Grue 3 droite -->
-      <rect x="547" y="57" width="5" height="113" fill="#1a5a8a"/>
-      <rect x="520" y="60" width="60" height="4" fill="#1a5a8a"/>
-      <rect x="520" y="60" width="4" height="26" fill="#1a5a8a"/>
-      <line x1="550" y1="64" x2="530" y2="84" stroke="#1a5a8a" stroke-width="1.5"/>
-      <line x1="550" y1="64" x2="575" y2="74" stroke="#1a5a8a" stroke-width="1.5"/>
-      <rect x="546" y="70" width="11" height="8" fill="#2a6a9a" rx="1"/>
-      <!-- Zone industrielle droite -->
-      <rect x="588" y="122" width="20" height="48" fill="#0a2840"/>
-      <rect x="612" y="112" width="16" height="58" fill="#0c2d4a"/>
-      <rect x="632" y="120" width="22" height="50" fill="#0a2840"/>
-      <rect x="658" y="107" width="18" height="63" fill="#0c2d4a"/>
-      <rect x="680" y="117" width="14" height="53" fill="#0a2840"/>
-      <rect x="698" y="102" width="20" height="68" fill="#0c2d4a"/>
-      <rect x="723" y="114" width="15" height="56" fill="#0a2840"/>
-      <rect x="725" y="102" width="11" height="14" rx="5" fill="#0c2d4a"/>
-      <path d="M730 102 Q727 90 731 80 Q735 70 732 60" fill="none" stroke="#1a3a55" stroke-width="1.8" opacity=".4"/>
-      <rect x="743" y="122" width="30" height="48" fill="#0a2840"/>
-      <rect x="778" y="117" width="22" height="53" fill="#0a2840"/>
-      <!-- Halo lumineux horizon -->
-      <ellipse cx="400" cy="170" rx="380" ry="22" fill="#0d3060" opacity=".5"/>
-      <ellipse cx="140" cy="170" rx="120" ry="14" fill="#0d3060" opacity=".3"/>
-      <!-- Quai et eau -->
-      <rect x="0" y="170" width="800" height="5" fill="#071828"/>
-      <rect x="0" y="175" width="800" height="35" fill="#061e35"/>
-      <path d="M0 183 Q200 180 400 183 Q600 186 800 183" fill="none" stroke="#1a4a7a" stroke-width="1" opacity=".4"/>
-      <path d="M0 191 Q200 188 400 191 Q600 194 800 191" fill="none" stroke="#1a4a7a" stroke-width="0.7" opacity=".3"/>
+  <div style="background:#04182e;line-height:0;margin-top:auto;">
+    <svg width="100%" viewBox="0 0 800 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" style="display:block;pointer-events:none;">
+      <rect x="0" y="0" width="800" height="180" fill="#04182e"/>
+      <circle cx="60" cy="18" r="1.2" fill="#fff" opacity=".6"/><circle cx="380" cy="8" r="1" fill="#fff" opacity=".4"/><circle cx="720" cy="20" r="1.3" fill="#fff" opacity=".6"/>
+      <circle cx="720" cy="35" r="14" fill="#f0e8c8" opacity=".9"/><circle cx="726" cy="30" r="12" fill="#04182e" opacity=".88"/>
+      <rect x="105" y="62" width="5" height="88" fill="#1a5a8a"/><rect x="70" y="65" width="75" height="4" fill="#1a5a8a"/>
+      <rect x="172" y="52" width="5" height="98" fill="#1a5a8a"/><rect x="145" y="55" width="60" height="4" fill="#1a5a8a"/>
+      <rect x="268" y="88" width="28" height="62" fill="#0c2d4a" rx="1"/><rect x="308" y="78" width="22" height="72" fill="#0e3255" rx="1"/>
+      <rect x="540" y="70" width="35" height="80" fill="#0d3055" rx="1"/><rect x="620" y="75" width="40" height="75" fill="#0e3255" rx="1"/>
+      <rect x="0" y="150" width="800" height="30" fill="#061520"/>
     </svg>
   </div>
-
-  <!-- STATS -->
-  <div class="land-stats">
-    <div class="land-stat"><div class="land-stat-num">12+</div><div class="land-stat-label">Métiers du Havre</div></div>
-    <div class="land-stat"><div class="land-stat-num">100%</div><div class="land-stat-label">Gratuit</div></div>
-    <div class="land-stat"><div class="land-stat-num">6</div><div class="land-stat-label">Jeux / métier</div></div>
-    <div class="land-stat"><div class="land-stat-num">A1&#8594;C2</div><div class="land-stat-label">Tous niveaux</div></div>
-  </div>
-
-  <!-- FEATURES -->
-  <div class="land-features">
-    <div class="land-section-label">Ce que vous pouvez faire</div>
-    <div class="land-feat">
-      <div class="land-feat-icon blue" style="font-size:1.4rem;">&#128506;</div>
-      <div><div class="land-feat-title">Découvrir les métiers qui recrutent</div><div class="land-feat-desc">Port, industrie, logistique, santé, numérique… explorez les métiers porteurs du Havre et de l'agglomération.</div></div>
-    </div>
-    <div class="land-feat">
-      <div class="land-feat-icon amber" style="font-size:1.4rem;">&#127918;</div>
-      <div><div class="land-feat-title">Apprendre en jouant</div><div class="land-feat-desc">Quiz, glisser-déposer, vrai ou faux, situations pro… gagnez des badges et des points !</div></div>
-    </div>
-    <div class="land-feat">
-      <div class="land-feat-icon green" style="font-size:1.4rem;">&#127919;</div>
-      <div><div class="land-feat-title">Un test d'orientation personnalisé</div><div class="land-feat-desc">Répondez à quelques questions et recevez 3 métiers qui correspondent à votre profil et situation.</div></div>
-    </div>
-    <div class="land-feat">
-      <div class="land-feat-icon purple" style="font-size:1.4rem;">&#128640;</div>
-      <div><div class="land-feat-title">Passer à l'action concrètement</div><div class="land-feat-desc">CV, lettre de motivation, simulation d'entretien, formations locales et entreprises qui recrutent.</div></div>
-    </div>
-  </div>
-
-  <!-- TESTIMONIALS -->
-  <div class="land-testimonials">
-    <div class="land-section-label">Ils ont trouvé leur voie</div>
-    <div class="land-testi">
-      <div class="land-testi-text">« J'avais peur de ne pas comprendre. Les jeux m'ont aidée à apprendre les métiers sans stress. Maintenant je sais que je veux devenir aide-soignante. »</div>
-      <div class="land-testi-author"><div class="land-testi-avatar" style="background:rgba(244,160,32,0.3);color:var(--accent);">F</div><span class="land-testi-name">Fatima, 34 ans — Niveau A2</span></div>
-    </div>
-    <div class="land-testi">
-      <div class="land-testi-text">« Le test m'a recommandé cariste. J'ai passé mon CACES et trouvé un CDI au port en 2 mois. Je n'y aurais jamais pensé seul. »</div>
-      <div class="land-testi-author"><div class="land-testi-avatar" style="background:rgba(58,143,217,0.3);color:#5aa8f0;">A</div><span class="land-testi-name">Ahmed, 28 ans — Le Havre</span></div>
-    </div>
-  </div>
-
-  <!-- OFFLINE NOTE -->
-  <div class="land-offline">
-    <span style="font-size:1.2rem;flex-shrink:0;">&#128246;</span>
-    <span>Fonctionne <strong>avec ou sans connexion Internet</strong>. Vos données sont sauvegardées automatiquement.</span>
-  </div>
-
-  <!-- BOTTOM CTA -->
-  <div class="land-cta-bottom">
-    <button class="btn btn-white" onclick="showPage('page-register')" style="font-size:1rem;padding:1rem;border-radius:14px;width:100%;max-width:340px;">&#10024; Créer mon compte gratuitement</button>
-    <p>Application d'orientation professionnelle · Le Havre</p>
-  </div>
-
 </div>
-</div>
-
-<!-- ===== PAGE INSCRIPTION ===== -->
 <div id="page-register" class="page">
   <div class="topbar">
     <div class="topbar-brand">
@@ -1157,13 +987,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="qcm-next-btn" onclick="nextQcmQuestion()">Question suivante →</button>
   </div>
 </div>
-  <nav class="bottom-nav visible">
-    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
-    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
-    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
-    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
-  </nav>
-</div>
+
+<!-- ===== PAGE GAME VRAI OU FAUX ===== -->
 <div id="page-game-vraifaux" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="vf-title">Vrai ou Faux</span></div>
@@ -1190,13 +1015,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="vf-next-btn" onclick="nextVF()">Suivant →</button>
   </div>
 </div>
-  <nav class="bottom-nav visible">
-    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
-    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
-    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
-    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
-  </nav>
-</div>
+
+<!-- ===== PAGE GAME GLISSER-DEPOSER ===== -->
 <div id="page-game-glisser" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="gl-title">Associer</span></div>
@@ -1219,13 +1039,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-ghost btn-full" style="margin-top:8px;display:none;" id="gl-next-btn" onclick="showPage('page-metier-detail')">← Retour au métier</button>
   </div>
 </div>
-  <nav class="bottom-nav visible">
-    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
-    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
-    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
-    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
-  </nav>
-</div>
+
+<!-- ===== PAGE GAME SITUATION PRO ===== -->
 <div id="page-game-situation" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="sit-title">Situation pro</span></div>
@@ -1251,13 +1066,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <button class="btn btn-primary btn-full" style="margin-top:1rem;display:none;" id="sit-next-btn" onclick="nextSituation()">Scénario suivant →</button>
   </div>
 </div>
-  <nav class="bottom-nav visible">
-    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
-    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
-    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
-    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
-  </nav>
-</div>
+
+<!-- ===== PAGE GAME JOURNEE TYPE ===== -->
 <div id="page-game-journee" class="page">
   <div class="topbar">
     <div class="topbar-brand"><div class="logo-badge">⚓</div><span id="jt-title">Journée type</span></div>
@@ -2169,9 +1979,6 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
   </div>
 </div>
 
-<!-- FAB Glossaire -->
-<button class="glossaire-fab" id="glossaire-fab" onclick="showPage('page-glossaire')" title="Glossaire" aria-label="Glossaire multilingue">&#128214;</button>
-
 <!-- FAB Help -->
 <button class="help-fab" id="help-fab" onclick="showModal('modal-help')" title="Aide">❓</button>
 
@@ -2632,7 +2439,7 @@ if(!groups.length && !localStorage.getItem('groups_initialized')){
   localStorage.setItem('groups', JSON.stringify(groups));
   localStorage.setItem('groups_initialized','1');
 }
-var testResults = JSON.parse(localStorage.getItem('testResults_' + (currentUser?.email||'')) || 'null');
+var testResults = JSON.parse(localStorage.getItem('testResults_' + ((currentUser && currentUser.email)||'')) || 'null');
 var selectedProfile = '';
 var currentMetier = null;
 var qcmQuestions = [];
@@ -2650,8 +2457,8 @@ function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }c
 function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) || def; }catch(e){ return def; } }
 function showPage(id){
   pushNavHistory(id);
-  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
-  const pg = document.getElementById(id);
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var pg = document.getElementById(id);
   if(pg){ pg.classList.add('active'); pg.scrollTop = 0; } document.body.style.overflow='';
   updateFab(id);
   trackNavigation(id);
@@ -2688,7 +2495,7 @@ function saveCurrentUser(){
   if(!currentUser) return;
   if(currentUser._isDemo) return; // Never save demo data
   save('currentUser', currentUser);
-  let idx = users.findIndex(u => u.email === currentUser.email);
+  var idx = users.findIndex(function(u){ return u.email === currentUser.email; });
   if(idx >= 0) users[idx] = currentUser;
   if(!currentUser||!currentUser._isDemo) save('users', users);
 }
@@ -2700,14 +2507,14 @@ function showModal(id){
 }
 function closeModal(id){ var el=document.getElementById(id); if(el) el.classList.remove('open'); var anyOpen=document.querySelectorAll('.modal-overlay.open').length; if(!anyOpen) document.body.style.overflow=''; }
 function togglePwd(inputId, btnId){
-  const inp = document.getElementById(inputId);
+  var inp = document.getElementById(inputId);
   inp.type = inp.type === 'password' ? 'text' : 'password';
 }
 
 // ==================== OFFLINE DETECTION ====================
 function updateOfflineStatus(){
-  const online = navigator.onLine;
-  document.querySelectorAll('.offline-indicator').forEach(el => {
+  var online = navigator.onLine;
+  document.querySelectorAll('.offline-indicator').forEach(function(el){
     el.classList.toggle('show', !online);
   });
 }
@@ -2723,15 +2530,15 @@ function selectProfile(p){
 }
 function handleRegister(e){
   e.preventDefault();
-  let valid = true;
-  const nom = document.getElementById('reg-nom').value.trim();
-  const prenom = document.getElementById('reg-prenom').value.trim();
-  const email = document.getElementById('reg-email').value.trim().toLowerCase();
-  const email2 = document.getElementById('reg-email2').value.trim().toLowerCase();
-  const pwd = document.getElementById('reg-pwd').value;
-  const pwd2 = document.getElementById('reg-pwd2').value;
+  var valid = true;
+  var nom = document.getElementById('reg-nom').value.trim();
+  var prenom = document.getElementById('reg-prenom').value.trim();
+  var email = document.getElementById('reg-email').value.trim().toLowerCase();
+  var email2 = document.getElementById('reg-email2').value.trim().toLowerCase();
+  var pwd = document.getElementById('reg-pwd').value;
+  var pwd2 = document.getElementById('reg-pwd2').value;
 
-  document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.error-msg').forEach(function(el){ el.style.display = 'none'; });
 
   if(!nom){ showErr('err-nom'); valid = false; }
   if(email !== email2){ showErr('err-email2'); valid = false; }
@@ -2741,7 +2548,7 @@ function handleRegister(e){
   if(!selectedProfile){ showErr('err-profile'); valid = false; }
   if(!valid) return;
 
-  if(users.find(u => u.email === email)){
+  if(users.find(function(u){ return u.email === email; })){
     showErr('err-email'); document.getElementById('err-email').textContent = 'Cette adresse mail est déjà utilisée.'; return;
   }
 
@@ -2751,7 +2558,7 @@ function handleRegister(e){
     var matchedGroup = groups.find(function(g){ return g.code && g.code.toLowerCase()===regGroupCode.toLowerCase(); });
     if(matchedGroup) autoGroupe = matchedGroup.nom;
   }
-  const user = {
+  var user = {
     nom, prenom, email, pwd,
     profile: selectedProfile,
     createdAt: new Date().toISOString(),
@@ -2887,13 +2694,13 @@ function forgotStep3(){
 }
 function handleLogin(e){
   e.preventDefault();
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pwd = document.getElementById('login-pwd').value;
+  var email = document.getElementById('login-email').value.trim().toLowerCase();
+  var pwd = document.getElementById('login-pwd').value;
   // Accept both plain-text (old accounts) and hashed passwords
   var user = users.find(function(u){
     return u.email===email && (u.pwd===pwd || u.pwd===hashPwdSimple(pwd));
   });
-  const errEl = document.getElementById('err-login');
+  var errEl = document.getElementById('err-login');
   if(!user){ errEl.textContent = 'Email ou mot de passe incorrect.'; errEl.style.display = 'block'; return; }
   currentUser = user;
   save('currentUser', user);
@@ -2909,7 +2716,7 @@ function postLogin(){
   if(currentUser.profile === 'referente') goToReferente();
   else {
     testResults = load('testResults_'+currentUser.email, null);
-    if(!testResults && !currentUser._isDemo && !currentUser.testResults) showPage('page-test');
+    if(!testResults && !currentUser._isDemo) showPage('page-test');
     else goToDashboard();
   }
 }
@@ -2933,13 +2740,13 @@ function autoLogout(){ logout(); }
 function selectRQTH(val){
   document.getElementById('rqth-oui').classList.toggle('selected', val==='oui');
   document.getElementById('rqth-non').classList.toggle('selected', val==='non');
-  const idx = selectedHandicap.indexOf('rqth');
+  var idx = selectedHandicap.indexOf('rqth');
   if(val==='oui' && idx<0) selectedHandicap.push('rqth');
   if(val==='non' && idx>=0) selectedHandicap.splice(idx,1);
 }
 function selectNiveau(n){
   selectedNiveauFr = n;
-  document.querySelectorAll('#niv-french .quiz-option').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('#niv-french .quiz-option').forEach(function(el){ el.classList.remove('selected'); });
   event.currentTarget.classList.add('selected');
 }
 function toggleHandicap(has){
@@ -2950,24 +2757,24 @@ function toggleHandicap(has){
 function toggleHItem(el, key){
   el.classList.toggle('selected');
   // collect in relevant array based on parent
-  const pid = el.closest('.test-section')?.id;
+  var pid = el.closest('.test-section') ? el.closest('.test-section').id : null;
   if(pid === 'test-section-2') updateArr(selectedHandicap, key, el.classList.contains('selected'));
   else if(pid === 'test-section-3') updateArr(selectedPrefs, key, el.classList.contains('selected'));
   else if(pid === 'test-section-4') updateArr(selectedInterests, key, el.classList.contains('selected'));
   else if(pid === 'test-section-5') updateArr(selectedSkills, key, el.classList.contains('selected'));
 }
 function updateArr(arr, key, add){
-  const idx = arr.indexOf(key);
+  var idx = arr.indexOf(key);
   if(add && idx < 0) arr.push(key);
   if(!add && idx >= 0) arr.splice(idx, 1);
 }
 function nextTestSection(n){
-  document.querySelectorAll('.test-section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.test-section').forEach(function(s){ s.style.display = 'none'; });
   document.getElementById('test-section-'+n).style.display = 'block';
-  const pct = Math.round((n/6)*100);
+  var pct = Math.round((n/6)*100);
   document.getElementById('test-progress').style.width = pct+'%';
   document.getElementById('step-current').textContent = n;
-  const names = ['','Niveau français','Handicap','Préférences','Intérêts','Compétences','Résultats'];
+  var names = ['','Niveau français','Handicap','Préférences','Intérêts','Compétences','Résultats'];
   document.getElementById('step-name').textContent = names[n]||'';
   if(n === 6) generateResults();
 }
@@ -2993,7 +2800,7 @@ function generateResults(){
 
   if(!scored.length){ showPage('page-metiers'); return; }
 
-  var resultsDiv = document.getElementById('recommended-metiers');
+  var resultsDiv = document.getElementById('test-results');
   if(!resultsDiv) return;
 
   var html = '<div style="text-align:center;margin-bottom:1rem;">'
@@ -3052,35 +2859,46 @@ function generateResults(){
 function goToMetiers(){ showPage('page-metiers'); renderMetiers(); }
 
 // ==================== MÉTIERS ====================
-function renderMetiers(cat='all', search=''){
-  const all = [...METIERS, ...customMetiers];
-  const grid = document.getElementById('metiers-grid');
-  const filtered = all.filter(m => {
-    const matchCat = cat === 'all' || m.cat === cat;
-    const matchSearch = !search || m.nom.toLowerCase().includes(search.toLowerCase());
+function renderMetiers(cat, search){
+  cat = cat || 'all'; search = (search || '').toLowerCase();
+  var all = [...METIERS, ...customMetiers];
+  var grid = document.getElementById('metiers-grid');
+  if(!grid) return;
+  var filtered = all.filter(function(m){
+    var matchCat = (cat === 'all') || (m.cat === cat);
+    var matchSearch = !search
+      || m.nom.toLowerCase().includes(search)
+      || (m.tags||[]).some(function(t){ return t.toLowerCase().includes(search); })
+      || (m.desc||'').toLowerCase().includes(search);
     return matchCat && matchSearch;
   });
-  grid.innerHTML = filtered.map(m => `
-    <div class="metier-card" onclick="openMetier('${m.id}')">
-      <div class="metier-banner" style="background:${m.couleur+'22'}">${m.emoji}</div>
-      <div class="metier-info">
-        <div class="metier-title">${m.nom}</div>
-        <div class="metier-tags">
-          ${m.cat==='porteur-lh'?'<span class="badge badge-blue">📍 LH</span>':m.cat==='porteur-agglo'?'<span class="badge badge-green">🌐 Agglo</span>':'<span class="badge badge-gray">ℹ️ Info</span>'}
-          ${currentUser?.stats?.badges?.includes(m.id)?'<span class="badge badge-amber">🏅</span>':''}
-        </div>
-      </div>
-    </div>
-  `).join('');
+  if(!filtered.length){
+    grid.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3);">Aucun m&eacute;tier trouv&eacute;.</div>';
+    return;
+  }
+  var hasBadges = currentUser && currentUser.stats && currentUser.stats.badges;
+  grid.innerHTML = filtered.map(function(m){
+    var catBadge = m.cat==='porteur-lh' ? '<span class="badge badge-blue">&#128205; LH</span>'
+      : m.cat==='porteur-agglo' ? '<span class="badge badge-green">&#127760; Agglo</span>'
+      : '<span class="badge badge-gray">&#8505; Info</span>';
+    var hasBadge = hasBadges && currentUser.stats.badges.includes(m.id);
+    var safeId = m.id.replace(/'/g, '');
+    return '<div class="metier-card" onclick="openMetier(\'' + safeId + '\')">'
+      + '<div class="metier-banner" style="background:' + (m.couleur||'#0a3d6b') + '22">' + m.emoji + '</div>'
+      + '<div class="metier-info">'
+      + '<div class="metier-title">' + m.nom + '</div>'
+      + '<div class="metier-tags">' + catBadge + (hasBadge ? '<span class="badge badge-amber">&#127885;</span>' : '') + '</div>'
+      + '</div></div>';
+  }).join('');
 }
 function filterCat(cat, btn){
-  document.querySelectorAll('[onclick^="filterCat"]').forEach(b => { b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost'; });
+  document.querySelectorAll('[onclick^="filterCat"]').forEach(function(b){ b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost'; });
   renderMetiers(cat, document.getElementById('metier-search').value);
 }
 function filterMetiers(){ renderMetiers('all', document.getElementById('metier-search').value); }
 
 function openMetier(id){
-  const m = [...METIERS, ...customMetiers].find(x => x.id === id);
+  var m = [...METIERS, ...customMetiers].find(function(x){ return x.id === id; });
   if(!m) return;
   currentMetier = m;
   
@@ -3090,34 +2908,33 @@ function openMetier(id){
     saveCurrentUser();
   }
 
-  document.getElementById('metier-detail-title').innerHTML = `<div class="logo-badge">⚓</div>${m.nom}`;
+  document.getElementById('metier-detail-title').innerHTML = ('<div class="logo-badge">⚓</div>' + m.nom);
   document.getElementById('metier-full-title').textContent = m.emoji + ' ' + m.nom;
   document.getElementById('metier-description').textContent = m.desc;
-  document.getElementById('metier-trail').innerHTML = `<span class="nav-trail-item" onclick="showPage('page-dashboard-stagiaire')">Accueil</span><span class="nav-trail-sep">›</span><span class="nav-trail-item" onclick="showPage('page-metiers')">Métiers</span><span class="nav-trail-sep">›</span><span class="nav-trail-current">${m.nom}</span>`;
+  document.getElementById('metier-trail').innerHTML = ('<span class="nav-trail-item" onclick="showPage(\'page-dashboard-stagiaire\')">Accueil</span><span class="nav-trail-sep">›</span><span class="nav-trail-item" onclick="showPage(\'page-metiers\')">Métiers</span><span class="nav-trail-sep">›</span><span class="nav-trail-current">' + m.nom + '</span>');
   
-  document.getElementById('metier-badge-row').innerHTML = (m.tags||[]).map(t => `<span class="badge badge-blue">${t}</span>`).join('') + `<span class="badge badge-amber">Niveau ${m.niveauFr||'A2'}+</span>`;
+  document.getElementById('metier-badge-row').innerHTML = (m.tags||[]).map(function(t){ return ('<span class="badge badge-blue">' + t + '</span>'); }).join('') + ('<span class="badge badge-amber">Niveau ' + m.niveauFr||'A2' + '+</span>');
   
-  document.getElementById('metier-conditions').innerHTML = (m.conditions||'').split('\n').map(l=>`<div style="display:flex;gap:6px;align-items:flex-start;">${l.startsWith('•')?'<span style="color:var(--primary)">'+l.slice(0,1)+'</span><span>'+l.slice(1)+'</span>':l}</div>`).join('');
+  document.getElementById('metier-conditions').innerHTML = (m.conditions||'').split('\n').map(function(l){ return '<div style="display:flex;gap:6px;align-items:flex-start;">'+l+'</div>'; }).join('');
 
   // Formations
-  const formDiv = document.getElementById('formations-list');
-  const allForms = [...(m.formations||[]), ...FORMATIONS_CUSTOM.filter(f => f.metier === m.id)];
+  var formDiv = document.getElementById('formations-list');
+  var allForms = [...(m.formations||[]), ...FORMATIONS_CUSTOM.filter(function(f){ return f.metier === m.id; })];
   if(allForms.length === 0){
     formDiv.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucune formation renseignée pour ce métier. Demandez à votre référente.</p>';
   } else {
-    formDiv.innerHTML = allForms.map(f => `
-      <div class="formation-card">
-        <div class="formation-card-header">
-          <div><div class="formation-name">${f.nom}</div><div class="formation-centre">${f.centre} — ${f.ville}</div></div>
-          ${f.lien?`<a href="${f.lien}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">🔗</a>`:''}
-        </div>
-        <div class="formation-meta">
-          ${f.duree?`<span class="badge badge-gray">⏱ ${f.duree}</span>`:''}
-          ${f.financement?`<span class="badge badge-green">💰 ${f.financement}</span>`:''}
-          ${f.updated?`<span class="badge badge-blue">Màj ${f.updated}</span>`:''}
-        </div>
-      </div>
-    `).join('');
+    formDiv.innerHTML = allForms.map(function(f){
+      return '<div class="formation-card">'
+        +'<div class="formation-card-header">'
+        +'<div><div class="formation-name">'+f.nom+'</div>'
+        +'<div class="formation-centre">'+(f.centre||'')+(f.ville?' &mdash; '+f.ville:'')+'</div></div>'
+        +(f.lien?'<a href="'+f.lien+'" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">&#128279;</a>':'')
+        +'</div>'
+        +'<div class="formation-meta">'
+        +(f.duree?'<span class="badge badge-gray">&#9200; '+f.duree+'</span>':'')
+        +(f.financement?'<span class="badge badge-green">&#128176; '+f.financement+'</span>':'')
+        +'</div></div>';
+    }).join('');
   }
 
   showPage('page-metier-detail');
@@ -3132,7 +2949,7 @@ function startGame(type){
   else if(type === 'situation') startSituation();
   else if(type === 'journee') startJournee();
 }
-function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function shuffle(arr){ var a=[].concat(arr); a.sort(function(){ return Math.random()-0.5; }); return a; }
 
 // --------- DONNÉES JEUX PAR MÉTIER ---------
 var GAMES_DATA = {
@@ -3565,43 +3382,10 @@ function getGameData(metierObj){
   };
 }
 
-// Données par défaut pour les métiers sans données spécifiques
-function getGameData(metierID) {
-  if(GAMES_DATA[metierID]) return GAMES_DATA[metierID];
-  // Générer données génériques basées sur questions QCM
-  const m = currentMetier;
-  const qs = m.questions || [];
-  return {
-    vraifaux: qs.slice(0,3).map(q => ({
-      s: q.opts[q.rep] + ' — c\'est lié au métier de ' + m.nom + '.',
-      r: true,
-      expl: q.expl
-    })).concat([
-      {s:'Ce métier ne nécessite aucune formation particulière.', r:false, expl:'Faux ! Tout métier demande des compétences et souvent une formation ou certification.'},
-      {s:'La sécurité est importante dans ce métier.', r:true, expl:'Vrai ! La sécurité est primordiale dans tous les métiers.'},
-      {s:'Ce métier recrute dans l\'agglomération havraise.', r:true, expl:'Vrai ! C\'est pourquoi ce métier figure dans notre plateforme.'}
-    ]),
-    glisser:{
-      question:'Associez chaque compétence à sa description',
-      items:['Ponctualité','Travail en équipe','Rigueur','Initiative','Communication','Adaptabilité'],
-      categories:['Être à l\'heure','Collaborer','Faire correctement','Proposer des idées','Expliquer clairement','S\'adapter aux changements'],
-      correct:[0,1,2,3,4,5]
-    },
-    situations: qs.slice(0,3).map((q,i) => ({
-      ctx:'Dans votre travail de ' + m.nom + ', vous faites face à une situation délicate.',
-      q: q.q,
-      opts: q.opts,
-      rep: q.rep,
-      expl: q.expl
-    })),
-    journee: ['8h - Prise de poste et briefing','9h - Début des activités principales','10h30 - Pause et point avec l\'équipe','12h - Pause repas','13h - Reprise des activités','15h - Tâches secondaires et rangement','16h30 - Compte-rendu et fin de poste']
-  };
-}
-
 // --------- VRAI OU FAUX ---------
 var vfQuestions=[], vfIndex=0, vfScore=0, vfSerie=0;
 function startVraiFaux(){
-  const data = getGameData(currentMetier.id);
+  var data = getGameData(currentMetier.id);
   vfQuestions = shuffle(data.vraifaux || []);
   vfIndex = 0; vfScore = 0; vfSerie = 0;
   document.getElementById('vf-title').textContent = '✅ Vrai ou Faux — ' + currentMetier.nom;
@@ -3613,7 +3397,7 @@ function startVraiFaux(){
 }
 function renderVF(){
   if(vfIndex >= vfQuestions.length){ endVF(); return; }
-  const q = vfQuestions[vfIndex];
+  var q = vfQuestions[vfIndex];
   document.getElementById('vf-current').textContent = vfIndex+1;
   document.getElementById('vf-progress').style.width = ((vfIndex+1)/vfQuestions.length*100)+'%';
   document.getElementById('vf-statement').textContent = q.s;
@@ -3622,10 +3406,10 @@ function renderVF(){
   document.getElementById('vf-next-btn').style.display = 'none';
 }
 function answerVF(answer){
-  const q = vfQuestions[vfIndex];
-  const correct = answer === q.r;
+  var q = vfQuestions[vfIndex];
+  var correct = answer === q.r;
   document.getElementById('vf-btns').style.display = 'none';
-  const feed = document.getElementById('vf-feedback');
+  var feed = document.getElementById('vf-feedback');
   feed.style.display = 'block';
   if(correct){
     vfScore += 15; vfSerie++;
@@ -3642,7 +3426,7 @@ function answerVF(answer){
 }
 function nextVF(){ renderVF(); }
 function endVF(){
-  const pct = Math.round(vfScore / (vfQuestions.length*15)*100);
+  var pct = Math.round(vfScore / (vfQuestions.length*15)*100);
   document.getElementById('vf-statement').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
     +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
     +'<div style="font-size:1.1rem;font-weight:700;font-family:var(--font);">Score : '+vfScore+' pts ('+pct+'%)</div>'
@@ -3673,37 +3457,37 @@ function startGlisser(){
   showPage('page-game-glisser');
 }
 function renderGlisser(){
-  const area = document.getElementById('gl-game-area');
-  const items = glData.items;
-  const cats = glData.categories;
-  const shuffledItems = shuffle(items.map((it,i) => ({text:it, origIdx:i})));
+  var area = document.getElementById('gl-game-area');
+  var items = glData.items;
+  var cats = glData.categories;
+  var shuffledItems = shuffle(items.map(function(it,i){ return ({text:it, origIdx:i}); }));
   area.innerHTML = '<div style="margin-bottom:1rem;">'
     +'<div style="font-size:0.8rem;font-weight:700;color:var(--text2);margin-bottom:0.5rem;">ÉLÉMENTS — Tapez pour sélectionner</div>'
     +'<div id="gl-items" style="display:flex;flex-wrap:wrap;gap:8px;">'
-    + shuffledItems.map(it =>
+    + shuffledItems.map(function(it){return
         '<div class="gl-item" data-idx="'+it.origIdx+'" onclick="selectGLItem(this,'+it.origIdx+')" '
         +'style="background:var(--primary);color:#fff;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;transition:all 0.2s;">'
         +it.text+'</div>'
-      ).join('')
+      }).join('')
     +'</div></div>'
     +'<div style="font-size:0.8rem;font-weight:700;color:var(--text2);margin-bottom:0.5rem;">CATÉGORIES — Tapez pour associer</div>'
-    + cats.map((cat,i) =>
+    + cats.map(function(cat,i){return
         '<div class="gl-cat" data-idx="'+i+'" onclick="assignGLCat('+i+')" '
         +'style="background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:0.75rem;margin-bottom:8px;cursor:pointer;transition:all 0.2s;">'
         +'<div style="font-size:0.78rem;font-weight:700;color:var(--text2);margin-bottom:4px;">'+cat+'</div>'
         +'<div id="gl-slot-'+i+'" style="min-height:28px;font-size:0.82rem;color:var(--text3);font-style:italic;">'+(glAnswers[i]!==undefined?'<span style="color:var(--primary);font-weight:600;font-style:normal;">'+items[glAnswers[i]]+'</span>':'Associer ici...')+'</div>'
         +'</div>'
-      ).join('');
+      }).join('');
 }
 function selectGLItem(el, idx){
-  document.querySelectorAll('.gl-item').forEach(i => {
+  document.querySelectorAll('.gl-item').forEach(function(i){
     i.style.background = 'var(--primary)';
     i.style.transform = 'scale(1)';
   });
   // Check if already placed
-  const already = Object.values(glAnswers).includes(idx);
+  var already = Object.values(glAnswers).includes(idx);
   if(already){
-    const catIdx = Object.keys(glAnswers).find(k => glAnswers[k]===idx);
+    var catIdx = Object.keys(glAnswers).find(function(k){ return glAnswers[k]===idx; });
     delete glAnswers[catIdx];
     document.getElementById('gl-slot-'+catIdx).innerHTML = 'Associer ici...';
     document.getElementById('gl-slot-'+catIdx).style.fontStyle = 'italic';
@@ -3716,17 +3500,17 @@ function selectGLItem(el, idx){
 function assignGLCat(catIdx){
   if(glSelectedItem === null) return;
   // Remove from old cat if was there
-  const oldCat = Object.keys(glAnswers).find(k => glAnswers[k]===glSelectedItem);
+  var oldCat = Object.keys(glAnswers).find(function(k){ return glAnswers[k]===glSelectedItem; });
   if(oldCat !== undefined) delete glAnswers[oldCat];
   // Remove item from this cat if different item was there
   if(glAnswers[catIdx] !== undefined){
-    const oldItem = glAnswers[catIdx];
-    document.querySelectorAll('.gl-item').forEach(el => {
+    var oldItem = glAnswers[catIdx];
+    document.querySelectorAll('.gl-item').forEach(function(el){
       if(parseInt(el.dataset.idx)===oldItem){ el.style.background='var(--primary)'; }
     });
   }
   glAnswers[catIdx] = glSelectedItem;
-  document.querySelectorAll('.gl-item').forEach(el => {
+  document.querySelectorAll('.gl-item').forEach(function(el){
     if(parseInt(el.dataset.idx)===glSelectedItem){ el.style.background='var(--success)'; el.style.transform='scale(1)'; }
   });
   document.getElementById('gl-slot-'+catIdx).innerHTML = '<span style="color:var(--success);font-weight:600;font-style:normal;">' + glData.items[glSelectedItem] + '</span>';
@@ -3734,29 +3518,29 @@ function assignGLCat(catIdx){
   checkAllAssigned();
 }
 function checkAllAssigned(){
-  const total = glData.categories.length;
-  const done = Object.keys(glAnswers).length;
+  var total = glData.categories.length;
+  var done = Object.keys(glAnswers).length;
   document.getElementById('gl-progress').style.width = Math.round(done/total*100)+'%';
   document.getElementById('gl-check-btn').style.display = done===total ? 'block' : 'none';
 }
 function checkGlisser(){
-  let correct = 0;
-  const items = glData.items;
-  const cats = glData.categories;
-  const correctMap = glData.correct;
-  Object.keys(glAnswers).forEach(catIdx => {
-    const placedItemIdx = glAnswers[catIdx];
-    const correctItemIdx = correctMap[parseInt(catIdx)];
-    const isOk = placedItemIdx === correctItemIdx;
+  var correct = 0;
+  var items = glData.items;
+  var cats = glData.categories;
+  var correctMap = glData.correct;
+  Object.keys(glAnswers).forEach(function(catIdx){
+    var placedItemIdx = glAnswers[catIdx];
+    var correctItemIdx = correctMap[parseInt(catIdx)];
+    var isOk = placedItemIdx === correctItemIdx;
     if(isOk) correct++;
-    const slot = document.getElementById('gl-slot-'+catIdx);
+    var slot = document.getElementById('gl-slot-'+catIdx);
     slot.innerHTML = '<span style="color:'+(isOk?'var(--success)':'var(--danger)')+';font-weight:700;">'
       +(isOk?'✅ ':'❌ ')+items[placedItemIdx]+(isOk?'':' (attendu : '+items[correctItemIdx]+')')+'</span>';
   });
-  const pts = correct * 25;
+  var pts = correct * 25;
   document.getElementById('gl-score').textContent = pts;
-  const pct = Math.round(correct/cats.length*100);
-  const feed = document.getElementById('gl-feedback');
+  var pct = Math.round(correct/cats.length*100);
+  var feed = document.getElementById('gl-feedback');
   feed.style.display = 'block';
   feed.innerHTML = '<div class="alert '+(pct>=60?'alert-success':'alert-warning')+'"><span>'+(pct>=60?'🎯':'💪')+'</span><span>'
     +correct+' / '+cats.length+' bonnes associations ('+pts+' pts). '+(pct>=60?'Excellent travail !':'Réessayez pour vous améliorer !')+'</span></div>';
@@ -3768,7 +3552,7 @@ function checkGlisser(){
 // --------- SITUATION PRO ---------
 var sitIndex=0, sitScore=0, sitQuestions=[];
 function startSituation(){
-  const data = getGameData(currentMetier.id);
+  var data = getGameData(currentMetier.id);
   sitQuestions = shuffle(data.situations || []);
   sitIndex = 0; sitScore = 0;
   document.getElementById('sit-title').textContent = '💡 Situation pro — ' + currentMetier.nom;
@@ -3778,30 +3562,30 @@ function startSituation(){
 }
 function renderSituation(){
   if(sitIndex >= sitQuestions.length){ endSituation(); return; }
-  const s = sitQuestions[sitIndex];
+  var s = sitQuestions[sitIndex];
   document.getElementById('sit-current').textContent = sitIndex+1;
   document.getElementById('sit-progress').style.width = ((sitIndex+1)/sitQuestions.length*100)+'%';
   document.getElementById('sit-context').textContent = s.ctx;
   document.getElementById('sit-question').textContent = s.q;
-  const shuffledOpts = shuffle(s.opts.map((o,i) => ({text:o,origIdx:i})));
-  document.getElementById('sit-options').innerHTML = shuffledOpts.map(o =>
-    '<div class="quiz-option" onclick="selectSitOption(this,'+o.origIdx+','+s.rep+')" data-idx="'+o.origIdx+'">'
+  var shuffledOpts = shuffle(s.opts.map(function(o,i){ return ({text:o,origIdx:i}); }));
+  document.getElementById('sit-options').innerHTML = shuffledOpts.map(function(o){
+    return '<div class="quiz-option" onclick="selectSitOption(this,'+o.origIdx+','+s.rep+')" data-idx="'+o.origIdx+'">'
     +'<span class="opt-letter" style="width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;flex-shrink:0;">'
-    +['A','B','C','D'][shuffledOpts.indexOf(o)]+'</span>'+o.text+'</div>'
-  ).join('');
+    +['A','B','C','D'][shuffledOpts.indexOf(o)]+'</span>'+o.text+'</div>';
+  }).join('');
   document.getElementById('sit-feedback').style.display = 'none';
   document.getElementById('sit-next-btn').style.display = 'none';
 }
 function selectSitOption(el, chosen, correct){
-  document.querySelectorAll('#sit-options .quiz-option').forEach(o => o.style.pointerEvents = 'none');
-  const isOk = chosen === correct;
+  document.querySelectorAll('#sit-options .quiz-option').forEach(function(o){ o.style.pointerEvents = 'none'; });
+  var isOk = chosen === correct;
   if(isOk){ el.classList.add('correct'); sitScore += 30; }
   else {
     el.classList.add('wrong');
-    document.querySelectorAll('#sit-options .quiz-option').forEach(o => { if(parseInt(o.dataset.idx)===correct) o.classList.add('correct'); });
+    document.querySelectorAll('#sit-options .quiz-option').forEach(function(o){ if(parseInt(o.dataset.idx)===correct) o.classList.add('correct'); });
   }
   document.getElementById('sit-score').textContent = sitScore;
-  const feed = document.getElementById('sit-feedback');
+  var feed = document.getElementById('sit-feedback');
   feed.style.display = 'block';
   feed.innerHTML = '<div class="alert '+(isOk?'alert-success':'alert-warning')+'"><span>'+(isOk?'✅':'❌')+'</span><span>'+sitQuestions[sitIndex].expl+'</span></div>';
   document.getElementById('sit-next-btn').style.display = 'block';
@@ -3809,7 +3593,7 @@ function selectSitOption(el, chosen, correct){
 }
 function nextSituation(){ renderSituation(); }
 function endSituation(){
-  const pct = Math.round(sitScore/(sitQuestions.length*30)*100);
+  var pct = Math.round(sitScore/(sitQuestions.length*30)*100);
   document.getElementById('sit-context').textContent = '';
   document.getElementById('sit-question').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
     +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
@@ -3829,7 +3613,7 @@ var jtPlaced = [];
 var jtTasks = [];
 var jtCorrectOrder = [];
 function startJournee(){
-  const data = getGameData(currentMetier.id);
+  var data = getGameData(currentMetier.id);
   jtCorrectOrder = data.journee || [];
   jtTasks = shuffle([...jtCorrectOrder]);
   jtPlaced = new Array(jtCorrectOrder.length).fill(null);
@@ -3843,25 +3627,25 @@ function startJournee(){
   showPage('page-game-journee');
 }
 function renderJournee(){
-  const pool = document.getElementById('jt-task-pool');
-  pool.innerHTML = jtTasks.filter(t => !jtPlaced.includes(t)).map(t =>
+  var pool = document.getElementById('jt-task-pool');
+  pool.innerHTML = jtTasks.filter(function(t){ return !jtPlaced.includes(t); }).map(function(t){return
     '<div class="jt-task" onclick="selectJTTask(this,'+JSON.stringify(t)+')" '
     +'style="background:var(--primary);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:0.8rem;font-weight:600;line-height:1.3;max-width:200px;text-align:center;border:2px solid transparent;transition:all 0.2s;">'
     +t+'</div>'
-  ).join('');
-  const slots = document.getElementById('jt-slots');
-  slots.innerHTML = jtCorrectOrder.map((t,i) =>
+    +t+'</div>'; }).join('');
+  var slots = document.getElementById('jt-slots');
+  slots.innerHTML = jtCorrectOrder.map(function(t,i){return
     '<div onclick="placeJTTask('+i+')" '
     +'style="background:var(--surface2);border:2px dashed var(--border);border-radius:10px;padding:0.7rem 0.85rem;margin-bottom:6px;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;transition:all 0.2s;">'
     +'<span style="background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">'+(i+1)+'</span>'
     +'<span style="font-size:0.82rem;color:'+(jtPlaced[i]?'var(--text)':'var(--text3)')+';">'+(jtPlaced[i]||'Placer ici...')+'</span>'
     +'</div>'
-  ).join('');
-  const allPlaced = jtPlaced.every(p => p !== null);
+    +'</div>'; }).join('');
+  var allPlaced = jtPlaced.every(function(p){ return p !== null; });
   document.getElementById('jt-check-btn').style.display = allPlaced ? 'block' : 'none';
 }
 function selectJTTask(el, task){
-  document.querySelectorAll('.jt-task').forEach(t => {
+  document.querySelectorAll('.jt-task').forEach(function(t){
     t.style.borderColor = 'transparent';
     t.style.transform = 'scale(1)';
   });
@@ -3880,17 +3664,17 @@ function placeJTTask(slotIdx){
   renderJournee();
 }
 function checkJournee(){
-  let correct = 0;
-  jtPlaced.forEach((placed, i) => {
+  var correct = 0;
+  jtPlaced.forEach(function(placed, i){
     if(placed === jtCorrectOrder[i]) correct++;
   });
-  const pts = correct * Math.round(50/jtCorrectOrder.length);
+  var pts = correct * Math.round(50/jtCorrectOrder.length);
   document.getElementById('jt-score').textContent = pts;
-  const pct = Math.round(correct/jtCorrectOrder.length*100);
-  const slots = document.getElementById('jt-slots');
-  slots.innerHTML = jtCorrectOrder.map((correctTask,i) => {
-    const placed = jtPlaced[i];
-    const isOk = placed === correctTask;
+  var pct = Math.round(correct/jtCorrectOrder.length*100);
+  var slots = document.getElementById('jt-slots');
+  slots.innerHTML = jtCorrectOrder.map(function(correctTask,i){
+    var placed = jtPlaced[i];
+    var isOk = placed === correctTask;
     return '<div style="background:var(--surface2);border:2px solid '+(isOk?'var(--success)':'var(--danger)')
       +';border-radius:10px;padding:0.7rem 0.85rem;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px;">'
       +'<span style="background:'+(isOk?'var(--success)':'var(--danger)')+';color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">'+(isOk?'✓':'✗')+'</span>'
@@ -3898,7 +3682,7 @@ function checkJournee(){
       +(isOk?'':'<div style="font-size:0.75rem;color:var(--success);margin-top:2px;">✅ Correct : '+correctTask+'</div>')
       +'</div></div>';
   }).join('');
-  const feed = document.getElementById('jt-feedback');
+  var feed = document.getElementById('jt-feedback');
   feed.style.display = 'block';
   feed.innerHTML = '<div class="alert '+(pct>=60?'alert-success':'alert-warning')+'"><span>'+(pct>=60?'🗓️':'💪')+'</span><span>'
     +correct+'/'+jtCorrectOrder.length+' tâches bien placées — '+pts+' points. '+(pct>=60?'Vous connaissez votre journée !':'Rejouer pour mémoriser l\'ordre.')+'</span></div>';
@@ -3908,7 +3692,7 @@ function checkJournee(){
   if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
 }
 function startQCM(){
-  const qs = shuffle(currentMetier.questions || []);
+  var qs = shuffle(currentMetier.questions || []);
   qcmQuestions = qs;
   qcmIndex = 0;
   qcmScore = 0;
@@ -3922,44 +3706,39 @@ function startQCM(){
 }
 function renderQCMQuestion(){
   if(qcmIndex >= qcmQuestions.length){ endQCM(); return; }
-  const q = qcmQuestions[qcmIndex];
+  var q = qcmQuestions[qcmIndex];
   document.getElementById('q-current').textContent = qcmIndex + 1;
   document.getElementById('qcm-progress').style.width = ((qcmIndex+1)/qcmQuestions.length*100)+'%';
   document.getElementById('qcm-question').textContent = q.q;
-  const opts = q.opts.map((o,i) => ({text:o, origIdx:i}));
-  const shuffled = shuffle(opts);
-  document.getElementById('qcm-options').innerHTML = shuffled.map((o,i) => 
-    `<div class="quiz-option" onclick="selectQCMAnswer(this,${o.origIdx},${q.rep})" data-idx="${o.origIdx}">
-      <span class="opt-letter">${['A','B','C','D'][i]}</span>${o.text}
-    </div>`
-  ).join('');
+  var opts = q.opts.map(function(o,i){ return ({text:o, origIdx:i}); });
+  var shuffled = shuffle(opts);
+  document.getElementById('qcm-options').innerHTML = shuffled.map(function(o,i){
+    return '<div class="quiz-option" onclick="selectQCMAnswer(this,'+o.origIdx+','+q.rep+')" data-idx="'+o.origIdx+'">'+
+      '<span class="opt-letter">'+['A','B','C','D'][i]+'</span>'+o.text+'</div>';
+  }).join('');
   document.getElementById('qcm-feedback').style.display = 'none';
   document.getElementById('qcm-next-btn').style.display = 'none';
 }
 function selectQCMAnswer(el, chosen, correct){
-  document.querySelectorAll('#qcm-options .quiz-option').forEach(o => o.style.pointerEvents = 'none');
-  const isCorrect = chosen === correct;
+  document.querySelectorAll('#qcm-options .quiz-option').forEach(function(o){ o.style.pointerEvents = 'none'; });
+  var isCorrect = chosen === correct;
   if(isCorrect){ el.classList.add('correct'); qcmScore += 20; document.getElementById('qcm-score').textContent = qcmScore; }
   else {
     el.classList.add('wrong');
-    document.querySelectorAll('#qcm-options .quiz-option').forEach(o => { if(parseInt(o.dataset.idx) === correct) o.classList.add('correct'); });
+    document.querySelectorAll('#qcm-options .quiz-option').forEach(function(o){ if(parseInt(o.dataset.idx) === correct) o.classList.add('correct'); });
   }
-  const feedDiv = document.getElementById('qcm-feedback');
+  var feedDiv = document.getElementById('qcm-feedback');
   feedDiv.style.display = 'block';
-  feedDiv.innerHTML = `<div class="alert ${isCorrect?'alert-success':'alert-warning'}"><span>${isCorrect?'✅':'❌'}</span><span>${qcmQuestions[qcmIndex].expl}</span></div>`;
+  feedDiv.innerHTML = '<div class="alert '+(isCorrect?'alert-success':'alert-warning')+'"><span>'+(isCorrect?'&#9989;':'&#10060;')+'</span><span>'+qcmQuestions[qcmIndex].expl+'</span></div>';
   document.getElementById('qcm-next-btn').style.display = 'block';
   qcmIndex++;
 }
 function nextQcmQuestion(){ renderQCMQuestion(); }
 function endQCM(){
-  const pct = Math.round(qcmScore / (qcmQuestions.length * 20) * 100);
-  const gotBadge = pct >= 60;
+  var pct = Math.round(qcmScore / (qcmQuestions.length * 20) * 100);
+  var gotBadge = pct >= 60;
   document.getElementById('qcm-options').innerHTML = '';
-  document.getElementById('qcm-question').innerHTML = `<div style="text-align:center;padding:1rem 0;">
-    <div style="font-size:3rem;margin-bottom:0.75rem">${gotBadge?'🏅':'💪'}</div>
-    <div style="font-size:1.2rem;font-weight:700;font-family:var(--font);">Score final : ${qcmScore} pts (${pct}%)</div>
-    <p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">${gotBadge?'Félicitations ! Vous obtenez le badge '+currentMetier.nom+' !':'Continuez à pratiquer pour obtenir le badge !'}</p>
-  </div>`;
+  document.getElementById('qcm-question').innerHTML = '<div style="text-align:center;padding:1rem 0;"><div style="font-size:3rem;margin-bottom:0.75rem">'+(gotBadge?'\U0001F3C5':'\U0001F4AA')+'</div><div style="font-size:1.2rem;font-weight:700;">Score final : '+qcmScore+' pts ('+pct+'%)</div><p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(gotBadge?'F\u00e9licitations ! Badge obtenu !':'Continuez \u00e0 vous am\u00e9liorer !')+'</p></div>';
   if(gotBadge && currentUser){
     if(!currentUser.stats.scores) currentUser.stats.scores={};
     if(score>(currentUser.stats.scores[currentMetier.id]||0)) currentUser.stats.scores[currentMetier.id]=score;
@@ -3975,7 +3754,7 @@ function endQCM(){
   }
   document.getElementById('qcm-feedback').style.display = 'none';
   document.getElementById('qcm-next-btn').innerHTML = '← Retour au métier';
-  document.getElementById('qcm-next-btn').onclick = () => showPage('page-metier-detail');
+  document.getElementById('qcm-next-btn').onclick = function(){ showPage('page-metier-detail'); };
   document.getElementById('qcm-next-btn').style.display = 'block';
 }
 
@@ -3983,82 +3762,60 @@ function endQCM(){
 function generateAttestation(metierNom){
   if(!currentUser) return;
   if(!currentUser.attestations) currentUser.attestations = [];
-  const exists = currentUser.attestations.find(a => a.metier === metierNom);
+  var exists = currentUser.attestations.find(function(a){ return a.metier === metierNom; });
   if(!exists){
     currentUser.attestations.push({metier:metierNom, date:new Date().toLocaleDateString('fr-FR'), id: Date.now()});
     saveCurrentUser();
   }
 }
 function renderAttestations(){
-  const atts = currentUser?.attestations || [];
-  const list = document.getElementById('attestations-list');
+  var atts = (currentUser && currentUser.attestations) || [];
+  var list = document.getElementById('attestations-list');
   if(atts.length === 0){
     list.innerHTML = '<p style="font-size:0.85rem;color:var(--text3);">Aucune attestation encore. Complétez les quiz avec un score ≥ 60% !</p>';
     return;
   }
-  list.innerHTML = atts.map(a => `
-    <div class="formation-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <div>
-          <div class="formation-name">🏅 ${a.metier}</div>
-          <div class="formation-centre">Délivré le ${a.date}</div>
-          <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">Cette attestation n'est pas un document officiel.</div>
-        </div>
-        <button class="btn btn-sm btn-primary" onclick="downloadAttestation('${a.metier}','${a.date}')">📥 PDF</button>
-      </div>
-    </div>
-  `).join('');
-  
-  const badges = currentUser?.stats?.badges || [];
-  const badgesDiv = document.getElementById('badges-list');
+  list.innerHTML = atts.map(function(a){
+    var safeMetier = a.metier.replace(/'/g,''); var safeDate = a.date.replace(/'/g,'');
+    return '<div class="formation-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div>'
+      +'<div class="formation-name">&#127885; '+a.metier+'</div>'
+      +'<div class="formation-centre">D&eacute;livr&eacute; le '+a.date+'</div>'
+      +'<div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">Document p&eacute;dagogique non officiel</div>'
+      +'</div>'
+      +'<button class="btn btn-sm btn-primary" onclick="downloadAttestation(\'' + safeMetier + '\',\'' + safeDate + '\')">&#128199; Imprimer</button>'
+      +'</div></div>';
+  }).join('');
+  var badges = (currentUser && currentUser.stats && currentUser.stats.badges) || [];
+  var badgesDiv = document.getElementById('badges-list');
   if(badges.length === 0){
     badgesDiv.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun badge encore. Jouez aux quiz pour en obtenir !</p>';
   } else {
-    const all = [...METIERS, ...customMetiers];
-    badgesDiv.innerHTML = badges.map(bid => {
-      const m = all.find(x => x.id === bid);
-      return m ? `<div style="background:var(--accent-light);border:2px solid var(--accent);border-radius:12px;padding:0.75rem 1rem;text-align:center;min-width:100px;"><div style="font-size:1.8rem">${m.emoji}</div><div style="font-size:0.75rem;font-weight:700;color:#b07a10;margin-top:4px;">${m.nom}</div></div>` : '';
+    var all = [...METIERS, ...customMetiers];
+    badgesDiv.innerHTML = badges.map(function(bid){
+      var m = all.find(function(x){ return x.id === bid; });
+      return m ? ('<div style="background:var(--accent-light);border:2px solid var(--accent);border-radius:12px;padding:0.75rem 1rem;text-align:center;min-width:100px;"><div style="font-size:1.8rem">' + m.emoji + '</div><div style="font-size:0.75rem;font-weight:700;color:#b07a10;margin-top:4px;">' + m.nom + '</div></div>') : '';
     }).join('');
   }
 }
 function downloadAttestation(metier, date){
-  const nom = currentUser?.nom || '';
-  const prenom = currentUser?.prenom || '';
-  const win = window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Attestation</title><style>
-    body{font-family:Arial,sans-serif;margin:40px;max-width:600px;margin:40px auto;}
-    .box{border:3px double #0a3d6b;padding:40px;border-radius:12px;text-align:center;}
-    h1{color:#0a3d6b;font-size:1.4rem;margin-bottom:0.5rem;}
-    .disclaimer{font-size:0.78rem;color:#888;margin-top:20px;font-style:italic;}
-    .logo{font-size:2rem;margin-bottom:1rem;}
-  </style></head><body>
-    <div class="box">
-      <div class="logo">⚓</div>
-      <h1>ATTESTATION DE PARTICIPATION</h1>
-      <p>La plateforme <strong>Cap Avenir – Le Havre</strong></p>
-      <p>certifie que</p>
-      <h2>${prenom} ${nom}</h2>
-      <p>a suivi et complété avec succès le module</p>
-      <h3 style="color:#f4a020;">${metier}</h3>
-      <p>Délivré le ${date}</p>
-      <p class="disclaimer">Cette attestation n'est pas un document officiel.</p>
-    </div>
-    <script>window.print();<\/script>
-  </body></html>`);
+  var nom = (currentUser && currentUser.nom) || '';
+  var prenom = (currentUser && currentUser.prenom) || '';
+  var win = window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>Attestation</title><style>body{font-family:Arial,sans-serif;margin:40px auto;max-width:600px;}.box{border:3px double #0a3d6b;padding:40px;border-radius:12px;text-align:center;}h1{color:#0a3d6b;font-size:1.4rem;}.disclaimer{font-size:0.78rem;color:#888;margin-top:20px;font-style:italic;}.logo{font-size:2rem;margin-bottom:1rem;}</style></head><body><div class="box"><div class="logo">&#9875;</div><h1>ATTESTATION DE PARTICIPATION</h1><p>La plateforme <strong>Cap Avenir &ndash; Le Havre</strong></p><p>certifie que</p><h2>'+prenom+' '+nom+'</h2><p>a suivi et compl&eacute;t&eacute; avec succ&egrave;s le module</p><h3 style="color:#f4a020;">'+metier+'</h3><p>D&eacute;livr&eacute; le '+date+'</p><p class="disclaimer">Cette attestation n&#39;est pas un document officiel.</p></div><script>window.print();<\/script></body></html>');
 }
 
 // ==================== DASHBOARD STAGIAIRE ====================
 function renderDashboard(){
   if(!currentUser) return;
   document.getElementById('dash-welcome').textContent = currentUser.prenom + ' ' + currentUser.nom;
-  const niveau = testResults?.niveau || '—';
+  var niveau = (testResults && testResults.niveau) || '—';
   document.getElementById('dash-niveau').textContent = 'Niveau ' + niveau;
-  const stats = currentUser.stats || {};
+  var stats = currentUser.stats || {};
   document.getElementById('stat-metiers').textContent = (stats.metiersExplored||[]).length;
-  document.getElementById('stat-score').textContent = Object.values(stats.scores||{}).reduce((a,b)=>a+b,0);
+  document.getElementById('stat-score').textContent = Object.values(stats.scores||{}).reduce(function(a,b){return a+b;},0);
   document.getElementById('stat-badges').textContent = (stats.badges||[]).length;
   document.getElementById('stat-games').textContent = stats.games || 0;
-  const pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
+  var pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
   document.getElementById('global-progress').style.width = pct+'%';
   document.getElementById('global-pct').textContent = pct;
   
@@ -4360,16 +4117,16 @@ function renderMapList(type){
 var currentQuestionFilter = 'tous';
 function filterQuestions(cat, btn){
   currentQuestionFilter = cat;
-  document.querySelectorAll('[onclick^="filterQuestions"]').forEach(b => {
+  document.querySelectorAll('[onclick^="filterQuestions"]').forEach(function(b){
     b.className = b === btn ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-ghost';
   });
   renderQuestionsEntretien(cat);
 }
 
 function renderQuestionsEntretien(cat){
-  const div = document.getElementById('questions-entretien');
+  var div = document.getElementById('questions-entretien');
   if(!div) return;
-  const filtered = cat === 'tous' ? QUESTIONS_ENTRETIEN : QUESTIONS_ENTRETIEN.filter(function(q){ return q.cat === cat; });
+  var filtered = cat === 'tous' ? QUESTIONS_ENTRETIEN : QUESTIONS_ENTRETIEN.filter(function(q){ return q.cat === cat; });
   div.innerHTML = filtered.map(function(q){
     return '<div class="card" style="padding:0;overflow:hidden;margin-bottom:8px;">'
       + '<div style="padding:0.85rem;cursor:pointer;" onclick="toggleQuestion(this)">'
@@ -4386,9 +4143,9 @@ function renderQuestionsEntretien(cat){
 }
 
 function toggleQuestion(el){
-  const conseil = el.nextElementSibling;
-  const arrow = el.querySelector('span:last-child');
-  const isOpen = conseil.style.display !== 'none';
+  var conseil = el.nextElementSibling;
+  var arrow = el.querySelector('span:last-child');
+  var isOpen = conseil.style.display !== 'none';
   conseil.style.display = isOpen ? 'none' : 'block';
   if(arrow) arrow.textContent = isOpen ? '▼' : '▲';
 }
@@ -4405,28 +4162,30 @@ function renderReferenteDashboard(){
   populateMetierSelect();
 }
 function showAdminTab(tabId, btn){
-  document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
-  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.admin-tab-content').forEach(function(t){ t.style.display = 'none'; });
+  document.querySelectorAll('.admin-tab').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById(tabId).style.display = 'block';
   btn.classList.add('active');
 }
-function renderStagiairesList(filter=''){
-  const div = document.getElementById('stagiaires-list');
-  const stagiaires = users.filter(u => u.profile === 'stagiaire' && (!filter || (u.nom+u.prenom+u.email).toLowerCase().includes(filter.toLowerCase())));
+function renderStagiairesList(filter){
+  filter = filter || '';
+  var div = document.getElementById('stagiaires-list');
+  if(!div) return;
+  var stagiaires = users.filter(function(u){ return u.profile === 'stagiaire' && (!filter || (u.nom+u.prenom+u.email).toLowerCase().includes(filter.toLowerCase())); });
   if(!stagiaires.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun stagiaire inscrit.</p>'; return; }
-  div.innerHTML = stagiaires.map(s => `
-    <div class="editable-list-item">
-      <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:var(--primary);flex-shrink:0;">${(s.prenom[0]||'?').toUpperCase()}</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:600;font-size:0.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.prenom} ${s.nom}</div>
-        <div style="font-size:0.74rem;color:var(--text3);">${(s.stats?.metiersExplored||[]).length} métiers · ${(s.stats?.badges||[]).length} badges</div>
-      </div>
-      <div class="item-actions">
-        <button class="btn btn-sm btn-ghost" onclick="showStagiaireDetail('${s.email}')">👁</button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${s.email}')">🗑</button>
-      </div>
-    </div>
-  `).join('');
+  div.innerHTML = stagiaires.map(function(s){
+    var safeEmail = s.email.replace(/'/g,'');
+    var nm = (s.stats&&s.stats.metiersExplored||[]).length;
+    var nb = (s.stats&&s.stats.badges||[]).length;
+    return '<div class="editable-list-item">'
+      +'<div style="width:36px;height:36px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">'+((s.prenom||'?')[0].toUpperCase())+'</div>'
+      +'<div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:0.88rem;">'+s.prenom+' '+s.nom+'</div>'
+      +'<div style="font-size:0.74rem;color:var(--text3);">'+(s.groupe||'Sans groupe')+' &bull; '+nm+' m&eacute;tier'+(nm!==1?'s':'')+' &bull; '+nb+' badge'+(nb!==1?'s':'')+'</div></div>'
+      +'<div class="item-actions">'
+      +'<button class="btn btn-sm btn-ghost" onclick="showStagiaireDetail(\'' + safeEmail + '\')" title="Voir">&#128065;</button>'
+      +'<button class="btn btn-sm btn-danger" onclick="confirmDelete(\'' + safeEmail + '\')" title="Supprimer">&#128465;</button>'
+      +'</div></div>';
+  }).join('');
 }
 function filterStagiaires(){ renderStagiairesList(document.getElementById('search-stagiaires').value); }
 function showStagiaireDetail(email){
@@ -4563,29 +4322,29 @@ function confirmDelete(email){
   showModal('modal-confirm-delete');
 }
 function renderGroupesList(){
-  const div = document.getElementById('groupes-list');
+  var div = document.getElementById('groupes-list');
   if(!groups.length){ div.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucun groupe créé. Cliquez sur "+ Créer".</p>'; return; }
-  div.innerHTML = groups.map((g,i) => `
-    <div class="editable-list-item">
-      <span style="font-size:1.4rem">📂</span>
-      <div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">${g.nom}</div><div style="font-size:0.74rem;color:var(--text3);">${g.dispositif||'—'} · Créé le ${g.date||'—'}</div></div>
-      <div class="item-actions">
-        <button class="btn btn-sm btn-ghost" onclick="renameGroupe(${i})">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteGroupe(${i})">🗑</button>
-      </div>
-    </div>
-  `).join('');
+  div.innerHTML = groups.map(function(g,i){
+    return '<div class="editable-list-item">'
+      +'<span style="font-size:1.4rem">&#128194;</span>'
+      +'<div style="flex:1;"><div style="font-weight:600;font-size:0.88rem;">'+g.nom+'</div>'
+      +'<div style="font-size:0.74rem;color:var(--text3);">'+(g.dispositif||'')+(g.date?' &bull; '+g.date:'')+(g.code?' &bull; Code: '+g.code:'')+'</div></div>'
+      +'<div class="item-actions">'
+      +'<button class="btn btn-sm btn-ghost" onclick="renameGroupe('+i+')">&#9998;</button>'
+      +'<button class="btn btn-sm btn-danger" onclick="deleteGroupe('+i+')">&#128465;</button>'
+      +'</div></div>';
+  }).join('');
 }
 function addGroupe(){
-  const nom = document.getElementById('new-groupe-nom').value.trim();
+  var nom = document.getElementById('new-groupe-nom').value.trim();
   if(!nom) return;
-  var grpCode=(document.getElementById('new-groupe-code')||{}).value||''; groups.push({nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value, code:grpCode.toUpperCase()});
+  var grpCode=(document.getElementById('new-groupe-code')||{}).value||''; groups.push({nom:nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value, code:grpCode.toUpperCase()});
   save('groups', groups);
   closeModal('modal-add-groupe');
   renderGroupesList();
 }
 function renameGroupe(i){
-  const newNom = prompt('Nouveau nom du groupe :', groups[i].nom);
+  var newNom = prompt('Nouveau nom du groupe :', groups[i].nom);
   if(newNom && confirm('Voulez-vous renommer ce groupe ?')){ groups[i].nom = newNom; save('groups',groups); renderGroupesList(); }
 }
 function deleteGroupe(i){
@@ -4665,9 +4424,9 @@ function saveEditMetierDyn(id, isCustom){
   renderMetiers();
 }
 function addMetierAdmin(){
-  const nom = document.getElementById('new-metier-nom').value.trim();
+  var nom = document.getElementById('new-metier-nom').value.trim();
   if(!nom) return;
-  const id = 'custom-' + Date.now();
+  var id = 'custom-' + Date.now();
   var _existingIds=[...METIERS,...customMetiers].map(function(m){return m.id;});
   if(_existingIds.includes(newId)){alert('Identifiant existant. Modifiez le nom du metier.'); return;}
   customMetiers.push({
@@ -4692,7 +4451,7 @@ function addMetierAdmin(){
   renderMetiers();
 }
 function deleteCustomMetier(id){
-  if(confirm('Supprimer ce métier ?')){ customMetiers = customMetiers.filter(m => m.id !== id); save('custom_metiers',customMetiers); renderAdminMetiers(); }
+  if(confirm('Supprimer ce métier ?')){ customMetiers = customMetiers.filter(function(m){ return m.id !== id; }); save('custom_metiers',customMetiers); renderAdminMetiers(); }
 }
 function renderAdminFormations(){
   var div = document.getElementById('admin-formations-list');
@@ -4788,8 +4547,8 @@ function _openEditFormationModal(f, onSave){
   document.body.appendChild(modal);
 }
 function addFormationAdmin(){
-  const nom = document.getElementById('new-form-nom').value.trim();
-  const centre = document.getElementById('new-form-centre').value.trim();
+  var nom = document.getElementById('new-form-nom').value.trim();
+  var centre = document.getElementById('new-form-centre').value.trim();
   if(!nom || !centre) return;
   FORMATIONS_CUSTOM.push({
     nom, centre,
@@ -4808,10 +4567,10 @@ function deleteFormation(i){
   if(confirm('Supprimer cette formation ?')){ FORMATIONS_CUSTOM.splice(i,1); save('formations_custom',FORMATIONS_CUSTOM); renderAdminFormations(); }
 }
 function populateMetierSelect(){
-  const sel = document.getElementById('new-form-metier');
+  var sel = document.getElementById('new-form-metier');
   if(!sel) return;
-  const all = [...METIERS, ...customMetiers];
-  sel.innerHTML = all.map(m => `<option value="${m.id}">${m.nom}</option>`).join('');
+  var all = [...METIERS, ...customMetiers];
+  sel.innerHTML = all.map(function(m){ return ('<option value="' + m.id + '">' + m.nom + '</option>'); }).join('');
 }
 function openRapportModal(){
   var stSel = document.getElementById('rapport-stagiaire-sel');
@@ -5360,12 +5119,11 @@ function saveProfilPwd(){
 }
 
 function showPage_glossaire(){
-  const chips = document.getElementById('glossaire-chips');
+  var chips = document.getElementById('glossaire-chips');
   if(chips && chips.innerHTML === ''){
-    const suggestions = ['CACES','CDI','SMIC','CPF','RQTH','BTP','CV','Intérim','Apprentissage','Fiche de paie'];
-    chips.innerHTML = suggestions.map(w =>
-      '<span onclick="quickGlossaire(\''+w+'\')" style="background:var(--primary-pale);color:var(--primary);padding:5px 12px;border-radius:20px;font-size:0.8rem;cursor:pointer;border:1px solid var(--primary-pale);font-weight:600;">'+w+'</span>'
-    ).join('');
+    var suggestions = ['CACES','CDI','SMIC','CPF','RQTH','BTP','CV','Intérim','Apprentissage','Fiche de paie'];
+    chips.innerHTML = suggestions.map(function(w){ return '<span onclick="quickGlossaire(\''+w+'\'); }" style="background:var(--primary-pale);color:var(--primary);padding:5px 12px;border-radius:20px;font-size:0.8rem;cursor:pointer;border:1px solid var(--primary-pale);font-weight:600;">'+w+'</span>'
+    }).join('');
   }
   filterGlossaireLocal('');
 }
@@ -5376,24 +5134,25 @@ function quickGlossaire(word){
 }
 
 function filterGlossaireLocal(query){
-  const list = document.getElementById('glossaire-local-list');
+  var list = document.getElementById('glossaire-local-list');
   if(!list) return;
-  const q = query.trim().toLowerCase();
-  const filtered = q ? GLOSSAIRE_LOCAL.filter(e => e.mot.toLowerCase().includes(q) || e.def.toLowerCase().includes(q)) : GLOSSAIRE_LOCAL.slice(0,10);
-  list.innerHTML = filtered.map(e =>
-    '<div class="card" style="padding:0.85rem;margin-bottom:4px;cursor:pointer;" onclick="quickGlossaire(\''+e.mot+'\')">'
-    +'<div style="font-weight:700;font-size:0.88rem;color:var(--primary);">'+e.mot+'</div>'
-    +'<div style="font-size:0.8rem;color:var(--text2);margin-top:3px;line-height:1.5;">'+e.def+'</div>'
-    +'<div style="font-size:0.72rem;color:var(--accent);margin-top:4px;">👆 Cliquez pour traduire</div>'
-    +'</div>'
-  ).join('') || '<p style="font-size:0.83rem;color:var(--text3);">Aucun mot trouvé. Utilisez le bouton "Chercher" pour une traduction IA.</p>';
+  var q = query.trim().toLowerCase();
+  var filtered = q ? GLOSSAIRE_LOCAL.filter(function(e){ return e.mot.toLowerCase().includes(q) || e.def.toLowerCase().includes(q); }) : GLOSSAIRE_LOCAL.slice(0,10);
+  list.innerHTML = filtered.map(function(e){
+    var safeWord = e.mot.replace(/'/g,'');
+    return '<div class="card" style="padding:0.85rem;margin-bottom:4px;cursor:pointer;" onclick="quickGlossaire(\'' + safeWord + '\')">'
+      +'<div style="font-weight:700;font-size:0.88rem;color:var(--primary);">'+e.mot+'</div>'
+      +'<div style="font-size:0.8rem;color:var(--text2);margin-top:3px;line-height:1.5;">'+e.def+'</div>'
+      +'<div style="font-size:0.72rem;color:var(--accent);margin-top:4px;">&#128070; Cliquez pour traduire</div>'
+      +'</div>';
+  }).join('') || '<p style="font-size:0.83rem;color:var(--text3);">Aucun mot trouv&eacute;.</p>';
 }
 
 async function searchGlossaire(){
-  const word = document.getElementById('glossaire-search').value.trim();
+  var word = document.getElementById('glossaire-search').value.trim();
   if(!word) return;
-  const lang = document.getElementById('glossaire-lang').value;
-  const result = document.getElementById('glossaire-result');
+  var lang = document.getElementById('glossaire-lang').value;
+  var result = document.getElementById('glossaire-result');
   result.style.display = 'block';
   result.innerHTML = '<div class="card" style="padding:1rem;text-align:center;">'
     +'<div style="font-size:1.5rem;margin-bottom:0.5rem;">⏳</div>'
@@ -5401,11 +5160,11 @@ async function searchGlossaire(){
     +'</div>';
 
   // Check local dictionary first
-  const local = GLOSSAIRE_LOCAL.find(e => e.mot.toLowerCase() === word.toLowerCase());
-  const localDef = local ? local.def : null;
+  var local = GLOSSAIRE_LOCAL.find(function(e){ return e.mot.toLowerCase() === word.toLowerCase(); });
+  var localDef = local ? local.def : null;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -5421,18 +5180,18 @@ async function searchGlossaire(){
         }]
       })
     });
-    const data = await response.json();
-    const text = (data.content[0].text || '').trim();
-    let parsed;
+    var data = await response.json();
+    var text = (data.content[0].text || '').trim();
+    var parsed;
     try { parsed = JSON.parse(text); }
     catch(e) {
       // Try to extract JSON
-      const match = text.match(/\{[\s\S]*\}/);
+      var match = text.match(/\{[\s\S]*\}/);
       parsed = match ? JSON.parse(match[0]) : null;
     }
     if(parsed){
-      const langKey = Object.keys(parsed).find(k => k.startsWith('traduction_'));
-      const trad = langKey ? parsed[langKey] : '';
+      var langKey = Object.keys(parsed).find(function(k){ return k.startsWith('traduction_'); });
+      var trad = langKey ? parsed[langKey] : '';
       result.innerHTML = '<div class="card" style="padding:0;overflow:hidden;">'
         +'<div style="background:var(--primary);color:#fff;padding:0.85rem 1rem;">'
         +'<div style="font-size:1.1rem;font-weight:700;">📖 ' + parsed.mot + '</div>'
@@ -5573,7 +5332,7 @@ function goToDashboard(){
   showPage('page-dashboard-stagiaire');
 }
 function initHandicapChecks(){
-  const types = [
+  var types = [
     {val:'moteur',label:'Moteur/Mobilité'},
     {val:'visuel',label:'Visuel'},
     {val:'auditif',label:'Auditif'},
@@ -5582,8 +5341,8 @@ function initHandicapChecks(){
     {val:'chronique',label:'Maladie chronique'},
     {val:'langage',label:'Trouble du langage'},
   ];
-  const div = document.getElementById('new-metier-handi-checks');
-  if(div) div.innerHTML = types.map(t => `<label style="display:flex;align-items:center;gap:8px;font-size:0.83rem;"><input type="checkbox" value="${t.val}"> ${t.label}</label>`).join('');
+  var div = document.getElementById('new-metier-handi-checks');
+  if(div) div.innerHTML = types.map(function(t){ return ('<label style="display:flex;align-items:center;gap:8px;font-size:0.83rem;"><input type="checkbox" value="' + t.val + '"> ' + t.label + '</label>'); }).join('');
 }
 initHandicapChecks();
 
@@ -5625,24 +5384,24 @@ function exportMyData(){
     showToast('✅ Fichier téléchargé ! Gardez-le sur clé USB ou envoyez-vous par email.');
   } catch(e) {
     // Fallback: show data in modal for manual copy
-    showExportCopyModal(dataStr);
+    showDataCopyModal(dataStr);
   }
 }
-function showExportCopyModal(dataStr){
-  var old=document.getElementById('modal-export-copy'); if(old) old.remove();
-  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-export-copy';
+function showDataCopyModal(dataStr){
+  var old=document.getElementById('modal-datacopy'); if(old) old.remove();
+  var m=document.createElement('div'); m.className='modal-overlay open'; m.id='modal-datacopy';
   m.innerHTML='<div class="modal"><div class="modal-header"><h3 style="font-family:var(--font);">💾 Copier vos données</h3>'
-    +'<button class="btn-icon" id="exp-copy-close" style="color:var(--text2);background:var(--surface2);">&#10005;</button></div>'
+    +'<button class="btn-icon" id="datacopy-close" style="color:var(--text2);background:var(--surface2);">&#10005;</button></div>'
     +'<div class="modal-body"><p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Le téléchargement est bloqué sur cet appareil. Copiez ce texte et collez-le dans un email ou un document :</p>'
-    +'<textarea id="export-copy-area" style="width:100%;height:150px;font-size:0.7rem;font-family:monospace;border:1.5px solid var(--border);border-radius:8px;padding:8px;background:var(--surface2);color:var(--text);" readonly>'+dataStr+'</textarea>'
+    +'<textarea id="datacopy-area" style="width:100%;height:150px;font-size:0.7rem;font-family:monospace;border:1.5px solid var(--border);border-radius:8px;padding:8px;background:var(--surface2);color:var(--text);" readonly>'+dataStr+'</textarea>'
     +'</div><div class="modal-footer">'
-    +'<button class="btn btn-primary btn-full" onclick="var ta=document.getElementById('export-copy-area');ta.select();document.execCommand('copy');showToast('✅ Données copiées ! Collez-les dans un email.');">📋 Tout copier</button>'
+    +'<button class="btn btn-primary btn-full" onclick="doCopyExport()">📋 Tout copier</button>'
     +'</div></div>';
   document.body.appendChild(m);
-  var closeExpCopy = function(){ var mo=document.getElementById('modal-export-copy'); if(mo) mo.remove(); document.body.style.overflow=''; };
-  var closeBtn = document.getElementById('exp-copy-close');
+  var closeExpCopy = function(){ var mo=document.getElementById('modal-datacopy'); if(mo) mo.remove(); document.body.style.overflow=''; };
+  var closeBtn = document.getElementById('datacopy-close');
   if(closeBtn) closeBtn.onclick = closeExpCopy;
-  setTimeout(function(){ var ta=document.getElementById('export-copy-area'); if(ta) ta.select(); },100);
+  setTimeout(function(){ var ta=document.getElementById('datacopy-area'); if(ta) ta.select(); },100);
 }
 
 function importMyData(){
@@ -5746,7 +5505,7 @@ function setPCType(shared){
     showToast('🏫 Mode PC partagé : exportez vos données avant de partir !');
     startIdleWatch();
     // Show export button in dashboard
-    var exportBtn=document.getElementById('export-data-btn');
+    var exportBtn=document.getElementById('datacopy-data-btn');
     if(exportBtn) exportBtn.style.display='block';
   }
 }
@@ -5796,7 +5555,7 @@ function uploadLogo(){
   if(!input || !input.files[0]) return;
   var file = input.files[0];
   if(file.size > 300000){
-    alert('Image trop grande (max 300KB). Compressez votre logo avant de l'importer.');
+    alert('Image trop grande (max 300KB). Compressez votre logo avant de l\'importer.');
     input.value = ''; return;
   }
   var reader = new FileReader();
@@ -5829,9 +5588,22 @@ function initLogoPreview(){
 // Auto-login if session exists
 if(currentUser){ postLogin(); }
 
+
+// ==================== LANDING BUTTONS ====================
+(function(){
+  var bc = document.getElementById('btn-commencer');
+  var bl = document.getElementById('btn-connexion');
+  if(bc){ bc.addEventListener('click', function(){ showPage('page-register'); }); }
+  if(bl){ bl.addEventListener('click', function(){ showPage('page-login'); }); }
+})();
+function doCopyExport(){
+  var ta = document.getElementById('datacopy-area');
+  if(ta){ ta.select(); document.execCommand('copy'); showToast('Données copiées ! Collez-les dans un email.'); }
+}
+
 // PWA Service Worker
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.register('sw.js').catch(function(){});
 }
 </script>
 <!-- Leaflet.js for interactive map - loaded after page content -->
