@@ -126,6 +126,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)
 .badge-blue{background:var(--primary-pale);color:var(--primary);}
 .badge-green{background:var(--success-light);color:var(--success);}
 .badge-amber{background:var(--accent-light);color:#b07a10;}
+.badge-danger{background:#fdecea;color:#c62828;}
+.badge-green{background:#e8f5e9;color:#2e7d32;}
 .badge-red{background:var(--danger-light);color:var(--danger);}
 .badge-gray{background:var(--surface2);color:var(--text2);}
 
@@ -348,6 +350,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 @keyframes pageEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .page.active > *:first-child { animation: pageEnter 0.35s ease both; }
 @keyframes pageEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
 .page.active > .topbar,.page.active > .scroll-content{animation:pageEnter 0.3s ease both;}
 </style>
 </head>
@@ -480,7 +484,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <p style="font-size:0.72rem;color:var(--text3);margin-top:4px;">Code fourni par votre r&eacute;f&eacute;rente. Laissez vide sinon.</p>
       </div>
       <div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.75rem;border:1px dashed var(--border);">
-        <div style="font-size:0.78rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;">🔐 Récupération de mot de passe (recommandé)</div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--text3);margin-bottom:0.6rem;">🔐 Récupération de mot de passe <span style="color:var(--danger);">(fortement recommandé)</span></div>
         <div class="form-group" style="margin-bottom:0.5rem;">
           <label style="font-size:0.8rem;">Question secrète</label>
           <select id="reg-question" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0.6rem;background:var(--surface);color:var(--text);font-size:0.85rem;">
@@ -576,7 +580,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
           <div class="quiz-option" onclick="selectNiveau('C2')"><span class="opt-letter">C2</span>Niveau langue maternelle</div>
         </div>
       </div>
-      <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="nextTestSection(2)">Suivant →</button>
+      <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="if(!selectedNiveauFr){showToast('Veuillez sélectionner votre niveau de français.');return;}nextTestSection(2);">Suivant →</button>
     </div>
 
     <!-- SECTION 2 : HANDICAP -->
@@ -711,7 +715,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
       <div style="display:flex;gap:8px;margin-top:1rem;">
         <button class="btn btn-ghost" onclick="nextTestSection(2)">← Retour</button>
-        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(4)">Suivant →</button>
+        <button class="btn btn-primary" style="flex:1" onclick="if(selectedPrefs.length===0){showToast('Sélectionnez au moins une préférence.');return;}nextTestSection(4);">Suivant →</button>
       </div>
     </div>
 
@@ -735,7 +739,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
       <div style="display:flex;gap:8px;margin-top:1rem;">
         <button class="btn btn-ghost" onclick="nextTestSection(3)">← Retour</button>
-        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(5)">Suivant →</button>
+        <button class="btn btn-primary" style="flex:1" onclick="if(selectedInterests.length===0){showToast('Sélectionnez au moins un secteur.');return;}nextTestSection(5);">Suivant →</button>
       </div>
     </div>
 
@@ -770,8 +774,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         <div id="recommended-metiers" style="text-align:left;display:flex;flex-direction:column;gap:8px;"></div>
         <div id="strengths-section" style="margin-top:1rem;text-align:left;"></div>
       </div>
-      <button class="btn btn-accent btn-full btn-lg" style="margin-top:1rem" onclick="goToMetiers()">🚀 Découvrir mes métiers recommandés</button>
-      <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="showPage('page-dashboard-stagiaire')">Mon tableau de bord</button>
+      <div style="display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap;"><button class="btn btn-primary" style="flex:1;min-width:140px;" onclick="goToDashboard()">&#127968; Mon tableau de bord</button><button class="btn btn-accent" style="flex:1;min-width:140px;" onclick="goToMetiers()">&#128640; Voir les métiers</button></div>
+      
     </div>
   </div>
 </div>
@@ -1213,7 +1217,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="attestations-list" style="margin-bottom:1rem;"></div>
     <div class="alert alert-info">
       <span>ℹ️</span>
-      <span>Les attestations sont générées automatiquement lorsque vous atteignez le score minimum dans un métier.</span>
+      <span>Les attestations sont générées automatiquement lorsque vous atteignez le score minimum (60%) dans un métier. Jouez au Quiz sur une fiche métier pour obtenir votre premier badge !</span>
     </div>
   </div>
   <nav class="bottom-nav visible">
@@ -2993,16 +2997,24 @@ function openMetier(id){
 
   document.getElementById('metier-detail-title').innerHTML = ('<div class="logo-badge">⚓</div>' + m.nom);
   document.getElementById('metier-full-title').textContent = m.emoji + ' ' + m.nom;
+  // Show niveau badge prominently
+  var nDiv = document.getElementById('metier-niveau-header');
+  if(nDiv) nDiv.textContent = 'Niveau français requis : ' + (m.niveauFr||'A2');
   document.getElementById('metier-description').textContent = m.desc;
   document.getElementById('metier-trail').innerHTML = ('<span class="nav-trail-item" onclick="showPage(\'page-dashboard-stagiaire\')">Accueil</span><span class="nav-trail-sep">›</span><span class="nav-trail-item" onclick="showPage(\'page-metiers\')">Métiers</span><span class="nav-trail-sep">›</span><span class="nav-trail-current">' + m.nom + '</span>');
   
-  document.getElementById('metier-badge-row').innerHTML = (m.tags||[]).map(function(t){ return ('<span class="badge badge-blue">' + t + '</span>'); }).join('') + ('<span class="badge badge-amber">Niveau ' + m.niveauFr||'A2' + '+</span>');
+  var niveaux={A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
+  var uN=testResults?(niveaux[testResults.niveau]||0):0;
+  var mN=niveaux[m.niveauFr||'A2']||2;
+  var nCol=uN===0?'badge-amber':(uN>=mN?'badge-green':'badge-danger');
+  var nLbl=uN>=mN&&uN>0?'✓ Niveau '+m.niveauFr+' adapté':'Niveau '+(m.niveauFr||'A2')+' requis';
+  document.getElementById('metier-badge-row').innerHTML=(m.tags||[]).map(function(t){return '<span class="badge badge-blue">'+t+'</span>';}).join('')+'<span class="badge '+nCol+'">'+nLbl+'</span>';
   
   document.getElementById('metier-conditions').innerHTML = (m.conditions||'').split('\n').map(function(l){ return '<div style="display:flex;gap:6px;align-items:flex-start;">'+l+'</div>'; }).join('');
 
   // Formations
   var formDiv = document.getElementById('formations-list');
-  var allForms = [...(m.formations||[]), ...FORMATIONS_CUSTOM.filter(function(f){ return f.metier === m.id; })];
+  var allForms = (m.formations||[]).concat(FORMATIONS_CUSTOM.filter(function(f){ return f.metier === m.id || f.metier === m.nom; }));
   if(allForms.length === 0){
     formDiv.innerHTML = '<p style="font-size:0.83rem;color:var(--text3);">Aucune formation renseignée pour ce métier. Demandez à votre référente.</p>';
   } else {
@@ -3509,6 +3521,38 @@ function answerVF(answer){
   vfIndex++;
 }
 function nextVF(){ renderVF(); }
+
+function saveGameResult(pct, gameScore){
+  if(!currentUser || !currentMetier) return;
+  if(!currentUser.stats.scores) currentUser.stats.scores = {};
+  currentUser.stats.games = (currentUser.stats.games||0) + 1;
+  var prev = currentUser.stats.scores[currentMetier.id] || 0;
+  if(gameScore > prev) currentUser.stats.scores[currentMetier.id] = gameScore;
+  if(pct >= 60){
+    if(!currentUser.stats.badges) currentUser.stats.badges = [];
+    if(!currentUser.stats.badges.includes(currentMetier.id)){
+      currentUser.stats.badges.push(currentMetier.id);
+      showBadgeCelebration(currentMetier);
+    }
+    generateAttestation(currentMetier.nom);
+  }
+  saveCurrentUser();
+}
+
+function showBadgeCelebration(metier){
+  var el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.3s;';
+  el.innerHTML = '<div style="background:#fff;border-radius:24px;padding:2rem;text-align:center;max-width:320px;margin:1rem;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);">'
+    +'<div style="font-size:4rem;margin-bottom:0.5rem;">&#127885;</div>'
+    +'<div style="font-size:1.4rem;font-weight:800;font-family:var(--font);color:var(--primary);margin-bottom:0.25rem;">Badge obtenu !</div>'
+    +'<div style="font-size:1.2rem;margin-bottom:0.75rem;">'+metier.emoji+' '+metier.nom+'</div>'
+    +'<p style="font-size:0.85rem;color:var(--text3);margin-bottom:1rem;">Votre attestation a été générée. Retrouvez-la dans <strong>Mes réussites</strong>.</p>'
+    +'<button class="btn btn-primary btn-full" onclick="this.parentNode.parentNode.remove()">Super ! &#127881;</button>'
+    +'</div>';
+  document.body.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
+}
+
 function endVF(){
   var pct = Math.round(vfScore / (vfQuestions.length*15)*100);
   document.getElementById('vf-statement').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
@@ -3517,7 +3561,7 @@ function endVF(){
     +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent ! Vous maîtrisez ce métier.':'Continuez à vous entraîner !')+'</p></div>';
   document.getElementById('vf-btns').style.display = 'none';
   document.getElementById('vf-feedback').style.display = 'none';
-  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  saveGameResult(pct, vfScore);
   document.getElementById('vf-next-btn').textContent = '← Retour au métier';
   document.getElementById('vf-next-btn').onclick = function(){ showPage('page-metier-detail'); };
   document.getElementById('vf-next-btn').style.display = 'block';
@@ -3630,7 +3674,7 @@ function checkGlisser(){
     +correct+' / '+cats.length+' bonnes associations ('+pts+' pts). '+(pct>=60?'Excellent travail !':'Réessayez pour vous améliorer !')+'</span></div>';
   document.getElementById('gl-check-btn').style.display = 'none';
   document.getElementById('gl-next-btn').style.display = 'block';
-  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  saveGameResult(pct, pts);
 }
 
 // --------- SITUATION PRO ---------
@@ -3685,7 +3729,7 @@ function endSituation(){
     +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent sang-froid !':'Rejouez pour progresser !')+'</p></div>';
   document.getElementById('sit-options').innerHTML = '';
   document.getElementById('sit-feedback').style.display = 'none';
-  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  saveGameResult(pct, sitScore);
   document.getElementById('sit-next-btn').textContent = '← Retour au métier';
   document.getElementById('sit-next-btn').onclick = function(){ showPage('page-metier-detail'); };
   document.getElementById('sit-next-btn').style.display = 'block';
@@ -3773,7 +3817,7 @@ function checkJournee(){
   document.getElementById('jt-task-pool').innerHTML = '';
   document.getElementById('jt-check-btn').style.display = 'none';
   document.getElementById('jt-next-btn').style.display = 'block';
-  if(currentUser){ currentUser.stats.games=(currentUser.stats.games||0)+1; saveCurrentUser(); }
+  saveGameResult(pct, pts);
 }
 function startQCM(){
   var qs = shuffle(currentMetier.questions || []);
@@ -3782,6 +3826,7 @@ function startQCM(){
   qcmScore = 0;
   document.getElementById('game-title').textContent = '🧠 Quiz – ' + currentMetier.nom;
   document.getElementById('q-total').textContent = qs.length;
+  document.getElementById('q-current').textContent = '1';
   document.getElementById('qcm-score').textContent = 0;
   document.getElementById('qcm-next-btn').style.display = 'none';
   document.getElementById('qcm-feedback').style.display = 'none';
@@ -3825,7 +3870,7 @@ function endQCM(){
   document.getElementById('qcm-question').innerHTML = '<div style="text-align:center;padding:1rem 0;"><div style="font-size:3rem;margin-bottom:0.75rem">'+(gotBadge?'\U0001F3C5':'\U0001F4AA')+'</div><div style="font-size:1.2rem;font-weight:700;">Score final : '+qcmScore+' pts ('+pct+'%)</div><p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(gotBadge?'F\u00e9licitations ! Badge obtenu !':'Continuez \u00e0 vous am\u00e9liorer !')+'</p></div>';
   if(gotBadge && currentUser){
     if(!currentUser.stats.scores) currentUser.stats.scores={};
-    if(score>(currentUser.stats.scores[currentMetier.id]||0)) currentUser.stats.scores[currentMetier.id]=score;
+    if(qcmScore>(currentUser.stats.scores[currentMetier.id]||0)) currentUser.stats.scores[currentMetier.id]=qcmScore;
     if(!currentUser.stats.badges.includes(currentMetier.id)){
       currentUser.stats.badges.push(currentMetier.id);
     }
@@ -3927,6 +3972,25 @@ function renderDashboard(){
   var pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
   var firstCta = document.getElementById('first-time-cta');
   if(firstCta) firstCta.style.display = (!testResults && !currentUser._isDemo) ? 'block' : 'none';
+  // Show recommended metiers on dashboard
+  var recDiv = document.getElementById('rec-metiers-dash');
+  if(recDiv && testResults && testResults.top3 && testResults.top3.length){
+    var allM = [...METIERS, ...customMetiers];
+    var recHtml = '<div style="margin-bottom:0.5rem;font-size:0.8rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">&#11088; Vos métiers recommandés</div>'
+      + testResults.top3.slice(0,3).map(function(id){
+        var m = allM.find(function(x){return x.id===id;});
+        if(!m) return '';
+        var hasBadge = (stats.badges||[]).includes(id);
+        return '<div style="display:flex;align-items:center;gap:10px;padding:0.6rem 0.75rem;background:var(--surface2);border-radius:10px;margin-bottom:6px;cursor:pointer;" onclick="openMetier(&quot;'+id+'&quot;)">'+
+          +'<span style="font-size:1.4rem;">'+m.emoji+'</span>'
+          +'<div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">'+m.nom+'</div>'
+          +'<div style="font-size:0.72rem;color:var(--text3);">Niveau '+m.niveauFr+' '+(hasBadge?'&#127885; Badge obtenu':'→ Jouer')+'</div></div>'
+          +'<span style="color:var(--text3);">›</span></div>';
+      }).join('');
+    recDiv.innerHTML = recHtml;
+  } else if(recDiv){
+    recDiv.innerHTML = '';
+  }
   document.getElementById('global-progress').style.width = pct+'%';
   document.getElementById('global-pct').textContent = pct;
   
@@ -4091,6 +4155,15 @@ var mapLayerFormations = null;
 var mapLayerEntreprises = null;
 
 function renderMapPage(){
+  var offMsg = document.getElementById('map-offline-msg');
+  var mapDiv = document.getElementById('map');
+  if(!navigator.onLine){
+    if(offMsg) offMsg.style.display='block';
+    if(mapDiv) mapDiv.style.display='none';
+    return;
+  }
+  if(offMsg) offMsg.style.display='none';
+  if(mapDiv) mapDiv.style.display='block';
   renderMapList('all');
   setTimeout(initLeafletMap, 150);
 }
@@ -4287,8 +4360,12 @@ function renderReferenteDashboard(){
 function showAdminTab(tabId, btn){
   document.querySelectorAll('.admin-tab-content').forEach(function(t){ t.style.display = 'none'; });
   document.querySelectorAll('.admin-tab').forEach(function(b){ b.classList.remove('active'); });
-  document.getElementById(tabId).style.display = 'block';
-  btn.classList.add('active');
+  var tabEl = document.getElementById(tabId);
+  if(tabEl) tabEl.style.display = 'block';
+  if(btn) btn.classList.add('active');
+  // Special: load rapports when clicking that tab
+  if(tabId === 'tab-rapports') { try{ updateRapportStats(); }catch(e){} }
+  if(tabId === 'tab-parametres') { try{ loadOrganismeField(); }catch(e){} }
 }
 function renderStagiairesList(filter){
   filter = filter || '';
@@ -4303,6 +4380,7 @@ function renderStagiairesList(filter){
     return '<div class="editable-list-item">'
       +'<div style="width:36px;height:36px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">'+((s.prenom||'?')[0].toUpperCase())+'</div>'
       +'<div style="flex:1;min-width:0;"><div style="font-weight:600;font-size:0.88rem;">'+s.prenom+' '+s.nom+'</div>'
+      +'<a href="mailto:'+s.email+'" style="font-size:0.72rem;color:var(--primary);">'+s.email+'</a>'
       +'<div style="font-size:0.74rem;color:var(--text3);">'+(s.groupe||'Sans groupe')+' &bull; '+nm+' m&eacute;tier'+(nm!==1?'s':'')+' &bull; '+nb+' badge'+(nb!==1?'s':'')+'</div></div>'
       +'<div class="item-actions">'
       +'<button class="btn btn-sm btn-ghost" onclick="showStagiaireDetail(\'' + safeEmail + '\')" title="Voir">&#128065;</button>'
@@ -4321,10 +4399,25 @@ function showStagiaireDetail(email){
   var badges = (s.stats&&s.stats.badges)||[];
   var atts = s.attestations||[];
   var scores = (s.stats&&s.stats.scores)||{};
+  var trStag = load('testResults_'+s.email, null);
+  var niveauStag = trStag ? trStag.niveau : null;
+  var top3Stag = trStag ? (trStag.top3||trStag.recommended||[]) : [];
   var badgeHtml = badges.map(function(bid){
     var met=allM.find(function(x){return x.id===bid;});
     return met?'<span style="background:var(--accent-light);color:#b07a10;padding:3px 8px;border-radius:10px;font-size:0.75rem;margin:2px;display:inline-block;">'+met.emoji+' '+met.nom+'</span>':'';
   }).join('');
+  // Test results summary
+  var testHtml = trStag
+    ? '<div style="background:var(--primary-pale);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;">'
+      +'<div style="font-size:0.75rem;font-weight:700;color:var(--text3);margin-bottom:6px;">TEST D’ORIENTATION</div>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'
+      +'<span class="badge badge-blue">Niveau '+niveauStag+'</span>'
+      +top3Stag.slice(0,3).map(function(id){
+        var m2=allM.find(function(x){return x.id===id;});
+        return m2?('<span class="badge badge-gray">'+m2.emoji+' '+m2.nom+'</span>'):'';
+      }).join('')
+      +'</div></div>'
+    : '<div style="font-size:0.82rem;color:var(--text3);margin-bottom:0.75rem;">⚠️ Test non effectué</div>';
   var attHtml = atts.length ? atts.map(function(a){
     var safeN=(s.prenom+' '+s.nom).replace(/'/g,''); var safeM=a.metier.replace(/'/g,'');
     return '<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);">'
@@ -4438,6 +4531,7 @@ function confirmDelete(email){
     body.innerHTML = '<p style="font-size:0.88rem;color:var(--text2);margin-bottom:0.75rem;">Vous allez supprimer le compte de :</p>'
       +'<div style="background:var(--surface2);border-radius:10px;padding:0.85rem;text-align:center;margin-bottom:0.75rem;">'
       +'<div style="font-size:1.1rem;font-weight:700;">'+s.prenom+' '+s.nom+'</div>'
+      +'<a href="mailto:'+s.email+'" style="font-size:0.72rem;color:var(--primary);">'+s.email+'</a>'
       +'<div style="font-size:0.78rem;color:var(--text3);margin-top:4px;">'+s.email+'</div>'
       +'<div style="font-size:0.75rem;color:var(--text3);margin-top:4px;">'
       +(s.stats&&s.stats.metiersExplored||[]).length+' m&eacute;tiers &middot; '
@@ -4472,7 +4566,13 @@ function renderGroupesList(){
 function addGroupe(){
   var nom = document.getElementById('new-groupe-nom').value.trim();
   if(!nom) return;
-  var grpCode=(document.getElementById('new-groupe-code')||{}).value||''; groups.push({nom:nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value, code:grpCode.toUpperCase()});
+  var grpCode=(document.getElementById('new-groupe-code')||{}).value||'';
+  if(!grpCode){
+    // Auto-generate: first 3 letters of name + random 2 digits
+    grpCode = (nom.replace(/[^A-Z0-9]/gi,'').toUpperCase().slice(0,3) + Math.floor(10+Math.random()*89)).slice(0,6);
+    var codeInp = document.getElementById('new-groupe-code');
+    if(codeInp) codeInp.value = grpCode;
+  } groups.push({nom:nom, dispositif:document.getElementById('new-groupe-dispositif').value, date:document.getElementById('new-groupe-date').value, code:grpCode.toUpperCase()});
   save('groups', groups);
   closeModal('modal-add-groupe');
   renderGroupesList();
@@ -4816,7 +4916,8 @@ function renderRapportStagiaire(){
   var atts=s.attestations||[];
   var scores=(s.stats&&s.stats.scores)||{};
   var html='<div style="background:var(--surface2);border-radius:10px;padding:0.85rem;margin-top:0.5rem;">';
-  html+='<div style="font-weight:700;font-size:0.88rem;">'+s.prenom+' '+s.nom+'</div>';
+  html+='<div style="font-weight:700;font-size:0.88rem;">'+s.prenom+' '+s.nom+'</div>'
+      +'<a href="mailto:'+s.email+'" style="font-size:0.72rem;color:var(--primary);">'+s.email+'</a>';
   html+='<div style="font-size:0.73rem;color:var(--text3);margin-bottom:0.6rem;">'+s.email+(s.groupe?' &middot; '+s.groupe:'')+'</div>';
   html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:0.75rem;">';
   html+='<div class="stat-card"><div class="stat-value">'+metiers.length+'</div><div class="stat-label">M&eacute;tiers</div></div>';
@@ -4911,6 +5012,7 @@ function renderRapportGroupe(){
         +'<div style="width:30px;height:30px;border-radius:50%;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);font-size:0.8rem;flex-shrink:0;">'+((s.prenom||'?')[0]).toUpperCase()+'</div>'
         +'<div style="flex:1;margin:0 8px;">'
         +'<div style="font-size:0.85rem;font-weight:600;">'+s.prenom+' '+s.nom+'</div>'
+      +'<a href="mailto:'+s.email+'" style="font-size:0.72rem;color:var(--primary);">'+s.email+'</a>'
         +'<div style="height:5px;background:var(--surface2);border-radius:4px;margin:3px 0;"><div style="height:5px;background:var(--primary);border-radius:4px;width:'+pct+'%;"></div></div>'
         +'<div style="font-size:0.72rem;color:var(--text3);">'+m+' m&eacute;tiers &middot; '+b+' badges &middot; '+a+' attestations</div>'
         +'</div>'
@@ -5514,7 +5616,23 @@ function hashPwdSimple(pwd){
 function exportMyData(){
   if(!currentUser){ showToast('Connectez-vous pour exporter.'); return; }
   var snapshot = {v:3, at:new Date().toISOString(), user:JSON.parse(JSON.stringify(currentUser))};
-  var dataStr = JSON.stringify(snapshot, null, 2);
+  // Create readable summary
+  var stats2 = currentUser.stats || {};
+  var tr3 = load('testResults_'+currentUser.email, null);
+  var dataStr = '=== CAP AVENIR - MES DONNEES ===\n'
+    + 'Date : ' + new Date().toLocaleString('fr-FR') + '\n\n'
+    + '--- MON PROFIL ---\n'
+    + 'Nom : ' + currentUser.prenom + ' ' + currentUser.nom + '\n'
+    + 'Email : ' + currentUser.email + '\n'
+    + 'Groupe : ' + (currentUser.groupe||'Non assigné') + '\n\n'
+    + (tr3 ? '--- TEST D\'ORIENTATION ---\nNiveau français : ' + tr3.niveau + '\n' : '')
+    + '--- MA PROGRESSION ---\n'
+    + 'Métiers explorés : ' + (stats2.metiersExplored||[]).length + '\n'
+    + 'Badges obtenus : ' + (stats2.badges||[]).join(', ') + '\n'
+    + 'Jeux terminés : ' + (stats2.games||0) + '\n'
+    + 'Points totaux : ' + Object.values(stats2.scores||{}).reduce(function(a,b){return a+b;},0) + '\n\n'
+    + '--- CODE DE SAUVEGARDE (pour restaurer sur un autre PC) ---\n'
+    + btoa(unescape(encodeURIComponent(JSON.stringify(snapshot)))) + '\n';
   // Try download first, fallback to copy modal
   try {
     var blob = new Blob([dataStr],{type:'application/json'});
@@ -5595,7 +5713,7 @@ function exportReferenteCSV(){
     ].map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');
   });
   var csv='\uFEFF'+hdrs.map(function(h){return '"'+h+'"';}).join(',')+'\n'+rows.join('\n');
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var blob=new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='stagiaires-'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();
