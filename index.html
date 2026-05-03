@@ -353,6 +353,12 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
 .page.active > .topbar,.page.active > .scroll-content{animation:pageEnter 0.3s ease both;}
+
+@media print{
+  #modal-attestation-print .modal-footer{ display:none !important; }
+  #modal-attestation-print .modal-card{ box-shadow:none; border:2px solid #0a3d6b; }
+  .topbar,.bottom-nav,.nav-trail{ display:none !important; }
+}
 </style>
 </head>
 <body>
@@ -404,7 +410,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
     <div class="alert alert-info" style="margin-bottom:1rem;">
       <span>⚠️</span>
-      <span><strong>Important :</strong> Notez votre adresse mail et votre mot de passe. Aucun mail de confirmation ne sera envoyé.</span>
+      <span><strong>Important :</strong> <strong>&#9998; Notez</strong> votre adresse mail et votre mot de passe — vous en aurez besoin à chaque connexion. Aucun mail de confirmation ne sera envoyé.</span>
     </div>
 
     <form id="register-form" onsubmit="handleRegister(event)">
@@ -692,8 +698,8 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
         </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:1rem;">
-        <button class="btn btn-ghost" onclick="nextTestSection(1)">← Retour</button>
-        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(3)">Suivant →</button>
+        <button class="btn btn-ghost" onclick="nextTestSection(6)">← Retour</button>
+        <button class="btn btn-primary" style="flex:1" onclick="nextTestSection(6)">Suivant →</button>
       </div>
     </div>
 
@@ -854,6 +860,16 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       </div>
     </div>
     <div id="rec-metiers-dash" style="margin-bottom:1rem;"></div>
+    <div id="synthesis-card" style="display:none;margin-bottom:1rem;">
+      <div class="card" style="background:linear-gradient(135deg,var(--primary-pale) 0%,var(--surface) 100%);border:1.5px solid var(--primary);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+          <span style="font-size:1.5rem;">&#128203;</span>
+          <div style="font-weight:700;font-family:var(--font);font-size:0.95rem;">Ma synth&egrave;se de parcours</div>
+        </div>
+        <div id="synthesis-content" style="font-size:0.82rem;color:var(--text2);line-height:1.7;"></div>
+        <button class="btn btn-outline btn-full" style="margin-top:0.75rem;font-size:0.82rem;" onclick="showSynthesisModal()">&#128065; Voir en d&eacute;tail &rarr;</button>
+      </div>
+    </div>
 
     
     <div class="card" style="margin-bottom:0.5rem;cursor:pointer;" onclick="showPage('page-profil')">
@@ -1136,6 +1152,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span class="nav-trail-sep">›</span>
       <span class="nav-trail-current">Passer à l'action</span>
     </div>
+    <div class="alert alert-info" style="margin-bottom:1rem;"><span>&#128161;</span><span>Commencez par <strong>créer votre CV</strong>, puis rédigez votre <strong>lettre de motivation</strong>, enfin entraînez-vous à l&rsquo;<strong>entretien</strong>.</span></div>
     <div class="section-title">Mes outils</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
       <div class="card" style="cursor:pointer;text-align:center;padding:1.25rem 0.75rem;" onclick="showModal('modal-cv')">
@@ -1217,7 +1234,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     <div id="attestations-list" style="margin-bottom:1rem;"></div>
     <div class="alert alert-info">
       <span>ℹ️</span>
-      <span>Les attestations sont générées automatiquement lorsque vous atteignez le score minimum (60%) dans un métier. Jouez au Quiz sur une fiche métier pour obtenir votre premier badge !</span>
+      <span>Les attestations sont générées automatiquement lorsque vous atteignez <strong>60%</strong> au Quiz d'un métier.<br><br>&#128073; <strong>Comment faire ?</strong> Choisissez un métier &rarr; cliquez sur &quot;Quiz QCM&quot; &rarr; obtenez 60% ou plus !</span>
     </div>
   </div>
   <nav class="bottom-nav visible">
@@ -1261,7 +1278,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
       <span>💡</span>
       <span>Pour postuler, visitez le site de l'entreprise ou rendez-vous sur <strong>France Travail</strong> pour voir leurs offres d'emploi.</span>
     </div>
-  </div>
+  
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav></div>
 </div>
 
 
@@ -1288,7 +1311,7 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
     </div>
     <div class="card" style="margin-bottom:1rem;">
       <div class="section-title" style="margin-bottom:0.75rem;">💾 Mes données</div>
-      <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Exportez vos données pour les retrouver sur un autre ordinateur (PC de salle, ordinateur personnel…)</p>
+      <p style="font-size:0.82rem;color:var(--text2);margin-bottom:0.75rem;">Exportez vos données pour les retrouver sur un autre ordinateur. <strong>Notez le code de sauvegarde</strong> dans un endroit sûr (carnet, téléphone...).</p>
       <button class="btn btn-primary btn-full" onclick="exportMyData()">💾 Exporter mes données</button>
       <button class="btn btn-outline btn-full" style="margin-top:8px;" onclick="importMyData()">📂 Importer mes données</button>
     </div>
@@ -1410,7 +1433,13 @@ input:checked+.toggle-slider:before{transform:translateX(20px);}
 
     <div class="section-title" id="map-entreprises-title">🏢 Entreprises qui recrutent</div>
     <div id="map-entreprises-list"></div>
-  </div>
+  
+  <nav class="bottom-nav visible">
+    <button class="nav-item" onclick="showPage('page-dashboard-stagiaire')"><span class="nav-icon">&#127968;</span><span class="nav-label">Accueil</span></button>
+    <button class="nav-item" onclick="showPage('page-metiers')"><span class="nav-icon">&#128252;</span><span class="nav-label">M&eacute;tiers</span></button>
+    <button class="nav-item" onclick="showPage('page-action')"><span class="nav-icon">&#128640;</span><span class="nav-label">Action</span></button>
+    <button class="nav-item" onclick="showPage('page-attestations')"><span class="nav-icon">&#127942;</span><span class="nav-label">Mes gains</span></button>
+  </nav></div>
 </div>
 
 <!-- ===== PAGE RÉFÉRENTE DASHBOARD ===== -->
@@ -2510,7 +2539,8 @@ var selectedNiveauFr = '';
 var customMetiers = JSON.parse(localStorage.getItem('custom_metiers') || '[]');
 
 // ==================== UTILS ====================
-function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); if(key==='currentUser') localStorage.setItem('_lastSave',new Date().toISOString()); }catch(e){} }
+function getLastSaveTime(){ try{ var t=localStorage.getItem('_lastSave'); return t?new Date(t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null; }catch(e){ return null; } }
 function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) || def; }catch(e){ return def; } }
 function showPage(id){
   pushNavHistory(id);
@@ -2849,7 +2879,7 @@ function nextTestSection(n){
   var pct = Math.round((n/6)*100);
   document.getElementById('test-progress').style.width = pct+'%';
   document.getElementById('step-current').textContent = n;
-  var names = ['','Niveau français','Handicap','Préférences','Intérêts','Compétences','Résultats'];
+  var names = ['','Niveau français','Préférences','Secteurs','Compétences','Accessibilité','Résultats'];
   document.getElementById('step-name').textContent = names[n]||'';
   if(n === 6) generateResults();
 }
@@ -2862,7 +2892,7 @@ function generateResults(){
     var score = 0;
     var hasIncompat = _handicaps.some(function(h){ return m.incompatible && m.incompatible.includes(h); });
     if(hasIncompat) return {m:m, score:-100};
-    if(selectedInterests.includes(m.secteur)) score += 30;
+    if(selectedInterests && selectedInterests.includes(m.secteur)) score += 30;
     if(m.competences) m.competences.forEach(function(c){ if(selectedPrefs.includes(c)||selectedSkills.includes(c)) score += 10; });
     var metierN = niveaux[m.niveauFr||'A2']||2;
     if(userN >= metierN) score += 20;
@@ -2894,7 +2924,7 @@ function generateResults(){
     var why=[];
     if((niveaux2[selectedNiveauFr||'A1']||1)>=(niveaux2[m.niveauFr||'A2']||2)) why.push('Niveau fran&ccedil;ais adapt&eacute;');
     if(selectedInterests.includes(m.secteur)) why.push('Secteur choisi');
-    if(m.competences&&m.competences.some(function(c){return selectedPrefs.includes(c)||selectedSkills.includes(c);})) why.push('Correspond &agrave; vos pr&eacute;f&eacute;rences');
+    if(m.competences&&m.competences.some(function(c){return (selectedPrefs||[]).includes(c)||(selectedSkills||[]).includes(c);})) why.push('Correspond &agrave; vos pr&eacute;f&eacute;rences');
     var whyHtml = why.length ? '<div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap;">'
       +why.map(function(r){return '<span style="font-size:0.64rem;background:#e8f5e9;color:#2e7d32;padding:1px 6px;border-radius:10px;">&check; '+r+'</span>';}).join('')+'</div>' : '';
     html += '<div class="card" style="margin-bottom:0.75rem;border-left:4px solid '+colors[i]+';cursor:pointer;" onclick="openMetier(\''+safeId+'\')">'
@@ -3008,7 +3038,12 @@ function openMetier(id){
   var mN=niveaux[m.niveauFr||'A2']||2;
   var nCol=uN===0?'badge-amber':(uN>=mN?'badge-green':'badge-danger');
   var nLbl=uN>=mN&&uN>0?'✓ Niveau '+m.niveauFr+' adapté':'Niveau '+(m.niveauFr||'A2')+' requis';
-  document.getElementById('metier-badge-row').innerHTML=(m.tags||[]).map(function(t){return '<span class="badge badge-blue">'+t+'</span>';}).join('')+'<span class="badge '+nCol+'">'+nLbl+'</span>';
+  var _niveaux={A1:1,A2:2,B1:3,B2:4,C1:5,C2:6};
+  var _uN=testResults?(_niveaux[testResults.niveau]||0):0;
+  var _mN=_niveaux[m.niveauFr||'A2']||2;
+  var _nCol=_uN===0?'badge-amber':(_uN>=_mN?'badge-green':'badge-danger');
+  var _nLbl=_uN>=_mN&&_uN>0?'✓ Niveau '+(m.niveauFr||'A2')+' adapté':'Niveau '+(m.niveauFr||'A2')+' requis';
+  document.getElementById('metier-badge-row').innerHTML=(m.tags||[]).map(function(t){return '<span class="badge badge-blue">'+t+'</span>';}).join('')+'<span class="badge '+_nCol+'">'+_nLbl+'</span>';
   
   document.getElementById('metier-conditions').innerHTML = (m.conditions||'').split('\n').map(function(l){ return '<div style="display:flex;gap:6px;align-items:flex-start;">'+l+'</div>'; }).join('');
 
@@ -3539,15 +3574,16 @@ function saveGameResult(pct, gameScore){
   saveCurrentUser();
 }
 
+function closeBadgeCelebration(){ var cel=document.getElementById('badge-celebration'); if(cel) cel.remove(); }
 function showBadgeCelebration(metier){
   var el = document.createElement('div');
-  el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.3s;';
+  el.id = 'badge-celebration'; el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.3s;';
   el.innerHTML = '<div style="background:#fff;border-radius:24px;padding:2rem;text-align:center;max-width:320px;margin:1rem;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);">'
     +'<div style="font-size:4rem;margin-bottom:0.5rem;">&#127885;</div>'
     +'<div style="font-size:1.4rem;font-weight:800;font-family:var(--font);color:var(--primary);margin-bottom:0.25rem;">Badge obtenu !</div>'
     +'<div style="font-size:1.2rem;margin-bottom:0.75rem;">'+metier.emoji+' '+metier.nom+'</div>'
     +'<p style="font-size:0.85rem;color:var(--text3);margin-bottom:1rem;">Votre attestation a été générée. Retrouvez-la dans <strong>Mes réussites</strong>.</p>'
-    +'<button class="btn btn-primary btn-full" onclick="this.parentNode.parentNode.remove()">Super ! &#127881;</button>'
+    +'<button class="btn btn-primary btn-full" onclick="closeBadgeCelebration()">Super ! &#127881;</button>'
     +'</div>';
   document.body.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 6000);
@@ -3558,7 +3594,7 @@ function endVF(){
   document.getElementById('vf-statement').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
     +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
     +'<div style="font-size:1.1rem;font-weight:700;font-family:var(--font);">Score : '+vfScore+' pts ('+pct+'%)</div>'
-    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent ! Vous maîtrisez ce métier.':'Continuez à vous entraîner !')+'</p></div>';
+    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent ! Vous maîtrisez ce métier.':'Continuez à vous entraîner ! Réessayez pour améliorer votre score.')+'</p></div>';
   document.getElementById('vf-btns').style.display = 'none';
   document.getElementById('vf-feedback').style.display = 'none';
   saveGameResult(pct, vfScore);
@@ -3726,7 +3762,7 @@ function endSituation(){
   document.getElementById('sit-question').innerHTML = '<div style="text-align:center;padding:0.5rem 0;">'
     +'<div style="font-size:3rem;margin-bottom:0.75rem">'+(pct>=60?'🏅':'💪')+'</div>'
     +'<div style="font-size:1.1rem;font-weight:700;font-family:var(--font);">Score : '+sitScore+' pts ('+pct+'%)</div>'
-    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent sang-froid !':'Rejouez pour progresser !')+'</p></div>';
+    +'<p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(pct>=60?'Excellent sang-froid !':'Rejouez pour progresser ! Chaque essai vous rapproche du badge.')+'</p></div>';
   document.getElementById('sit-options').innerHTML = '';
   document.getElementById('sit-feedback').style.display = 'none';
   saveGameResult(pct, sitScore);
@@ -3868,17 +3904,16 @@ function endQCM(){
   var gotBadge = pct >= 60;
   document.getElementById('qcm-options').innerHTML = '';
   document.getElementById('qcm-question').innerHTML = '<div style="text-align:center;padding:1rem 0;"><div style="font-size:3rem;margin-bottom:0.75rem">'+(gotBadge?'\U0001F3C5':'\U0001F4AA')+'</div><div style="font-size:1.2rem;font-weight:700;">Score final : '+qcmScore+' pts ('+pct+'%)</div><p style="font-size:0.85rem;color:var(--text3);margin-top:0.5rem;">'+(gotBadge?'F\u00e9licitations ! Badge obtenu !':'Continuez \u00e0 vous am\u00e9liorer !')+'</p></div>';
-  if(gotBadge && currentUser){
-    if(!currentUser.stats.scores) currentUser.stats.scores={};
-    if(qcmScore>(currentUser.stats.scores[currentMetier.id]||0)) currentUser.stats.scores[currentMetier.id]=qcmScore;
-    if(!currentUser.stats.badges.includes(currentMetier.id)){
-      currentUser.stats.badges.push(currentMetier.id);
-    }
-  }
   if(currentUser){
+    if(!currentUser.stats.scores) currentUser.stats.scores={};
+    if(!currentUser.stats.badges) currentUser.stats.badges=[];
     currentUser.stats.scores[currentMetier.id] = Math.max(currentUser.stats.scores[currentMetier.id]||0, qcmScore);
     currentUser.stats.games = (currentUser.stats.games||0) + 1;
-    if(gotBadge) generateAttestation(currentMetier.nom);
+    if(gotBadge){
+      if(!currentUser.stats.badges.includes(currentMetier.id)) currentUser.stats.badges.push(currentMetier.id);
+      generateAttestation(currentMetier.nom);
+      showBadgeCelebration(currentMetier);
+    }
     saveCurrentUser();
   }
   document.getElementById('qcm-feedback').style.display = 'none';
@@ -3970,64 +4005,49 @@ function renderDashboard(){
   document.getElementById('stat-badges').textContent = (stats.badges||[]).length;
   document.getElementById('stat-games').textContent = stats.games || 0;
   var pct = Math.min(100, Math.round((stats.metiersExplored||[]).length / METIERS.length * 100));
-  var firstCta = document.getElementById('first-time-cta');
-  if(firstCta) firstCta.style.display = (!testResults && !currentUser._isDemo) ? 'block' : 'none';
-  // Show recommended metiers on dashboard
-  var recDiv = document.getElementById('rec-metiers-dash');
-  if(recDiv && testResults && testResults.top3 && testResults.top3.length){
-    var allM = [...METIERS, ...customMetiers];
-    var recHtml = '<div style="margin-bottom:0.5rem;font-size:0.8rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">&#11088; Vos métiers recommandés</div>'
-      + testResults.top3.slice(0,3).map(function(id){
-        var m = allM.find(function(x){return x.id===id;});
-        if(!m) return '';
-        var hasBadge = (stats.badges||[]).includes(id);
-        return '<div style="display:flex;align-items:center;gap:10px;padding:0.6rem 0.75rem;background:var(--surface2);border-radius:10px;margin-bottom:6px;cursor:pointer;" onclick="openMetier(&quot;'+id+'&quot;)">'+
-          +'<span style="font-size:1.4rem;">'+m.emoji+'</span>'
-          +'<div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">'+m.nom+'</div>'
-          +'<div style="font-size:0.72rem;color:var(--text3);">Niveau '+m.niveauFr+' '+(hasBadge?'&#127885; Badge obtenu':'→ Jouer')+'</div></div>'
-          +'<span style="color:var(--text3);">›</span></div>';
-      }).join('');
-    recDiv.innerHTML = recHtml;
-  } else if(recDiv){
-    recDiv.innerHTML = '';
-  }
   document.getElementById('global-progress').style.width = pct+'%';
   document.getElementById('global-pct').textContent = pct;
-  
-  // Recommended metiers widget
-  var recDiv = document.getElementById('rec-metiers-dash');
-  if(currentUser.testResults && currentUser.testResults.recommended && currentUser.testResults.recommended.length){
-    var allM2 = [...METIERS, ...customMetiers];
-    var recHtml = '<div class="section-title">&#127919; Mes m&eacute;tiers recommand&eacute;s</div>';
-    currentUser.testResults.recommended.slice(0,3).forEach(function(id){
-      var m = allM2.find(function(x){return x.id===id;});
-      if(!m) return;
-      var catLabel = m.cat==='porteur-lh'?'&#128205; Le Havre':m.cat==='porteur-agglo'?'&#127760; Agglo':'&#8505;&#65039;';
-      var safeId = m.id.replace(/'/g,'');
-      recHtml += '<div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:6px;cursor:pointer;" onclick="openMetier(\''+safeId+'\')">'
-        +'<span style="font-size:1.6rem">'+m.emoji+'</span>'
-        +'<div style="flex:1"><div style="font-weight:700;font-size:0.88rem;">'+m.nom+'</div>'
-        +'<div style="font-size:0.75rem;color:var(--text3);">'+catLabel+'</div></div>'
-        +'<span style="color:var(--primary);font-size:1.1rem;">&rsaquo;</span></div>';
-    });
-    recDiv.innerHTML = recHtml;
-  }
-  // Security status
-  var ctaDiv=document.getElementById('test-cta-dash');
+
+  // ── CTA Test si pas encore fait ──────────────────────────────────
+  var firstCta = document.getElementById('first-time-cta');
+  if(firstCta) firstCta.style.display = (!testResults && !currentUser._isDemo) ? 'block' : 'none';
+
+  var ctaDiv = document.getElementById('test-cta-dash');
   if(ctaDiv){
-    if(!currentUser.testResults){
-      var ctaCard=document.createElement('div');
-      ctaCard.className='card';
-      ctaCard.style.cssText='margin-bottom:1rem;background:var(--primary-pale);border:1.5px solid var(--primary);cursor:pointer;';
-      ctaCard.onclick=function(){showPage('page-test');};
-      ctaCard.innerHTML='<div style="display:flex;align-items:center;gap:12px;">'
+    if(!testResults){
+      ctaDiv.innerHTML = '<div class="card" style="margin-bottom:1rem;background:var(--primary-pale);border:1.5px solid var(--primary);cursor:pointer;" onclick="goToTest()">'
+        +'<div style="display:flex;align-items:center;gap:12px;">'
         +'<span style="font-size:2rem;">&#129517;</span>'
-        +'<div><div style="font-weight:700;font-size:0.88rem;color:var(--primary);">Faites le test d&#39;orientation !</div>'
-        +'<div style="font-size:0.78rem;color:var(--text3);">D&eacute;couvrez les m&eacute;tiers faits pour vous (3 minutes)</div></div>'
-        +'<span style="margin-left:auto;font-size:1.2rem;">&rarr;</span></div>';
-      ctaDiv.innerHTML=''; ctaDiv.appendChild(ctaCard);
-    } else { ctaDiv.innerHTML=''; }
+        +'<div><div style="font-weight:700;font-size:0.88rem;color:var(--primary);">Faites le test d&rsquo;orientation !</div>'
+        +'<div style="font-size:0.78rem;color:var(--text3);">D&eacute;couvrez les m&eacute;tiers faits pour vous (3 min)</div></div>'
+        +'<span style="margin-left:auto;font-size:1.2rem;">&rarr;</span></div></div>';
+    } else { ctaDiv.innerHTML = ''; }
   }
+
+  // ── Métiers recommandés (source unique: testResults global) ───────
+  var recDiv = document.getElementById('rec-metiers-dash');
+  if(recDiv){
+    var top3ids = (testResults && (testResults.top3 || testResults.recommended)) || [];
+    if(top3ids.length){
+      var allM = [...METIERS, ...customMetiers];
+      var recHtml = '<div style="margin-bottom:0.5rem;font-size:0.8rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">&#11088; Vos m&eacute;tiers recommand&eacute;s</div>';
+      top3ids.slice(0,3).forEach(function(id){
+        var m = allM.find(function(x){return x.id===id;});
+        if(!m) return;
+        var hasBadge = (stats.badges||[]).includes(id);
+        var safeId = id.replace(/'/g,'');
+        recHtml += '<div style="display:flex;align-items:center;gap:10px;padding:0.65rem 0.75rem;background:var(--surface2);border-radius:10px;margin-bottom:6px;cursor:pointer;" onclick="openMetier(&quot;'+safeId+'&quot;)"><span style="font-size:1.4rem;">'+m.emoji+'</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">'+m.nom+'</div><div style="font-size:0.72rem;color:var(--text3);">Niveau '+m.niveauFr+' '+(hasBadge?'&#127885; Badge obtenu':'&#8594; Jouer')+'</div></div><span style="color:var(--text3);">&#8250;</span></div>';
+      });
+      recDiv.innerHTML = recHtml;
+    } else {
+      recDiv.innerHTML = '';
+    }
+  }
+
+  updateSynthesisCard();
+  var lsEl = document.getElementById('dash-lastsave');
+  if(lsEl){ var lsTime=getLastSaveTime(); lsEl.textContent = lsTime ? '&#x1F4BE; Sauvegardé à '+lsTime : ''; }
+  // ── Sécurité : question secrète ───────────────────────────────────
   var secDiv = document.getElementById('security-status');
   if(secDiv){
     if(currentUser.secretQuestion){
@@ -4389,6 +4409,20 @@ function renderStagiairesList(filter){
   }).join('');
 }
 function filterStagiaires(){ renderStagiairesList(document.getElementById('search-stagiaires').value); }
+
+function resetStagiaire(email){
+  if(!confirm('Remettre à zéro la progression de ce stagiaire ?\nSes scores, badges et attestations seront supprimés.\nSon compte et ses identifiants seront conservés.')) return;
+  var u = users.find(function(x){return x.email===email;});
+  if(!u) return;
+  u.stats = {metiersExplored:[],scores:{},badges:[],games:0};
+  u.attestations = [];
+  // Reset test results
+  try{ localStorage.removeItem('testResults_'+email); }catch(e){}
+  save('users', users);
+  showToast('Progression réinitialisée pour '+u.prenom+' '+u.nom);
+  renderStagiairesList();
+}
+
 function showStagiaireDetail(email){
   var s = users.find(function(u){ return u.email===email; });
   if(!s) return;
@@ -5572,6 +5606,7 @@ function openVideoModal(){
 
   document.body.appendChild(modal);
 }
+function goToTest(){ showPage('page-test'); }
 function goToDashboard(){
   showPage('page-dashboard-stagiaire');
 }
@@ -5632,7 +5667,7 @@ function exportMyData(){
     + 'Jeux terminés : ' + (stats2.games||0) + '\n'
     + 'Points totaux : ' + Object.values(stats2.scores||{}).reduce(function(a,b){return a+b;},0) + '\n\n'
     + '--- CODE DE SAUVEGARDE (pour restaurer sur un autre PC) ---\n'
-    + btoa(unescape(encodeURIComponent(JSON.stringify(snapshot)))) + '\n';
+    + (function(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(snapshot))));}catch(e){return '[Erreur encodage]';}})() + '\n';
   // Try download first, fallback to copy modal
   try {
     var blob = new Blob([dataStr],{type:'application/json'});
@@ -5892,6 +5927,118 @@ if(currentUser){ postLogin(); }
 function doCopyExport(){
   var ta = document.getElementById('datacopy-area');
   if(ta){ ta.select(); document.execCommand('copy'); showToast('Données copiées ! Collez-les dans un email.'); }
+}
+
+
+function buildSynthesis(){
+  if(!currentUser) return null;
+  var stats = currentUser.stats || {};
+  var tr = testResults;
+  var badges = stats.badges || [];
+  var metiers = stats.metiersExplored || [];
+  var allM = [...METIERS, ...customMetiers];
+  return {
+    niveau: tr ? tr.niveau : null,
+    top3: tr ? (tr.top3 || tr.recommended || []) : [],
+    badges: badges.map(function(id){ var m=allM.find(function(x){return x.id===id;}); return m?m.nom:id; }),
+    metiersExplores: metiers.length,
+    jeux: stats.games || 0,
+    points: Object.values(stats.scores||{}).reduce(function(a,b){return a+b;},0),
+  };
+}
+
+function updateSynthesisCard(){
+  var card = document.getElementById('synthesis-card');
+  var content = document.getElementById('synthesis-content');
+  if(!card || !content) return;
+  var s = buildSynthesis();
+  if(!s || (!s.niveau && !s.badges.length && !s.metiersExplores)) { card.style.display='none'; return; }
+  card.style.display = 'block';
+  var html = '';
+  if(s.niveau) html += '<span style="color:var(--primary);font-weight:700;">&#127987;&#65039; Niveau fran&ccedil;ais : '+s.niveau+'</span><br>';
+  if(s.top3.length){ var allM=[...METIERS,...customMetiers]; html += '&#11088; M&eacute;tiers cibles : <strong>'+s.top3.slice(0,2).map(function(id){var m=allM.find(function(x){return x.id===id;});return m?m.nom:id;}).join(', ')+'</strong><br>'; }
+  if(s.badges.length) html += '&#127885; Badges : <strong>'+s.badges.slice(0,3).join(', ')+'</strong><br>';
+  if(s.metiersExplores) html += '&#128252; M&eacute;tiers explor&eacute;s : <strong>'+s.metiersExplores+'</strong> | Jeux : <strong>'+s.jeux+'</strong>';
+  content.innerHTML = html;
+}
+
+
+var _entretienIdx = 0;
+var _entretienQuestions = [];
+
+function closeEntretienPopup(){ var p=document.getElementById('entretien-popup'); if(p) p.remove(); }
+function startEntretienInteractif(){
+  closeModal('modal-entretien');
+  _entretienIdx = 0;
+  // Get questions from the modal
+  var allQs = [];
+  document.querySelectorAll('#questions-entretien-list li').forEach(function(li){ allQs.push(li.textContent.trim()); });
+  if(!allQs.length){
+    // Fallback questions
+    allQs = [
+      "Parlez-moi de vous en quelques mots.",
+      "Pourquoi vous intéressez-vous à ce métier ?",
+      "Quelles sont vos principales qualités ?",
+      "Comment gérez-vous le travail en équipe ?",
+      "Avez-vous des expériences dans ce secteur ?"
+    ];
+  }
+  _entretienQuestions = allQs.slice(0,5);
+  showNextEntretienQuestion();
+}
+
+function showNextEntretienQuestion(){
+  if(_entretienIdx >= _entretienQuestions.length){
+    showToast('\uD83C\uDF89 Simulation terminée ! Bien joué !'); return;
+    showToast('\ud83c\udf89 Simulation terminée ! Vous avez répondu à '+_entretienQuestions.length+' questions. Très bien !');
+    return;
+  }
+  var q = _entretienQuestions[_entretienIdx];
+  var el = document.createElement('div');
+  el.id = 'entretien-popup';
+  el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;';
+  el.innerHTML = '<div style="background:#fff;border-radius:16px;padding:1.5rem;max-width:380px;width:100%;">'
+    +'<div style="font-size:0.72rem;color:var(--text3);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:1px;">Question '+(_entretienIdx+1)+'/'+_entretienQuestions.length+'</div>'
+    +'<div style="font-weight:700;font-size:1rem;line-height:1.5;margin-bottom:1rem;color:var(--primary);">&#127908; '+q+'</div>'
+    +'<p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem;">Répondez à voix haute, puis cliquez "Suivant".</p>'
+    +'<div style="display:flex;gap:8px;">'
+    +'<button class="btn btn-ghost" style="flex:1;" onclick="closeEntretienPopup()">&#10005; Arrêter</button>'
+    +'<button class="btn btn-primary" style="flex:1;" onclick="closeEntretienPopup();showNextEntretienQuestion();">Suivant &#8594;</button>'
+    +'</div></div>';
+  document.body.appendChild(el);
+  _entretienIdx++;
+}
+
+function closeSynthesisModal(){ var m=document.getElementById('modal-synthesis'); if(m) m.remove(); }
+function showSynthesisModal(){
+  var s = buildSynthesis();
+  if(!s) return;
+  var allM = [...METIERS, ...customMetiers];
+  var top3Names = (s.top3||[]).map(function(id){
+    var m=allM.find(function(x){return x.id===id;}); return m?(m.emoji+' '+m.nom):id;
+  });
+  var html = '<div class="modal-card" style="max-width:500px;">'
+    +'<div class="modal-header"><h3 style="font-family:var(--font);">&#128203; Mon projet professionnel</h3><button class="btn-icon" onclick="closeSynthesisModal()">&#10005;</button></div>'
+    +'<div class="modal-body" style="line-height:1.8;">';
+  if(s.niveau) html += '<div style="background:var(--primary-pale);border-radius:10px;padding:0.75rem;margin-bottom:0.75rem;"><strong>&#127987;&#65039; Niveau fran&ccedil;ais d&eacute;clar&eacute; :</strong> '+s.niveau+'</div>';
+  if(top3Names.length) html += '<div style="margin-bottom:0.75rem;"><strong>&#11088; M&eacute;tiers recommand&eacute;s :</strong><br>'
+    +top3Names.map(function(n){return '<span style="display:inline-block;background:var(--surface2);border-radius:8px;padding:4px 10px;margin:3px;font-size:0.85rem;">'+n+'</span>';}).join('')+'</div>';
+  if(s.badges.length) html += '<div style="margin-bottom:0.75rem;"><strong>&#127885; Badges obtenus ('+s.badges.length+') :</strong><br>'
+    +s.badges.map(function(n){return '<span style="display:inline-block;background:var(--accent-light);color:#b07a10;border-radius:8px;padding:4px 10px;margin:3px;font-size:0.85rem;">'+n+'</span>';}).join('')+'</div>';
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">'
+    +'<div style="flex:1;background:var(--surface2);border-radius:10px;padding:0.75rem;text-align:center;"><div style="font-size:1.4rem;font-weight:700;color:var(--primary);">'+s.metiersExplores+'</div><div style="font-size:0.75rem;color:var(--text3);">M&eacute;tiers explor&eacute;s</div></div>'
+    +'<div style="flex:1;background:var(--surface2);border-radius:10px;padding:0.75rem;text-align:center;"><div style="font-size:1.4rem;font-weight:700;color:var(--accent);">'+s.jeux+'</div><div style="font-size:0.75rem;color:var(--text3);">Jeux termin&eacute;s</div></div>'
+    +'<div style="flex:1;background:var(--surface2);border-radius:10px;padding:0.75rem;text-align:center;"><div style="font-size:1.4rem;font-weight:700;color:var(--success);">'+s.points+'</div><div style="font-size:0.75rem;color:var(--text3);">Points</div></div>'
+    +'</div>';
+  html += '</div><div class="modal-footer"><button class="btn btn-primary btn-full" onclick="closeSynthesisModal()">Fermer</button></div></div>';
+
+  var old = document.getElementById('modal-synthesis');
+  if(old) old.remove();
+  var modal = document.createElement('div');
+  modal.id = 'modal-synthesis';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
 }
 
 // PWA Service Worker
